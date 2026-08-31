@@ -54,9 +54,9 @@ class SettingsAboutSubview extends StatelessWidget {
             ListTile(
               leading: const Icon(LucideIcons.code),
               title: const Text('Source Code'),
-              subtitle: const Text('Tvastr-ops/otraku'),
+              subtitle: const Text('Tvastr-ops/Risutaku'),
               onTap: () =>
-                  SnackBarExtension.launch(context, 'https://github.com/Tvastr-ops/otraku'),
+                  SnackBarExtension.launch(context, 'https://github.com/Tvastr-ops/Risutaku'),
             ),
             ListTile(
               leading: const Icon(LucideIcons.heart),
