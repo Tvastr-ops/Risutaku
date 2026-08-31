@@ -91,11 +91,13 @@ class Statistics {
       for (final ry in map['releaseYears']) {
         releaseYears.add(YearStatistic.release(ry, ofAnime));
       }
+      releaseYears.sort((a, b) => (int.tryParse(b.year) ?? 0).compareTo(int.tryParse(a.year) ?? 0));
     }
     if (map['startYears'] != null) {
       for (final sy in map['startYears']) {
         startYears.add(YearStatistic.start(sy, ofAnime));
       }
+      startYears.sort((a, b) => (int.tryParse(b.year) ?? 0).compareTo(int.tryParse(a.year) ?? 0));
     }
 
     // The backend can't sort lengths naturally, so it has to be done locally.

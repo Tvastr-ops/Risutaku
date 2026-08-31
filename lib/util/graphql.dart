@@ -451,8 +451,8 @@ abstract class GqlQuery {
         studios(limit: 25, sort: [COUNT_DESC]) {studio {id name} count meanScore minutesWatched}
         voiceActors(limit: 25, sort: [COUNT_DESC]) {voiceActor {id name {userPreferred} image {medium}} count meanScore minutesWatched}
         staff(limit: 25, sort: [COUNT_DESC]) {staff {id name {userPreferred} image {medium}} count meanScore minutesWatched chaptersRead}
-        releaseYears(sort: [RELEASE_YEAR_DESC]) {releaseYear count meanScore minutesWatched chaptersRead}
-        startYears(sort: [START_YEAR_DESC]) {startYear count meanScore minutesWatched chaptersRead}
+        releaseYears {releaseYear count meanScore minutesWatched chaptersRead}
+        startYears {startYear count meanScore minutesWatched chaptersRead}
       }
     ''';
 
