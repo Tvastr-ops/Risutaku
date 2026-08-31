@@ -1,14 +1,14 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:risutaku/feature/collection/collection_models.dart';
 import 'package:risutaku/feature/edit/edit_model.dart';
 import 'package:risutaku/feature/edit/edit_view.dart';
 import 'package:risutaku/feature/media/media_models.dart';
 import 'package:risutaku/widget/sheets.dart';
 
-/// A floating quick-action dock anchored to the bottom of the media page.
-/// Provides immediate 1-tap access to status switching, progress incrementing, and full editing.
+/// A sleek Material 3 Expressive quick-action pill for media entries.
+/// Adapts responsively between an Extended Add FAB and a cohesive multi-action status dock.
 class QuickActionDock extends StatelessWidget {
   const QuickActionDock({
     super.key,
@@ -31,156 +31,158 @@ class QuickActionDock extends StatelessWidget {
     final status = entry.listStatus;
     final progress = entry.progress;
     final maxCount = isAnime ? media.info.episodes : media.info.chapters;
-
     final canIncrement = status != null && (maxCount == null || progress < maxCount);
 
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: SafeArea(
-        minimum: const EdgeInsets.only(bottom: 16),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 440),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(28),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.9),
-                    borderRadius: BorderRadius.circular(28),
-                    border: Border.all(
-                      color: colorScheme.outlineVariant.withValues(alpha: 0.4),
-                      width: 1.0,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.2),
-                        offset: const Offset(0, 4),
-                        blurRadius: 16,
+    if (status == null) {
+      return FloatingActionButton.extended(
+        heroTag: 'media_action_${media.info.id}',
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
+        elevation: 3,
+        icon: const Icon(LucideIcons.plus, size: 18),
+        label: Text(
+          'Add to List',
+          style: theme.textTheme.labelLarge?.copyWith(
+            fontWeight: FontWeight.w700,
+            color: colorScheme.onPrimary,
+            letterSpacing: 0.3,
+          ),
+        ),
+        onPressed: () => showSheet(
+          context,
+          EditView(
+            (id: media.info.id, setComplete: false),
+            callback: onEditComplete,
+          ),
+        ),
+      );
+    }
+
+    final statusColor = colorScheme.primary;
+    final statusIcon = switch (status) {
+      ListStatus.current => isAnime ? LucideIcons.play : LucideIcons.bookOpen,
+      ListStatus.completed => LucideIcons.checkCheck,
+      ListStatus.planning => LucideIcons.bookmark,
+      ListStatus.paused => LucideIcons.pause,
+      ListStatus.repeating => LucideIcons.repeat,
+      ListStatus.dropped => LucideIcons.trash2,
+    };
+
+    return Material(
+      color: colorScheme.surfaceContainerHigh,
+      elevation: 3,
+      shadowColor: Colors.black.withValues(alpha: 0.25),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(28),
+        side: BorderSide(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.4),
+          width: 1.0,
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Ink(
+        height: 50,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Status Button (Tap -> Full Edit)
+            InkWell(
+              onTap: () => showSheet(
+                context,
+                EditView(
+                  (id: media.info.id, setComplete: false),
+                  callback: onEditComplete,
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(statusIcon, size: 16, color: statusColor),
+                    const SizedBox(width: 7),
+                    Text(
+                      status.label(isAnime),
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: colorScheme.onSurface,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // Subtle divider
+            Container(
+              width: 1,
+              height: 22,
+              color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+            ),
+
+            // Progress Readout
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text(
+                maxCount != null
+                    ? '${isAnime ? "Ep" : "Ch"} $progress / $maxCount'
+                    : '${isAnime ? "Ep" : "Ch"} $progress',
+                style: theme.textTheme.labelMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+
+            // +1 Quick Increment
+            if (canIncrement) ...[
+              InkWell(
+                onTap: () {
+                  HapticFeedback.lightImpact();
+                  onProgressIncrement();
+                },
+                child: Container(
+                  height: 50,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  color: colorScheme.primary.withValues(alpha: 0.12),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Status / Add Button
-                      Flexible(
-                        child: Material(
-                          color: status == null
-                              ? colorScheme.primary
-                              : colorScheme.surfaceContainerLow,
-                          borderRadius: BorderRadius.circular(20),
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(20),
-                            onTap: () => showSheet(
-                              context,
-                              EditView(
-                                (id: media.info.id, setComplete: false),
-                                callback: onEditComplete,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    status == null ? LucideIcons.plus : LucideIcons.check,
-                                    size: 16,
-                                    color: status == null
-                                        ? colorScheme.onPrimary
-                                        : colorScheme.primary,
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Flexible(
-                                    child: Text(
-                                      status == null
-                                          ? 'Add to List'
-                                          : status.label(isAnime),
-                                      style: theme.textTheme.labelMedium?.copyWith(
-                                        fontWeight: FontWeight.w700,
-                                        color: status == null
-                                            ? colorScheme.onPrimary
-                                            : colorScheme.onSurface,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                      Icon(LucideIcons.plus, size: 15, color: colorScheme.primary),
+                      const SizedBox(width: 2),
+                      Text(
+                        '1',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 13,
+                          color: colorScheme.primary,
                         ),
                       ),
-
-                      if (status != null) ...[
-                        const SizedBox(width: 8),
-                        // Progress Readout
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: colorScheme.surfaceContainerLow,
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Text(
-                            maxCount != null
-                                ? '${isAnime ? "Ep" : "Ch"} $progress / $maxCount'
-                                : '${isAnime ? "Ep" : "Ch"} $progress',
-                            style: theme.textTheme.labelMedium?.copyWith(
-                              fontWeight: FontWeight.w700,
-                              fontFamily: 'monospace',
-                              color: colorScheme.onSurface,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-
-                        // +1 Increment Button
-                        if (canIncrement)
-                          IconButton.filled(
-                            style: IconButton.styleFrom(
-                              backgroundColor: colorScheme.primaryContainer,
-                              foregroundColor: colorScheme.onPrimaryContainer,
-                              padding: EdgeInsets.zero,
-                              minimumSize: const Size(36, 36),
-                            ),
-                            tooltip: 'Increment +1',
-                            icon: const Icon(LucideIcons.plus, size: 16),
-                            onPressed: () {
-                              HapticFeedback.lightImpact();
-                              onProgressIncrement();
-                            },
-                          ),
-
-                        const SizedBox(width: 4),
-
-                        // Full Edit Button
-                        IconButton(
-                          style: IconButton.styleFrom(
-                            minimumSize: const Size(36, 36),
-                            padding: EdgeInsets.zero,
-                          ),
-                          tooltip: 'Edit details',
-                          icon: const Icon(LucideIcons.slidersHorizontal, size: 16),
-                          onPressed: () => showSheet(
-                            context,
-                            EditView(
-                              (id: media.info.id, setComplete: false),
-                              callback: onEditComplete,
-                            ),
-                          ),
-                        ),
-                      ],
                     ],
                   ),
                 ),
               ),
+            ],
+
+            // Edit Settings Icon
+            InkWell(
+              onTap: () => showSheet(
+                context,
+                EditView(
+                  (id: media.info.id, setComplete: false),
+                  callback: onEditComplete,
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Icon(
+                  LucideIcons.slidersHorizontal,
+                  size: 16,
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

@@ -5,30 +5,181 @@ import 'package:flutter/material.dart';
 enum FormFactor { phone, tablet }
 
 enum ThemeBase {
-  peach('Peach', Color(0xFFFF9E80)),
-  sakura('Sakura', Color(0xFFFF80AB)),
-  cyberpunk('Cyberpunk', Color(0xFFFF007F)),
-  neonRed('Neon Red', Color(0xFFFF1744)),
-  crimson('Crimson', Color(0xFFE53935)),
-  wine('Wine', Color(0xFF894771)),
-  amethyst('Amethyst', Color(0xFF9C27B0)),
-  lavender('Lavender', Color(0xFFB4ABF5)),
-  indigo('Indigo', Color(0xFF5C6BC0)),
-  navy('Navy', Color(0xFF45A0F2)),
-  neonCyan('Neon Cyan', Color(0xFF00E5FF)),
-  mint('Mint', Color(0xFF2AB8B8)),
-  forest('Forest', Color(0xFF00FFA9)),
-  neonGreen('Neon Green', Color(0xFF00E676)),
-  matcha('Matcha', Color(0xFF8BC34A)),
-  mustard('Mustard', Color(0xFFFFBF02)),
-  sunset('Sunset', Color(0xFFFF6E40)),
-  caramel('Caramel', Color(0xFFF78204)),
-  nordic('Nordic', Color(0xFF607D8B));
+  peach(
+    'Peach',
+    Color(0xFFFF8A65),
+    lightPrimary: Color(0xFFD84315),
+    lightContainer: Color(0xFFFFEBE5),
+    darkPrimary: Color(0xFFFFAB91),
+    darkContainer: Color(0xFF5E1A04),
+  ),
+  sakura(
+    'Sakura',
+    Color(0xFFFF80AB),
+    lightPrimary: Color(0xFFD81B60),
+    lightContainer: Color(0xFFFCE4EC),
+    darkPrimary: Color(0xFFFF80AB),
+    darkContainer: Color(0xFF5C0028),
+  ),
+  cyberpunk(
+    'Cyberpunk',
+    Color(0xFFFF007F),
+    lightPrimary: Color(0xFFD500F9),
+    lightContainer: Color(0xFFFFD6EC),
+    darkPrimary: Color(0xFFFF007F),
+    darkContainer: Color(0xFF600030),
+  ),
+  neonRed(
+    'Neon Red',
+    Color(0xFFFF1744),
+    lightPrimary: Color(0xFFD50000),
+    lightContainer: Color(0xFFFFCDD2),
+    darkPrimary: Color(0xFFFF3355),
+    darkContainer: Color(0xFF5A000A),
+  ),
+  crimson(
+    'Crimson',
+    Color(0xFFB71C1C),
+    lightPrimary: Color(0xFF8B0000),
+    lightContainer: Color(0xFFFFEBEE),
+    darkPrimary: Color(0xFFE53935),
+    darkContainer: Color(0xFF4A0808),
+  ),
+  wine(
+    'Wine',
+    Color(0xFF722F37),
+    lightPrimary: Color(0xFF581845),
+    lightContainer: Color(0xFFF3E5F5),
+    darkPrimary: Color(0xFFC75D8F),
+    darkContainer: Color(0xFF400A24),
+  ),
+  amethyst(
+    'Amethyst',
+    Color(0xFF9C27B0),
+    lightPrimary: Color(0xFF7B1FA2),
+    lightContainer: Color(0xFFEDE7F6),
+    darkPrimary: Color(0xFFCE6CE6),
+    darkContainer: Color(0xFF450A52),
+  ),
+  lavender(
+    'Lavender',
+    Color(0xFF7E57C2),
+    lightPrimary: Color(0xFF512DA8),
+    lightContainer: Color(0xFFEDE7F6),
+    darkPrimary: Color(0xFFB4ABF5),
+    darkContainer: Color(0xFF26184D),
+  ),
+  indigo(
+    'Indigo',
+    Color(0xFF3F51B5),
+    lightPrimary: Color(0xFF283593),
+    lightContainer: Color(0xFFE8EAF6),
+    darkPrimary: Color(0xFF7986CB),
+    darkContainer: Color(0xFF141F59),
+  ),
+  navy(
+    'Navy',
+    Color(0xFF0288D1),
+    lightPrimary: Color(0xFF0277BD),
+    lightContainer: Color(0xFFE1F5FE),
+    darkPrimary: Color(0xFF40C4FF),
+    darkContainer: Color(0xFF003859),
+  ),
+  neonCyan(
+    'Neon Cyan',
+    Color(0xFF00E5FF),
+    lightPrimary: Color(0xFF00838F),
+    lightContainer: Color(0xFFE0F7FA),
+    darkPrimary: Color(0xFF00E5FF),
+    darkContainer: Color(0xFF004953),
+  ),
+  mint(
+    'Mint',
+    Color(0xFF00BFA5),
+    lightPrimary: Color(0xFF00796B),
+    lightContainer: Color(0xFFE0F2F1),
+    darkPrimary: Color(0xFF1DE9B6),
+    darkContainer: Color(0xFF003D34),
+  ),
+  forest(
+    'Forest',
+    Color(0xFF2E7D32),
+    lightPrimary: Color(0xFF1B5E20),
+    lightContainer: Color(0xFFE8F5E9),
+    darkPrimary: Color(0xFF4CAF50),
+    darkContainer: Color(0xFF0F3A13),
+  ),
+  neonGreen(
+    'Neon Green',
+    Color(0xFF00E676),
+    lightPrimary: Color(0xFF00853B),
+    lightContainer: Color(0xFFE8F8F0),
+    darkPrimary: Color(0xFF00E676),
+    darkContainer: Color(0xFF004D22),
+  ),
+  matcha(
+    'Matcha',
+    Color(0xFF689F38),
+    lightPrimary: Color(0xFF4B6E1F),
+    lightContainer: Color(0xFFF1F8E9),
+    darkPrimary: Color(0xFFAED581),
+    darkContainer: Color(0xFF2B400F),
+  ),
+  mustard(
+    'Mustard',
+    Color(0xFFFFB300),
+    lightPrimary: Color(0xFFB26A00),
+    lightContainer: Color(0xFFFFF8E1),
+    darkPrimary: Color(0xFFFFD54F),
+    darkContainer: Color(0xFF5C3800),
+  ),
+  sunset(
+    'Sunset',
+    Color(0xFFFF3D00),
+    lightPrimary: Color(0xFFDD2C00),
+    lightContainer: Color(0xFFFFEBE5),
+    darkPrimary: Color(0xFFFF6E40),
+    darkContainer: Color(0xFF5C1000),
+  ),
+  caramel(
+    'Caramel',
+    Color(0xFFD87A15),
+    lightPrimary: Color(0xFF8D4004),
+    lightContainer: Color(0xFFFFF3E0),
+    darkPrimary: Color(0xFFFFA726),
+    darkContainer: Color(0xFF4A2000),
+  ),
+  nordic(
+    'Nordic',
+    Color(0xFF546E7A),
+    lightPrimary: Color(0xFF37474F),
+    lightContainer: Color(0xFFECEFF1),
+    darkPrimary: Color(0xFF90A4AE),
+    darkContainer: Color(0xFF1E282D),
+  );
 
-  const ThemeBase(this.title, this.seed);
+  const ThemeBase(
+    this.title,
+    this.seed, {
+    required this.lightPrimary,
+    required this.lightContainer,
+    required this.darkPrimary,
+    required this.darkContainer,
+  });
 
   final String title;
   final Color seed;
+  final Color lightPrimary;
+  final Color lightContainer;
+  final Color darkPrimary;
+  final Color darkContainer;
+
+  static ThemeBase? fromSeed(Color seed) {
+    for (final t in values) {
+      if (t.seed == seed) return t;
+    }
+    return null;
+  }
 }
 
 class Theming extends ThemeExtension<Theming> {
@@ -88,35 +239,132 @@ class Theming extends ThemeExtension<Theming> {
     required Brightness brightness,
     required bool highContrast,
   }) {
+    final tb = ThemeBase.fromSeed(seed);
+    final hsl = HSLColor.fromColor(seed);
+    final bgHue = hsl.hue;
+
     if (brightness == Brightness.light) {
-      final base = ColorScheme.fromSeed(seedColor: seed, brightness: Brightness.light);
+      final primary = tb?.lightPrimary ??
+          HSLColor.fromAHSL(
+            1.0,
+            hsl.hue,
+            (hsl.saturation * 1.1).clamp(0.7, 1.0),
+            hsl.lightness.clamp(0.28, 0.42),
+          ).toColor();
+
+      final primaryContainer = tb?.lightContainer ??
+          HSLColor.fromAHSL(
+            1.0,
+            hsl.hue,
+            (hsl.saturation * 0.5).clamp(0.2, 0.6),
+            0.92,
+          ).toColor();
+
+      final onPrimaryContainer = HSLColor.fromAHSL(
+        1.0,
+        hsl.hue,
+        (hsl.saturation * 1.1).clamp(0.8, 1.0),
+        0.18,
+      ).toColor();
+
+      final secondary = HSLColor.fromAHSL(
+        1.0,
+        (hsl.hue + 15) % 360,
+        (hsl.saturation * 0.7).clamp(0.3, 0.7),
+        0.40,
+      ).toColor();
+
+      final tertiary = HSLColor.fromAHSL(
+        1.0,
+        (hsl.hue + 45) % 360,
+        (hsl.saturation * 0.7).clamp(0.3, 0.7),
+        0.42,
+      ).toColor();
+
+      final secondaryContainer = HSLColor.fromAHSL(
+        1.0,
+        (hsl.hue + 15) % 360,
+        (hsl.saturation * 0.4).clamp(0.15, 0.45),
+        0.92,
+      ).toColor();
+
+      final onSecondaryContainer = HSLColor.fromAHSL(
+        1.0,
+        (hsl.hue + 15) % 360,
+        (hsl.saturation * 0.8).clamp(0.5, 0.9),
+        0.20,
+      ).toColor();
+
       if (highContrast) {
-        return base.copyWith(
+        return ColorScheme.light(
+          primary: primary,
+          onPrimary: Colors.white,
+          primaryContainer: primaryContainer,
+          onPrimaryContainer: onPrimaryContainer,
+          secondary: secondary,
+          onSecondary: Colors.white,
+          secondaryContainer: const Color(0xFFEDEDED),
+          onSecondaryContainer: Colors.black,
+          tertiary: tertiary,
+          onTertiary: Colors.white,
           surface: Colors.white,
+          onSurface: Colors.black,
+          onSurfaceVariant: const Color(0xFF404040),
           surfaceContainerLowest: Colors.white,
           surfaceContainerLow: const Color(0xFFF7F7F7),
           surfaceContainer: const Color(0xFFEFEFEF),
           surfaceContainerHigh: const Color(0xFFE5E5E5),
           surfaceContainerHighest: const Color(0xFFDBDBDB),
+          outline: primary.withValues(alpha: 0.40),
+          outlineVariant: const Color(0xFFD0D0D0),
         );
       }
-      return base;
+
+      final surface = HSLColor.fromAHSL(1.0, bgHue, 0.08, 0.985).toColor();
+      final surfaceLow = HSLColor.fromAHSL(1.0, bgHue, 0.08, 0.96).toColor();
+      final surfaceCont = HSLColor.fromAHSL(1.0, bgHue, 0.10, 0.93).toColor();
+      final surfaceHigh = HSLColor.fromAHSL(1.0, bgHue, 0.12, 0.89).toColor();
+      final surfaceHighest = HSLColor.fromAHSL(1.0, bgHue, 0.14, 0.85).toColor();
+
+      return ColorScheme.light(
+        primary: primary,
+        onPrimary: Colors.white,
+        primaryContainer: primaryContainer,
+        onPrimaryContainer: onPrimaryContainer,
+        secondary: secondary,
+        onSecondary: Colors.white,
+        secondaryContainer: secondaryContainer,
+        onSecondaryContainer: onSecondaryContainer,
+        tertiary: tertiary,
+        onTertiary: Colors.white,
+        surface: surface,
+        onSurface: const Color(0xFF1A1A1A),
+        onSurfaceVariant: const Color(0xFF555555),
+        surfaceContainerLowest: Colors.white,
+        surfaceContainerLow: surfaceLow,
+        surfaceContainer: surfaceCont,
+        surfaceContainerHigh: surfaceHigh,
+        surfaceContainerHighest: surfaceHighest,
+        outline: primary.withValues(alpha: 0.25),
+        outlineVariant: HSLColor.fromAHSL(1.0, bgHue, 0.08, 0.88).toColor(),
+      );
     }
 
-    final hsl = HSLColor.fromColor(seed);
-    final vibrantPrimary = HSLColor.fromAHSL(
-      1.0,
-      hsl.hue,
-      (hsl.saturation * 1.15).clamp(0.75, 1.0),
-      hsl.lightness.clamp(0.60, 0.72),
-    ).toColor();
+    final vibrantPrimary = tb?.darkPrimary ??
+        HSLColor.fromAHSL(
+          1.0,
+          hsl.hue,
+          (hsl.saturation * 1.15).clamp(0.75, 1.0),
+          hsl.lightness.clamp(0.60, 0.72),
+        ).toColor();
 
-    final primaryContainer = HSLColor.fromAHSL(
-      1.0,
-      hsl.hue,
-      (hsl.saturation * 0.9).clamp(0.5, 0.9),
-      0.22,
-    ).toColor();
+    final primaryContainer = tb?.darkContainer ??
+        HSLColor.fromAHSL(
+          1.0,
+          hsl.hue,
+          (hsl.saturation * 0.9).clamp(0.5, 0.9),
+          0.22,
+        ).toColor();
 
     final onPrimaryContainer = HSLColor.fromAHSL(
       1.0,
@@ -130,6 +378,20 @@ class Theming extends ThemeExtension<Theming> {
       (hsl.hue + 15) % 360,
       (hsl.saturation * 0.8).clamp(0.4, 0.8),
       0.70,
+    ).toColor();
+
+    final secondaryContainer = HSLColor.fromAHSL(
+      1.0,
+      (hsl.hue + 15) % 360,
+      (hsl.saturation * 0.45).clamp(0.2, 0.45),
+      0.18,
+    ).toColor();
+
+    final onSecondaryContainer = HSLColor.fromAHSL(
+      1.0,
+      (hsl.hue + 15) % 360,
+      (hsl.saturation * 0.8).clamp(0.4, 0.85),
+      0.88,
     ).toColor();
 
     final tertiary = HSLColor.fromAHSL(
@@ -147,6 +409,8 @@ class Theming extends ThemeExtension<Theming> {
         onPrimaryContainer: onPrimaryContainer,
         secondary: secondary,
         onSecondary: Colors.black,
+        secondaryContainer: const Color(0xFF1A1A1A),
+        onSecondaryContainer: const Color(0xFFE8E8E8),
         tertiary: tertiary,
         onTertiary: Colors.black,
         surface: Colors.black,
@@ -162,7 +426,6 @@ class Theming extends ThemeExtension<Theming> {
       );
     }
 
-    final bgHue = hsl.hue;
     final surface = HSLColor.fromAHSL(1.0, bgHue, 0.22, 0.08).toColor();
     final surfaceLow = HSLColor.fromAHSL(1.0, bgHue, 0.20, 0.11).toColor();
     final surfaceCont = HSLColor.fromAHSL(1.0, bgHue, 0.18, 0.13).toColor();
@@ -176,6 +439,8 @@ class Theming extends ThemeExtension<Theming> {
       onPrimaryContainer: onPrimaryContainer,
       secondary: secondary,
       onSecondary: Colors.black,
+      secondaryContainer: secondaryContainer,
+      onSecondaryContainer: onSecondaryContainer,
       tertiary: tertiary,
       onTertiary: Colors.black,
       surface: surface,
@@ -231,8 +496,51 @@ class Theming extends ThemeExtension<Theming> {
         fontVariations: const [FontVariation('wght', 400)],
       ),
     ),
-    segmentedButtonTheme: const SegmentedButtonThemeData(
-      style: ButtonStyle(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+    segmentedButtonTheme: SegmentedButtonThemeData(
+      style: ButtonStyle(
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        backgroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return scheme.secondaryContainer;
+          }
+          return Colors.transparent;
+        }),
+        foregroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return scheme.onSecondaryContainer;
+          }
+          return scheme.onSurface;
+        }),
+        iconColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return scheme.onSecondaryContainer;
+          }
+          return scheme.onSurfaceVariant;
+        }),
+        side: WidgetStateProperty.resolveWith((states) {
+          return BorderSide(color: scheme.outlineVariant);
+        }),
+      ),
+    ),
+    switchTheme: SwitchThemeData(
+      thumbColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return scheme.onPrimary;
+        }
+        return scheme.onSurfaceVariant;
+      }),
+      trackColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return scheme.primary;
+        }
+        return scheme.surfaceContainerHighest;
+      }),
+      trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return Colors.transparent;
+        }
+        return scheme.outline;
+      }),
     ),
     sliderTheme: const SliderThemeData(
       trackGap: 6,

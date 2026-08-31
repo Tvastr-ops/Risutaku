@@ -271,7 +271,7 @@ class _BentoStatsGrid extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           mainAxisSpacing: 8,
           crossAxisSpacing: 8,
-          childAspectRatio: isWide ? 2.4 : 2.1,
+          childAspectRatio: isWide ? 2.8 : 2.35,
           children: [
             if (info.averageScore > 0)
               BentoStatTile(

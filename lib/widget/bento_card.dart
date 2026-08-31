@@ -130,7 +130,7 @@ class BentoStatTile extends StatelessWidget {
 
     return BentoCard(
       onTap: onTap,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -139,10 +139,10 @@ class BentoStatTile extends StatelessWidget {
             children: [
               if (icon != null) ...[
                 IconTheme(
-                  data: IconThemeData(size: 14, color: accent),
+                  data: IconThemeData(size: 13, color: accent),
                   child: icon!,
                 ),
-                const SizedBox(width: 4),
+                const SizedBox(width: 5),
               ],
               Expanded(
                 child: Text(
@@ -150,7 +150,7 @@ class BentoStatTile extends StatelessWidget {
                   style: theme.textTheme.labelSmall?.copyWith(
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
-                    letterSpacing: 0.8,
+                    letterSpacing: 0.6,
                     color: colorScheme.onSurfaceVariant,
                   ),
                   maxLines: 1,
@@ -159,14 +159,14 @@ class BentoStatTile extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 3),
           Text(
             value,
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w800,
+            style: theme.textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.w700,
               color: colorScheme.onSurface,
             ),
-            maxLines: 1,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
         ],

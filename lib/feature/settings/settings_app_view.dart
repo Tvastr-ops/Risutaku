@@ -31,7 +31,7 @@ class SettingsAppSubview extends ConsumerWidget {
     return ListView(
       controller: scrollCtrl,
       padding: .only(
-        top: listPadding.top + Theming.offset,
+        top: listPadding.top + Theming.normalTapTarget + Theming.offset,
         bottom: listPadding.bottom + Theming.offset + 60,
       ),
       children: [

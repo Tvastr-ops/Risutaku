@@ -81,7 +81,6 @@ class AppState extends ConsumerState<_App> {
     ref.watch(viewerIdProvider);
     final options = ref.watch(persistenceProvider.select((s) => s.options));
     final platformBrightness = MediaQuery.platformBrightnessOf(context);
-    final viewSize = MediaQuery.sizeOf(context);
 
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
@@ -154,9 +153,10 @@ class AppState extends ConsumerState<_App> {
           routerConfig: _router,
           builder: (context, child) {
             final directionality = Directionality.of(context);
+            final size = MediaQuery.sizeOf(context);
 
             final theming = Theming(
-              formFactor: viewSize.width < Theming.windowWidthMedium ? .phone : .tablet,
+              formFactor: size.width < Theming.windowWidthMedium ? .phone : .tablet,
               rightButtonOrientation: options.buttonOrientation == .auto
                   ? directionality == TextDirection.ltr
                   : options.buttonOrientation == .right,

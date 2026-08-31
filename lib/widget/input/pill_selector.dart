@@ -33,24 +33,38 @@ class PillSelector extends StatelessWidget {
         padding: MediaQuery.paddingOf(context).add(Theming.paddingAll),
         itemCount: items.length,
         separatorBuilder: (context, _) => const SizedBox(height: Theming.offset / 2),
-        itemBuilder: (context, i) => Material(
-          shape: const StadiumBorder(),
-          color: i == selected ? ColorScheme.of(context).secondaryContainer : null,
-          child: InkWell(
-            customBorder: const StadiumBorder(),
-            onTap: () => onTap(i),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(minHeight: Theming.minTapTarget),
-              child: Padding(
-                padding: const .symmetric(
-                  horizontal: Theming.offset * 1.5,
-                  vertical: Theming.offset * 0.5,
+        itemBuilder: (context, i) {
+          final isSelected = i == selected;
+          final scheme = ColorScheme.of(context);
+          return Material(
+            shape: const StadiumBorder(),
+            color: isSelected ? scheme.secondaryContainer : null,
+            child: InkWell(
+              customBorder: const StadiumBorder(),
+              onTap: () => onTap(i),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(minHeight: Theming.minTapTarget),
+                child: Padding(
+                  padding: const .symmetric(
+                    horizontal: Theming.offset * 1.5,
+                    vertical: Theming.offset * 0.5,
+                  ),
+                  child: IconTheme.merge(
+                    data: IconThemeData(
+                      color: isSelected ? scheme.onSecondaryContainer : scheme.onSurfaceVariant,
+                    ),
+                    child: DefaultTextStyle.merge(
+                      style: TextStyle(
+                        color: isSelected ? scheme.onSecondaryContainer : scheme.onSurface,
+                      ),
+                      child: Align(alignment: Alignment.centerLeft, child: items[i]),
+                    ),
+                  ),
                 ),
-                child: Align(alignment: Alignment.centerLeft, child: items[i]),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
