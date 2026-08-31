@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otraku/feature/viewer/persistence_provider.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/sheets.dart';
-import 'package:otraku/feature/calendar/calendar_filter_provider.dart';
-import 'package:otraku/feature/calendar/calendar_models.dart';
-import 'package:otraku/widget/input/chip_selector.dart';
+import 'package:risutaku/feature/viewer/persistence_provider.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/sheets.dart';
+import 'package:risutaku/feature/calendar/calendar_filter_provider.dart';
+import 'package:risutaku/feature/calendar/calendar_models.dart';
+import 'package:risutaku/widget/input/chip_selector.dart';
 
 void showCalendarFilterSheet(BuildContext context, WidgetRef ref) {
   final highContrast = ref.read(persistenceProvider.select((s) => s.options.highContrast));

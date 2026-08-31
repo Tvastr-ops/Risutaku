@@ -1,4 +1,4 @@
-import 'package:otraku/extension/date_time_extension.dart';
+import 'package:risutaku/extension/date_time_extension.dart';
 
 class ThreadItem {
   const ThreadItem._({

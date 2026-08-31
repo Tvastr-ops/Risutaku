@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/feature/activity/activities_filter_model.dart';
-import 'package:otraku/feature/activity/activities_model.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/sheets.dart';
-import 'package:otraku/feature/activity/activities_filter_provider.dart';
+import 'package:risutaku/feature/activity/activities_filter_model.dart';
+import 'package:risutaku/feature/activity/activities_model.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/sheets.dart';
+import 'package:risutaku/feature/activity/activities_filter_provider.dart';
 
 void showActivityFilterSheet(BuildContext context, WidgetRef ref, ActivitiesTag tag) {
   ActivitiesFilter filter = ref.read(activitiesFilterProvider(tag));

@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/extension/build_context_extension.dart';
-import 'package:otraku/extension/date_time_extension.dart';
-import 'package:otraku/feature/viewer/persistence_provider.dart';
-import 'package:otraku/util/routes.dart';
-import 'package:otraku/feature/user/user_model.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/cached_image.dart';
-import 'package:otraku/widget/input/pill_selector.dart';
-import 'package:otraku/widget/layout/content_header.dart';
-import 'package:otraku/widget/dialogs.dart';
-import 'package:otraku/extension/snack_bar_extension.dart';
-import 'package:otraku/widget/text_rail.dart';
+import 'package:risutaku/extension/build_context_extension.dart';
+import 'package:risutaku/extension/date_time_extension.dart';
+import 'package:risutaku/feature/viewer/persistence_provider.dart';
+import 'package:risutaku/util/routes.dart';
+import 'package:risutaku/feature/user/user_model.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/cached_image.dart';
+import 'package:risutaku/widget/input/pill_selector.dart';
+import 'package:risutaku/widget/layout/content_header.dart';
+import 'package:risutaku/widget/dialogs.dart';
+import 'package:risutaku/extension/snack_bar_extension.dart';
+import 'package:risutaku/widget/text_rail.dart';
 
 class UserHeader extends StatelessWidget {
   const UserHeader({

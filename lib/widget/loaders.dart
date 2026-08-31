@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/shimmer.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/shimmer.dart';
 
 class Loader extends StatelessWidget {
   const Loader();

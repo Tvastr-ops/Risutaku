@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otraku/feature/viewer/persistence_provider.dart';
-import 'package:otraku/feature/viewer/repository_provider.dart';
-import 'package:otraku/util/graphql.dart';
-import 'package:otraku/feature/collection/collection_provider.dart';
-import 'package:otraku/feature/settings/settings_model.dart';
+import 'package:risutaku/feature/viewer/persistence_provider.dart';
+import 'package:risutaku/feature/viewer/repository_provider.dart';
+import 'package:risutaku/util/graphql.dart';
+import 'package:risutaku/feature/collection/collection_provider.dart';
+import 'package:risutaku/feature/settings/settings_model.dart';
 
 final settingsProvider = AsyncNotifierProvider.autoDispose<SettingsNotifier, Settings>(
   SettingsNotifier.new,

@@ -1,4 +1,4 @@
-import 'package:otraku/feature/media/media_models.dart';
+import 'package:risutaku/feature/media/media_models.dart';
 
 class StaffFilter {
   const StaffFilter({this.sort = .startDateDesc, this.ofAnime, this.inLists});

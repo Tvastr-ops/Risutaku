@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:otraku/extension/card_extension.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/extension/snack_bar_extension.dart';
+import 'package:risutaku/extension/card_extension.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/extension/snack_bar_extension.dart';
 
 class TableList extends StatelessWidget {
   const TableList(this.items, {required this.highContrast});

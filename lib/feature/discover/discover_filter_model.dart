@@ -1,8 +1,8 @@
-import 'package:otraku/extension/enum_extension.dart';
-import 'package:otraku/feature/collection/collection_filter_model.dart';
-import 'package:otraku/feature/discover/discover_model.dart';
-import 'package:otraku/feature/media/media_models.dart';
-import 'package:otraku/feature/review/review_models.dart';
+import 'package:risutaku/extension/enum_extension.dart';
+import 'package:risutaku/feature/collection/collection_filter_model.dart';
+import 'package:risutaku/feature/discover/discover_model.dart';
+import 'package:risutaku/feature/media/media_models.dart';
+import 'package:risutaku/feature/review/review_models.dart';
 
 class DiscoverFilter {
   const DiscoverFilter._({

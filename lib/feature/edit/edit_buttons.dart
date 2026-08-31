@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/extension/snack_bar_extension.dart';
-import 'package:otraku/feature/edit/edit_model.dart';
-import 'package:otraku/feature/edit/edit_provider.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/layout/navigation_tool.dart';
-import 'package:otraku/widget/dialogs.dart';
+import 'package:risutaku/extension/snack_bar_extension.dart';
+import 'package:risutaku/feature/edit/edit_model.dart';
+import 'package:risutaku/feature/edit/edit_provider.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/layout/navigation_tool.dart';
+import 'package:risutaku/widget/dialogs.dart';
 
 class EditButtons extends StatelessWidget {
   const EditButtons(this.ref, this.tag, this.entryEdit, this.callback);

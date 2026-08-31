@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otraku/extension/build_context_extension.dart';
-import 'package:otraku/feature/viewer/persistence_model.dart';
-import 'package:otraku/feature/viewer/persistence_provider.dart';
-import 'package:otraku/widget/shadowed_overflow_list.dart';
-import 'package:otraku/util/theming.dart';
+import 'package:risutaku/extension/build_context_extension.dart';
+import 'package:risutaku/feature/viewer/persistence_model.dart';
+import 'package:risutaku/feature/viewer/persistence_provider.dart';
+import 'package:risutaku/widget/shadowed_overflow_list.dart';
+import 'package:risutaku/util/theming.dart';
 
 const _previewHeight = 170.0;
 

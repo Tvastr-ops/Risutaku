@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otraku/extension/string_extension.dart';
-import 'package:otraku/util/graphql.dart';
-import 'package:otraku/feature/composition/composition_model.dart';
-import 'package:otraku/feature/viewer/repository_provider.dart';
+import 'package:risutaku/extension/string_extension.dart';
+import 'package:risutaku/util/graphql.dart';
+import 'package:risutaku/feature/composition/composition_model.dart';
+import 'package:risutaku/feature/viewer/repository_provider.dart';
 
 final compositionProvider = AsyncNotifierProvider.autoDispose
     .family<CompositionNotifier, Composition, CompositionTag>(CompositionNotifier.new);

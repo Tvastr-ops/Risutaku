@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/util/theming.dart';
+import 'package:risutaku/util/theming.dart';
 
 class ChipGrid extends StatelessWidget {
   const ChipGrid({

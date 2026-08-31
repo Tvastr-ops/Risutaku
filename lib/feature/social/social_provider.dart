@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otraku/feature/comment/comment_model.dart';
-import 'package:otraku/feature/forum/forum_model.dart';
-import 'package:otraku/feature/social/social_model.dart';
-import 'package:otraku/feature/user/user_item_model.dart';
-import 'package:otraku/feature/viewer/repository_provider.dart';
-import 'package:otraku/util/graphql.dart';
+import 'package:risutaku/feature/comment/comment_model.dart';
+import 'package:risutaku/feature/forum/forum_model.dart';
+import 'package:risutaku/feature/social/social_model.dart';
+import 'package:risutaku/feature/user/user_item_model.dart';
+import 'package:risutaku/feature/viewer/repository_provider.dart';
+import 'package:risutaku/util/graphql.dart';
 
 final socialProvider = AsyncNotifierProvider.autoDispose.family<SocialNotifier, Social, int>(
   SocialNotifier.new,

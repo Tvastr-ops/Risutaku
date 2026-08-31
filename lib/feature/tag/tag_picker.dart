@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otraku/extension/iterable_extension.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/input/search_field.dart';
-import 'package:otraku/widget/input/stateful_tiles.dart';
-import 'package:otraku/widget/grid/chip_grid.dart';
-import 'package:otraku/widget/loaders.dart';
-import 'package:otraku/widget/sheets.dart';
-import 'package:otraku/widget/shadowed_overflow_list.dart';
-import 'package:otraku/feature/tag/tag_model.dart';
-import 'package:otraku/feature/tag/tag_provider.dart';
+import 'package:risutaku/extension/iterable_extension.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/input/search_field.dart';
+import 'package:risutaku/widget/input/stateful_tiles.dart';
+import 'package:risutaku/widget/grid/chip_grid.dart';
+import 'package:risutaku/widget/loaders.dart';
+import 'package:risutaku/widget/sheets.dart';
+import 'package:risutaku/widget/shadowed_overflow_list.dart';
+import 'package:risutaku/feature/tag/tag_model.dart';
+import 'package:risutaku/feature/tag/tag_provider.dart';
 
 class TagPicker extends StatefulWidget {
   const TagPicker({

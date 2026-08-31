@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/feature/discover/discover_filter_provider.dart';
-import 'package:otraku/feature/discover/discover_model.dart';
-import 'package:otraku/widget/input/pill_selector.dart';
-import 'package:otraku/widget/swipe_switcher.dart';
-import 'package:otraku/widget/sheets.dart';
+import 'package:risutaku/feature/discover/discover_filter_provider.dart';
+import 'package:risutaku/feature/discover/discover_model.dart';
+import 'package:risutaku/widget/input/pill_selector.dart';
+import 'package:risutaku/widget/swipe_switcher.dart';
+import 'package:risutaku/widget/sheets.dart';
 
 class DiscoverFloatingAction extends StatelessWidget {
   const DiscoverFloatingAction() : super(key: const Key('switchDiscover'));

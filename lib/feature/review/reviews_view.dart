@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/feature/review/review_models.dart';
-import 'package:otraku/feature/viewer/persistence_provider.dart';
-import 'package:otraku/util/paged_controller.dart';
-import 'package:otraku/feature/review/review_grid.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/layout/adaptive_scaffold.dart';
-import 'package:otraku/widget/layout/hiding_floating_action_button.dart';
-import 'package:otraku/widget/layout/top_bar.dart';
-import 'package:otraku/widget/paged_view.dart';
-import 'package:otraku/feature/review/reviews_filter_sheet.dart';
-import 'package:otraku/feature/review/reviews_provider.dart';
-import 'package:otraku/feature/review/reviews_filter_provider.dart';
+import 'package:risutaku/feature/review/review_models.dart';
+import 'package:risutaku/feature/viewer/persistence_provider.dart';
+import 'package:risutaku/util/paged_controller.dart';
+import 'package:risutaku/feature/review/review_grid.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/layout/adaptive_scaffold.dart';
+import 'package:risutaku/widget/layout/hiding_floating_action_button.dart';
+import 'package:risutaku/widget/layout/top_bar.dart';
+import 'package:risutaku/widget/paged_view.dart';
+import 'package:risutaku/feature/review/reviews_filter_sheet.dart';
+import 'package:risutaku/feature/review/reviews_provider.dart';
+import 'package:risutaku/feature/review/reviews_filter_provider.dart';
 
 class ReviewsView extends ConsumerStatefulWidget {
   const ReviewsView(this.id);

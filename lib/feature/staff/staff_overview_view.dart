@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-import 'package:otraku/feature/staff/staff_model.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/table_list.dart';
-import 'package:otraku/widget/html_content.dart';
-import 'package:otraku/widget/loaders.dart';
+import 'package:risutaku/feature/staff/staff_model.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/table_list.dart';
+import 'package:risutaku/widget/html_content.dart';
+import 'package:risutaku/widget/loaders.dart';
 
 class StaffOverviewSubview extends StatelessWidget {
   const StaffOverviewSubview.asFragment({

@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otraku/extension/future_extension.dart';
-import 'package:otraku/feature/activity/activity_model.dart';
-import 'package:otraku/feature/viewer/persistence_provider.dart';
-import 'package:otraku/feature/viewer/repository_provider.dart';
-import 'package:otraku/util/graphql.dart';
-import 'package:otraku/util/paged.dart';
+import 'package:risutaku/extension/future_extension.dart';
+import 'package:risutaku/feature/activity/activity_model.dart';
+import 'package:risutaku/feature/viewer/persistence_provider.dart';
+import 'package:risutaku/feature/viewer/repository_provider.dart';
+import 'package:risutaku/util/graphql.dart';
+import 'package:risutaku/util/paged.dart';
 
 final activityProvider = AsyncNotifierProvider.autoDispose
     .family<ActivityNotifier, ExpandedActivity, int>(ActivityNotifier.new);

@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/extension/action_chip_extension.dart';
-import 'package:otraku/extension/card_extension.dart';
-import 'package:otraku/feature/discover/discover_filter_model.dart';
-import 'package:otraku/feature/media/media_provider.dart';
-import 'package:otraku/feature/tag/tag_model.dart';
-import 'package:otraku/util/routes.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/bento_card.dart';
-import 'package:otraku/widget/html_content.dart';
-import 'package:otraku/widget/loaders.dart';
-import 'package:otraku/widget/table_list.dart';
-import 'package:otraku/feature/discover/discover_filter_provider.dart';
-import 'package:otraku/feature/media/media_models.dart';
-import 'package:otraku/widget/dialogs.dart';
-import 'package:otraku/extension/snack_bar_extension.dart';
+import 'package:risutaku/extension/action_chip_extension.dart';
+import 'package:risutaku/extension/card_extension.dart';
+import 'package:risutaku/feature/discover/discover_filter_model.dart';
+import 'package:risutaku/feature/media/media_provider.dart';
+import 'package:risutaku/feature/tag/tag_model.dart';
+import 'package:risutaku/util/routes.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/bento_card.dart';
+import 'package:risutaku/widget/html_content.dart';
+import 'package:risutaku/widget/loaders.dart';
+import 'package:risutaku/widget/table_list.dart';
+import 'package:risutaku/feature/discover/discover_filter_provider.dart';
+import 'package:risutaku/feature/media/media_models.dart';
+import 'package:risutaku/widget/dialogs.dart';
+import 'package:risutaku/extension/snack_bar_extension.dart';
 
 class MediaOverviewSubview extends StatelessWidget {
   const MediaOverviewSubview.asFragment({

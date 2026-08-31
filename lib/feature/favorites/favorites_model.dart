@@ -1,5 +1,5 @@
-import 'package:otraku/feature/viewer/persistence_model.dart';
-import 'package:otraku/util/paged.dart';
+import 'package:risutaku/feature/viewer/persistence_model.dart';
+import 'package:risutaku/util/paged.dart';
 
 class Favorites {
   const Favorites({

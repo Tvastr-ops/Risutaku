@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/feature/viewer/persistence_provider.dart';
-import 'package:otraku/widget/input/chip_selector.dart';
-import 'package:otraku/feature/media/media_models.dart';
-import 'package:otraku/feature/staff/staff_filter_provider.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/sheets.dart';
+import 'package:risutaku/feature/viewer/persistence_provider.dart';
+import 'package:risutaku/widget/input/chip_selector.dart';
+import 'package:risutaku/feature/media/media_models.dart';
+import 'package:risutaku/feature/staff/staff_filter_provider.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/sheets.dart';
 
 class StaffFilterButton extends StatelessWidget {
   const StaffFilterButton(this.id, this.ref) : super(key: const Key('filterStaff'));

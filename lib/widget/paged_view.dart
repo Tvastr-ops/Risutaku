@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart';
-import 'package:otraku/util/paged.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/extension/snack_bar_extension.dart';
-import 'package:otraku/widget/layout/constrained_view.dart';
-import 'package:otraku/widget/loaders.dart';
+import 'package:risutaku/util/paged.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/extension/snack_bar_extension.dart';
+import 'package:risutaku/widget/layout/constrained_view.dart';
+import 'package:risutaku/widget/loaders.dart';
 
 class PagedView<T> extends StatelessWidget {
   const PagedView({

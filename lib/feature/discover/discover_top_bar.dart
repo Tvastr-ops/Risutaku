@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/feature/discover/discover_filter_model.dart';
-import 'package:otraku/feature/discover/discover_filter_provider.dart';
-import 'package:otraku/feature/discover/discover_media_filter_view.dart';
-import 'package:otraku/feature/discover/discover_recommendations_filter_sheet.dart';
-import 'package:otraku/feature/review/reviews_filter_sheet.dart';
-import 'package:otraku/feature/viewer/persistence_provider.dart';
-import 'package:otraku/util/routes.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/util/debounce.dart';
-import 'package:otraku/widget/input/search_field.dart';
-import 'package:otraku/widget/sheets.dart';
+import 'package:risutaku/feature/discover/discover_filter_model.dart';
+import 'package:risutaku/feature/discover/discover_filter_provider.dart';
+import 'package:risutaku/feature/discover/discover_media_filter_view.dart';
+import 'package:risutaku/feature/discover/discover_recommendations_filter_sheet.dart';
+import 'package:risutaku/feature/review/reviews_filter_sheet.dart';
+import 'package:risutaku/feature/viewer/persistence_provider.dart';
+import 'package:risutaku/util/routes.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/util/debounce.dart';
+import 'package:risutaku/widget/input/search_field.dart';
+import 'package:risutaku/widget/sheets.dart';
 
 class DiscoverTopBarTrailingContent extends StatelessWidget {
   const DiscoverTopBarTrailingContent(this.focusNode);

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:otraku/feature/activity/activities_filter_model.dart';
-import 'package:otraku/feature/activity/activities_filter_provider.dart';
-import 'package:otraku/feature/activity/activities_model.dart';
-import 'package:otraku/feature/activity/activities_provider.dart';
-import 'package:otraku/feature/activity/activity_card.dart';
-import 'package:otraku/feature/activity/activity_model.dart';
-import 'package:otraku/feature/viewer/persistence_model.dart';
-import 'package:otraku/util/routes.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/paged_view.dart';
+import 'package:risutaku/feature/activity/activities_filter_model.dart';
+import 'package:risutaku/feature/activity/activities_filter_provider.dart';
+import 'package:risutaku/feature/activity/activities_model.dart';
+import 'package:risutaku/feature/activity/activities_provider.dart';
+import 'package:risutaku/feature/activity/activity_card.dart';
+import 'package:risutaku/feature/activity/activity_model.dart';
+import 'package:risutaku/feature/viewer/persistence_model.dart';
+import 'package:risutaku/util/routes.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/paged_view.dart';
 
 class MediaActivitiesSubview extends StatelessWidget {
   const MediaActivitiesSubview({

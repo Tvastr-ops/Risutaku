@@ -1,7 +1,7 @@
-import 'package:otraku/extension/date_time_extension.dart';
-import 'package:otraku/feature/viewer/persistence_model.dart';
-import 'package:otraku/util/markdown.dart';
-import 'package:otraku/feature/media/media_models.dart';
+import 'package:risutaku/extension/date_time_extension.dart';
+import 'package:risutaku/feature/viewer/persistence_model.dart';
+import 'package:risutaku/util/markdown.dart';
+import 'package:risutaku/feature/media/media_models.dart';
 
 class ReviewItem {
   ReviewItem._({

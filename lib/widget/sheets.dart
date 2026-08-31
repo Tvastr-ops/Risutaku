@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/extension/snack_bar_extension.dart';
-import 'package:otraku/widget/layout/adaptive_scaffold.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/extension/snack_bar_extension.dart';
+import 'package:risutaku/widget/layout/adaptive_scaffold.dart';
 
 /// Used to open [DraggableScrollableSheet].
 Future<T?> showSheet<T>(BuildContext context, Widget sheet) => showModalBottomSheet<T>(

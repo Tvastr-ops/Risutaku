@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otraku/util/paged.dart';
-import 'package:otraku/feature/viewer/repository_provider.dart';
-import 'package:otraku/util/graphql.dart';
-import 'package:otraku/feature/review/review_models.dart';
-import 'package:otraku/feature/review/reviews_filter_provider.dart';
+import 'package:risutaku/util/paged.dart';
+import 'package:risutaku/feature/viewer/repository_provider.dart';
+import 'package:risutaku/util/graphql.dart';
+import 'package:risutaku/feature/review/review_models.dart';
+import 'package:risutaku/feature/review/reviews_filter_provider.dart';
 
 final reviewsProvider = AsyncNotifierProvider.autoDispose
     .family<ReviewsNotifier, PagedWithTotal<ReviewItem>, int>(ReviewsNotifier.new);

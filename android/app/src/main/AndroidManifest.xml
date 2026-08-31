@@ -49,6 +49,7 @@
                     <category android:name="android.intent.category.DEFAULT" />
                     <category android:name="android.intent.category.BROWSABLE" />
                     <data android:scheme="app" />
+                    <data android:host="risutaku" android:pathPrefix="/auth" />
                     <data android:host="otraku" android:pathPrefix="/auth" />
                </intent-filter>
                <!-- Deep links for AniList. -->

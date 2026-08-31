@@ -1,7 +1,7 @@
-import 'package:otraku/extension/date_time_extension.dart';
-import 'package:otraku/extension/string_extension.dart';
-import 'package:otraku/util/markdown.dart';
-import 'package:otraku/feature/statistics/statistics_model.dart';
+import 'package:risutaku/extension/date_time_extension.dart';
+import 'package:risutaku/extension/string_extension.dart';
+import 'package:risutaku/util/markdown.dart';
+import 'package:risutaku/feature/statistics/statistics_model.dart';
 
 class User {
   User._({

@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otraku/extension/future_extension.dart';
-import 'package:otraku/feature/studio/studio_filter_model.dart';
-import 'package:otraku/feature/viewer/persistence_provider.dart';
-import 'package:otraku/util/paged.dart';
-import 'package:otraku/feature/studio/studio_filter_provider.dart';
-import 'package:otraku/feature/studio/studio_model.dart';
-import 'package:otraku/feature/viewer/repository_provider.dart';
-import 'package:otraku/util/graphql.dart';
+import 'package:risutaku/extension/future_extension.dart';
+import 'package:risutaku/feature/studio/studio_filter_model.dart';
+import 'package:risutaku/feature/viewer/persistence_provider.dart';
+import 'package:risutaku/util/paged.dart';
+import 'package:risutaku/feature/studio/studio_filter_provider.dart';
+import 'package:risutaku/feature/studio/studio_model.dart';
+import 'package:risutaku/feature/viewer/repository_provider.dart';
+import 'package:risutaku/util/graphql.dart';
 
 final studioProvider = AsyncNotifierProvider.autoDispose.family<StudioNotifier, Studio, int>(
   StudioNotifier.new,

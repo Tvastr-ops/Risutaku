@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otraku/feature/notification/notifications_filter_model.dart';
+import 'package:risutaku/feature/notification/notifications_filter_model.dart';
 
 final notificationsFilterProvider =
     NotifierProvider.autoDispose<NotificationsFilterNotifier, NotificationsFilter>(

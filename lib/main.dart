@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:otraku/feature/viewer/persistence_model.dart';
-import 'package:otraku/feature/viewer/persistence_provider.dart';
-import 'package:otraku/util/routes.dart';
-import 'package:otraku/util/background_handler.dart';
-import 'package:otraku/util/theming.dart';
+import 'package:risutaku/feature/viewer/persistence_model.dart';
+import 'package:risutaku/feature/viewer/persistence_provider.dart';
+import 'package:risutaku/util/routes.dart';
+import 'package:risutaku/util/background_handler.dart';
+import 'package:risutaku/util/theming.dart';
 
 Future<void> main() async {
   final container = ProviderContainer(retry: (retryCount, error) => null);

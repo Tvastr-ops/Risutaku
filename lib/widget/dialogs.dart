@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/cached_image.dart';
-import 'package:otraku/widget/html_content.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/cached_image.dart';
+import 'package:risutaku/widget/html_content.dart';
 import 'package:vector_math/vector_math_64.dart' show Vector3;
 
 class TextInputDialog extends StatefulWidget {

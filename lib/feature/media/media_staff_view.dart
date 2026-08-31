@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:otraku/feature/media/media_models.dart';
-import 'package:otraku/util/routes.dart';
-import 'package:otraku/widget/grid/mono_relation_grid.dart';
-import 'package:otraku/widget/paged_view.dart';
-import 'package:otraku/feature/media/media_provider.dart';
+import 'package:risutaku/feature/media/media_models.dart';
+import 'package:risutaku/util/routes.dart';
+import 'package:risutaku/widget/grid/mono_relation_grid.dart';
+import 'package:risutaku/widget/paged_view.dart';
+import 'package:risutaku/feature/media/media_provider.dart';
 
 class MediaStaffSubview extends StatelessWidget {
   const MediaStaffSubview({required this.id, required this.scrollCtrl, required this.highContrast});

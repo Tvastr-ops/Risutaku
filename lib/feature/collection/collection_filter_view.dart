@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otraku/feature/collection/collection_filter_model.dart';
-import 'package:otraku/feature/collection/collection_models.dart';
-import 'package:otraku/widget/dialogs.dart';
-import 'package:otraku/widget/input/chip_selector.dart';
-import 'package:otraku/feature/tag/tag_picker.dart';
-import 'package:otraku/widget/input/year_range_picker.dart';
-import 'package:otraku/feature/media/media_models.dart';
-import 'package:otraku/feature/tag/tag_provider.dart';
-import 'package:otraku/feature/viewer/persistence_provider.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/layout/navigation_tool.dart';
-import 'package:otraku/widget/loaders.dart';
-import 'package:otraku/widget/sheets.dart';
+import 'package:risutaku/feature/collection/collection_filter_model.dart';
+import 'package:risutaku/feature/collection/collection_models.dart';
+import 'package:risutaku/widget/dialogs.dart';
+import 'package:risutaku/widget/input/chip_selector.dart';
+import 'package:risutaku/feature/tag/tag_picker.dart';
+import 'package:risutaku/widget/input/year_range_picker.dart';
+import 'package:risutaku/feature/media/media_models.dart';
+import 'package:risutaku/feature/tag/tag_provider.dart';
+import 'package:risutaku/feature/viewer/persistence_provider.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/layout/navigation_tool.dart';
+import 'package:risutaku/widget/loaders.dart';
+import 'package:risutaku/widget/sheets.dart';
 
 class CollectionFilterView extends ConsumerStatefulWidget {
   const CollectionFilterView({required this.tag, required this.filter, required this.onChanged});

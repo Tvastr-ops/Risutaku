@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/extension/scroll_controller_extension.dart';
-import 'package:otraku/extension/snack_bar_extension.dart';
-import 'package:otraku/feature/settings/settings_model.dart';
-import 'package:otraku/feature/settings/settings_provider.dart';
-import 'package:otraku/feature/settings/settings_app_view.dart';
-import 'package:otraku/feature/settings/settings_content_view.dart';
-import 'package:otraku/feature/settings/settings_notifications_view.dart';
-import 'package:otraku/feature/settings/settings_about_view.dart';
-import 'package:otraku/feature/viewer/persistence_provider.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/layout/adaptive_scaffold.dart';
-import 'package:otraku/widget/layout/hiding_floating_action_button.dart';
-import 'package:otraku/widget/layout/constrained_view.dart';
-import 'package:otraku/widget/layout/top_bar.dart';
-import 'package:otraku/widget/loaders.dart';
+import 'package:risutaku/extension/scroll_controller_extension.dart';
+import 'package:risutaku/extension/snack_bar_extension.dart';
+import 'package:risutaku/feature/settings/settings_model.dart';
+import 'package:risutaku/feature/settings/settings_provider.dart';
+import 'package:risutaku/feature/settings/settings_app_view.dart';
+import 'package:risutaku/feature/settings/settings_content_view.dart';
+import 'package:risutaku/feature/settings/settings_notifications_view.dart';
+import 'package:risutaku/feature/settings/settings_about_view.dart';
+import 'package:risutaku/feature/viewer/persistence_provider.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/layout/adaptive_scaffold.dart';
+import 'package:risutaku/widget/layout/hiding_floating_action_button.dart';
+import 'package:risutaku/widget/layout/constrained_view.dart';
+import 'package:risutaku/widget/layout/top_bar.dart';
+import 'package:risutaku/widget/loaders.dart';
 
 class SettingsView extends ConsumerStatefulWidget {
   const SettingsView();

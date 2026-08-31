@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/extension/build_context_extension.dart';
-import 'package:otraku/extension/card_extension.dart';
-import 'package:otraku/feature/collection/collection_models.dart';
-import 'package:otraku/feature/edit/edit_view.dart';
-import 'package:otraku/feature/media/media_route_tile.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/extension/snack_bar_extension.dart';
-import 'package:otraku/widget/cached_image.dart';
-import 'package:otraku/util/debounce.dart';
-import 'package:otraku/widget/dialogs.dart';
-import 'package:otraku/widget/grid/sliver_grid_delegates.dart';
-import 'package:otraku/widget/sheets.dart';
+import 'package:risutaku/extension/build_context_extension.dart';
+import 'package:risutaku/extension/card_extension.dart';
+import 'package:risutaku/feature/collection/collection_models.dart';
+import 'package:risutaku/feature/edit/edit_view.dart';
+import 'package:risutaku/feature/media/media_route_tile.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/extension/snack_bar_extension.dart';
+import 'package:risutaku/widget/cached_image.dart';
+import 'package:risutaku/util/debounce.dart';
+import 'package:risutaku/widget/dialogs.dart';
+import 'package:risutaku/widget/grid/sliver_grid_delegates.dart';
+import 'package:risutaku/widget/sheets.dart';
 
 class CollectionGrid extends StatelessWidget {
   const CollectionGrid({

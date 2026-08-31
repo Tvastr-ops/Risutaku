@@ -1,7 +1,7 @@
-import 'package:otraku/feature/comment/comment_model.dart';
-import 'package:otraku/feature/forum/forum_model.dart';
-import 'package:otraku/feature/user/user_item_model.dart';
-import 'package:otraku/util/paged.dart';
+import 'package:risutaku/feature/comment/comment_model.dart';
+import 'package:risutaku/feature/forum/forum_model.dart';
+import 'package:risutaku/feature/user/user_item_model.dart';
+import 'package:risutaku/util/paged.dart';
 
 class Social {
   const Social({

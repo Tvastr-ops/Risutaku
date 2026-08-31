@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:otraku/feature/staff/staff_model.dart';
-import 'package:otraku/util/routes.dart';
-import 'package:otraku/widget/grid/dual_relation_grid.dart';
-import 'package:otraku/widget/paged_view.dart';
-import 'package:otraku/feature/staff/staff_provider.dart';
+import 'package:risutaku/feature/staff/staff_model.dart';
+import 'package:risutaku/util/routes.dart';
+import 'package:risutaku/widget/grid/dual_relation_grid.dart';
+import 'package:risutaku/widget/paged_view.dart';
+import 'package:risutaku/feature/staff/staff_provider.dart';
 
 class StaffCharactersSubview extends StatelessWidget {
   const StaffCharactersSubview({

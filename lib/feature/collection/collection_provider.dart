@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otraku/extension/date_time_extension.dart';
-import 'package:otraku/feature/viewer/persistence_provider.dart';
-import 'package:otraku/feature/collection/collection_models.dart';
-import 'package:otraku/feature/home/home_provider.dart';
-import 'package:otraku/feature/media/media_models.dart';
-import 'package:otraku/feature/viewer/repository_provider.dart';
-import 'package:otraku/util/graphql.dart';
+import 'package:risutaku/extension/date_time_extension.dart';
+import 'package:risutaku/feature/viewer/persistence_provider.dart';
+import 'package:risutaku/feature/collection/collection_models.dart';
+import 'package:risutaku/feature/home/home_provider.dart';
+import 'package:risutaku/feature/media/media_models.dart';
+import 'package:risutaku/feature/viewer/repository_provider.dart';
+import 'package:risutaku/util/graphql.dart';
 
 final collectionProvider = AsyncNotifierProvider.autoDispose
     .family<CollectionNotifier, Collection, CollectionTag>(CollectionNotifier.new);

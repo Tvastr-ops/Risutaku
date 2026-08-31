@@ -1,4 +1,4 @@
-import 'package:otraku/feature/media/media_models.dart';
+import 'package:risutaku/feature/media/media_models.dart';
 
 class CharacterFilter {
   const CharacterFilter({this.sort = .trendingDesc, this.inLists});

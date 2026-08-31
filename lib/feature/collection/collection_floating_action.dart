@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/feature/collection/collection_models.dart';
-import 'package:otraku/feature/collection/collection_provider.dart';
-import 'package:otraku/feature/home/home_provider.dart';
-import 'package:otraku/widget/input/pill_selector.dart';
-import 'package:otraku/widget/swipe_switcher.dart';
-import 'package:otraku/widget/sheets.dart';
+import 'package:risutaku/feature/collection/collection_models.dart';
+import 'package:risutaku/feature/collection/collection_provider.dart';
+import 'package:risutaku/feature/home/home_provider.dart';
+import 'package:risutaku/widget/input/pill_selector.dart';
+import 'package:risutaku/widget/swipe_switcher.dart';
+import 'package:risutaku/widget/sheets.dart';
 
 class CollectionFloatingAction extends StatelessWidget {
   CollectionFloatingAction(this.tag) : super(key: Key('${tag.userId}${tag.ofAnime}'));

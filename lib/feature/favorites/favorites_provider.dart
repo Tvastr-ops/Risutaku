@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otraku/extension/future_extension.dart';
-import 'package:otraku/feature/viewer/persistence_provider.dart';
-import 'package:otraku/feature/favorites/favorites_model.dart';
-import 'package:otraku/feature/viewer/repository_provider.dart';
-import 'package:otraku/util/graphql.dart';
+import 'package:risutaku/extension/future_extension.dart';
+import 'package:risutaku/feature/viewer/persistence_provider.dart';
+import 'package:risutaku/feature/favorites/favorites_model.dart';
+import 'package:risutaku/feature/viewer/repository_provider.dart';
+import 'package:risutaku/util/graphql.dart';
 
 final favoritesProvider = AsyncNotifierProvider.autoDispose
     .family<FavoritesNotifier, Favorites, int>(FavoritesNotifier.new);

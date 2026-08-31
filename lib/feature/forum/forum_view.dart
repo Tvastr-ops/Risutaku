@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/feature/forum/forum_filter_provider.dart';
-import 'package:otraku/feature/forum/forum_filter_view.dart';
-import 'package:otraku/feature/forum/forum_provider.dart';
-import 'package:otraku/feature/forum/thread_item_list.dart';
-import 'package:otraku/feature/viewer/persistence_provider.dart';
-import 'package:otraku/util/debounce.dart';
-import 'package:otraku/util/paged_controller.dart';
-import 'package:otraku/widget/input/search_field.dart';
-import 'package:otraku/widget/layout/adaptive_scaffold.dart';
-import 'package:otraku/widget/layout/top_bar.dart';
-import 'package:otraku/widget/paged_view.dart';
+import 'package:risutaku/feature/forum/forum_filter_provider.dart';
+import 'package:risutaku/feature/forum/forum_filter_view.dart';
+import 'package:risutaku/feature/forum/forum_provider.dart';
+import 'package:risutaku/feature/forum/thread_item_list.dart';
+import 'package:risutaku/feature/viewer/persistence_provider.dart';
+import 'package:risutaku/util/debounce.dart';
+import 'package:risutaku/util/paged_controller.dart';
+import 'package:risutaku/widget/input/search_field.dart';
+import 'package:risutaku/widget/layout/adaptive_scaffold.dart';
+import 'package:risutaku/widget/layout/top_bar.dart';
+import 'package:risutaku/widget/paged_view.dart';
 
 class ForumView extends ConsumerStatefulWidget {
   const ForumView();

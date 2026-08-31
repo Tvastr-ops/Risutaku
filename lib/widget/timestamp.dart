@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:otraku/extension/date_time_extension.dart';
-import 'package:otraku/extension/snack_bar_extension.dart';
-import 'package:otraku/util/theming.dart';
+import 'package:risutaku/extension/date_time_extension.dart';
+import 'package:risutaku/extension/snack_bar_extension.dart';
+import 'package:risutaku/util/theming.dart';
 
 class Timestamp extends StatelessWidget {
   const Timestamp(

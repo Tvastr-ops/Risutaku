@@ -1,4 +1,4 @@
-import 'package:otraku/feature/viewer/persistence_model.dart';
+import 'package:risutaku/feature/viewer/persistence_model.dart';
 
 class MediaItem {
   const MediaItem._({required this.id, required this.name, required this.imageUrl});

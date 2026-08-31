@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/extension/snack_bar_extension.dart';
-import 'package:otraku/util/routes.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/cached_image.dart';
-import 'package:otraku/widget/loaders.dart';
-import 'package:otraku/widget/dialogs.dart';
-import 'package:otraku/widget/sheets.dart';
+import 'package:risutaku/extension/snack_bar_extension.dart';
+import 'package:risutaku/util/routes.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/cached_image.dart';
+import 'package:risutaku/widget/loaders.dart';
+import 'package:risutaku/widget/dialogs.dart';
+import 'package:risutaku/widget/sheets.dart';
 
 class HtmlContent extends StatelessWidget {
   const HtmlContent(this.text, {this.renderMode = RenderMode.column});

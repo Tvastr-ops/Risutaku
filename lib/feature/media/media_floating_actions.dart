@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otraku/feature/collection/collection_models.dart';
-import 'package:otraku/feature/media/media_models.dart';
-import 'package:otraku/feature/viewer/repository_provider.dart';
-import 'package:otraku/util/graphql.dart';
-import 'package:otraku/widget/quick_action_dock.dart';
+import 'package:risutaku/feature/collection/collection_models.dart';
+import 'package:risutaku/feature/media/media_models.dart';
+import 'package:risutaku/feature/viewer/repository_provider.dart';
+import 'package:risutaku/util/graphql.dart';
+import 'package:risutaku/widget/quick_action_dock.dart';
 
 class MediaEditButton extends ConsumerStatefulWidget {
   const MediaEditButton(this.media);

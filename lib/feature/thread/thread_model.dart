@@ -1,7 +1,7 @@
-import 'package:otraku/extension/date_time_extension.dart';
-import 'package:otraku/feature/comment/comment_model.dart';
-import 'package:otraku/feature/viewer/persistence_model.dart';
-import 'package:otraku/util/markdown.dart';
+import 'package:risutaku/extension/date_time_extension.dart';
+import 'package:risutaku/feature/comment/comment_model.dart';
+import 'package:risutaku/feature/viewer/persistence_model.dart';
+import 'package:risutaku/util/markdown.dart';
 
 class Thread {
   const Thread._({

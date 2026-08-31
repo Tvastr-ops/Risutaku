@@ -2,10 +2,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/feature/edit/edit_model.dart';
-import 'package:otraku/feature/edit/edit_view.dart';
-import 'package:otraku/feature/media/media_models.dart';
-import 'package:otraku/widget/sheets.dart';
+import 'package:risutaku/feature/edit/edit_model.dart';
+import 'package:risutaku/feature/edit/edit_view.dart';
+import 'package:risutaku/feature/media/media_models.dart';
+import 'package:risutaku/widget/sheets.dart';
 
 /// A floating quick-action dock anchored to the bottom of the media page.
 /// Provides immediate 1-tap access to status switching, progress incrementing, and full editing.

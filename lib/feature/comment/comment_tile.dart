@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:otraku/extension/snack_bar_extension.dart';
-import 'package:otraku/feature/composition/composition_model.dart';
-import 'package:otraku/feature/composition/composition_view.dart';
-import 'package:otraku/feature/comment/comment_model.dart';
-import 'package:otraku/util/routes.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/cached_image.dart';
-import 'package:otraku/widget/html_content.dart';
-import 'package:otraku/widget/sheets.dart';
-import 'package:otraku/widget/timestamp.dart';
+import 'package:risutaku/extension/snack_bar_extension.dart';
+import 'package:risutaku/feature/composition/composition_model.dart';
+import 'package:risutaku/feature/composition/composition_view.dart';
+import 'package:risutaku/feature/comment/comment_model.dart';
+import 'package:risutaku/util/routes.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/cached_image.dart';
+import 'package:risutaku/widget/html_content.dart';
+import 'package:risutaku/widget/sheets.dart';
+import 'package:risutaku/widget/timestamp.dart';
 
 const _maxCommentDepth = 6;
 

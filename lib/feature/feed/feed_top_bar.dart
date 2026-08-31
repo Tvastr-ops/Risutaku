@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/extension/snack_bar_extension.dart';
-import 'package:otraku/feature/activity/activities_model.dart';
-import 'package:otraku/feature/activity/activity_filter_sheet.dart';
-import 'package:otraku/feature/settings/settings_provider.dart';
-import 'package:otraku/feature/viewer/persistence_provider.dart';
-import 'package:otraku/util/routes.dart';
+import 'package:risutaku/extension/snack_bar_extension.dart';
+import 'package:risutaku/feature/activity/activities_model.dart';
+import 'package:risutaku/feature/activity/activity_filter_sheet.dart';
+import 'package:risutaku/feature/settings/settings_provider.dart';
+import 'package:risutaku/feature/viewer/persistence_provider.dart';
+import 'package:risutaku/util/routes.dart';
 
 class FeedTopBarTrailingContent extends StatelessWidget {
   const FeedTopBarTrailingContent();

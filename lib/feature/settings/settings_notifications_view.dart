@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/input/stateful_tiles.dart';
-import 'package:otraku/feature/settings/settings_model.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/input/stateful_tiles.dart';
+import 'package:risutaku/feature/settings/settings_model.dart';
 
 class SettingsNotificationsSubview extends StatelessWidget {
   const SettingsNotificationsSubview(this.scrollCtrl, this.settings);

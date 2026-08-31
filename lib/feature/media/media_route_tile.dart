@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:otraku/feature/edit/edit_view.dart';
-import 'package:otraku/util/routes.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/sheets.dart';
+import 'package:risutaku/feature/edit/edit_view.dart';
+import 'package:risutaku/util/routes.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/sheets.dart';
 
 class MediaRouteTile extends StatelessWidget {
   const MediaRouteTile({super.key, required this.id, required this.imageUrl, required this.child});

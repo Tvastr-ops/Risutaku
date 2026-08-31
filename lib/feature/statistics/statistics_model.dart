@@ -1,5 +1,5 @@
-import 'package:otraku/extension/string_extension.dart';
-import 'package:otraku/feature/media/media_models.dart';
+import 'package:risutaku/extension/string_extension.dart';
+import 'package:risutaku/feature/media/media_models.dart';
 
 class Statistics {
   Statistics._({

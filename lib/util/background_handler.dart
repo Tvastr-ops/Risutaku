@@ -3,12 +3,12 @@ import 'dart:io';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otraku/feature/viewer/persistence_model.dart';
-import 'package:otraku/feature/viewer/persistence_provider.dart';
-import 'package:otraku/feature/viewer/repository_provider.dart';
-import 'package:otraku/util/routes.dart';
-import 'package:otraku/feature/notification/notifications_model.dart';
-import 'package:otraku/util/graphql.dart';
+import 'package:risutaku/feature/viewer/persistence_model.dart';
+import 'package:risutaku/feature/viewer/persistence_provider.dart';
+import 'package:risutaku/feature/viewer/repository_provider.dart';
+import 'package:risutaku/util/routes.dart';
+import 'package:risutaku/feature/notification/notifications_model.dart';
+import 'package:risutaku/util/graphql.dart';
 import 'package:workmanager/workmanager.dart';
 
 final _notificationPlugin = FlutterLocalNotificationsPlugin();

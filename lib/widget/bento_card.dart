@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:otraku/util/theming.dart';
+import 'package:risutaku/util/theming.dart';
 
 /// A modular, tactile Bento Card container adhering to Material 3 Expressive.
 /// Supports tonal surface elevation, subtle borders, and responsive sizing.

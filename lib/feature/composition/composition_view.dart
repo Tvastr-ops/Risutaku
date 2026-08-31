@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/util/markdown.dart';
-import 'package:otraku/feature/composition/composition_model.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/html_content.dart';
-import 'package:otraku/widget/layout/navigation_tool.dart';
-import 'package:otraku/widget/loaders.dart';
-import 'package:otraku/widget/sheets.dart';
-import 'package:otraku/extension/snack_bar_extension.dart';
-import 'package:otraku/feature/composition/composition_provider.dart';
+import 'package:risutaku/util/markdown.dart';
+import 'package:risutaku/feature/composition/composition_model.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/html_content.dart';
+import 'package:risutaku/widget/layout/navigation_tool.dart';
+import 'package:risutaku/widget/loaders.dart';
+import 'package:risutaku/widget/sheets.dart';
+import 'package:risutaku/extension/snack_bar_extension.dart';
+import 'package:risutaku/feature/composition/composition_provider.dart';
 
 class CompositionView extends StatelessWidget {
   const CompositionView({required this.tag, required this.onSaved, this.defaultText = ''});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:otraku/feature/review/review_models.dart';
-import 'package:otraku/util/routes.dart';
-import 'package:otraku/widget/layout/content_header.dart';
+import 'package:risutaku/feature/review/review_models.dart';
+import 'package:risutaku/util/routes.dart';
+import 'package:risutaku/widget/layout/content_header.dart';
 
 class ReviewHeader extends StatelessWidget {
   const ReviewHeader({required this.id, required this.review, required this.bannerUrl});

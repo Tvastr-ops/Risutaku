@@ -1,12 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otraku/feature/forum/forum_filter_model.dart';
-import 'package:otraku/feature/forum/forum_filter_provider.dart';
-import 'package:otraku/feature/viewer/persistence_provider.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/input/chip_selector.dart';
-import 'package:otraku/widget/input/stateful_tiles.dart';
-import 'package:otraku/widget/sheets.dart';
+import 'package:risutaku/feature/forum/forum_filter_model.dart';
+import 'package:risutaku/feature/forum/forum_filter_provider.dart';
+import 'package:risutaku/feature/viewer/persistence_provider.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/input/chip_selector.dart';
+import 'package:risutaku/widget/input/stateful_tiles.dart';
+import 'package:risutaku/widget/sheets.dart';
 
 void showForumFilterSheet(BuildContext context, WidgetRef ref) async {
   final highContrast = ref.read(persistenceProvider.select((s) => s.options.highContrast));

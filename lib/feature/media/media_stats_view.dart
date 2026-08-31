@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/extension/build_context_extension.dart';
-import 'package:otraku/extension/card_extension.dart';
-import 'package:otraku/feature/discover/discover_filter_model.dart';
-import 'package:otraku/util/routes.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/grid/sliver_grid_delegates.dart';
-import 'package:otraku/widget/layout/constrained_view.dart';
-import 'package:otraku/widget/loaders.dart';
-import 'package:otraku/feature/discover/discover_filter_provider.dart';
-import 'package:otraku/feature/media/media_models.dart';
-import 'package:otraku/feature/statistics/charts.dart';
+import 'package:risutaku/extension/build_context_extension.dart';
+import 'package:risutaku/extension/card_extension.dart';
+import 'package:risutaku/feature/discover/discover_filter_model.dart';
+import 'package:risutaku/util/routes.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/grid/sliver_grid_delegates.dart';
+import 'package:risutaku/widget/layout/constrained_view.dart';
+import 'package:risutaku/widget/loaders.dart';
+import 'package:risutaku/feature/discover/discover_filter_provider.dart';
+import 'package:risutaku/feature/media/media_models.dart';
+import 'package:risutaku/feature/statistics/charts.dart';
 
 class MediaStatsSubview extends StatelessWidget {
   const MediaStatsSubview({

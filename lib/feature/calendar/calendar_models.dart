@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
-import 'package:otraku/extension/color_extension.dart';
-import 'package:otraku/extension/date_time_extension.dart';
-import 'package:otraku/extension/enum_extension.dart';
-import 'package:otraku/feature/viewer/persistence_model.dart';
-import 'package:otraku/feature/collection/collection_models.dart';
+import 'package:risutaku/extension/color_extension.dart';
+import 'package:risutaku/extension/date_time_extension.dart';
+import 'package:risutaku/extension/enum_extension.dart';
+import 'package:risutaku/feature/viewer/persistence_model.dart';
+import 'package:risutaku/feature/collection/collection_models.dart';
 
 class CalendarItem {
   const CalendarItem._({

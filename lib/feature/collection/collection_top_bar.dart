@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/feature/collection/collection_entries_provider.dart';
-import 'package:otraku/feature/collection/collection_filter_provider.dart';
-import 'package:otraku/feature/collection/collection_models.dart';
-import 'package:otraku/feature/collection/collection_provider.dart';
-import 'package:otraku/feature/collection/collection_filter_view.dart';
-import 'package:otraku/util/routes.dart';
-import 'package:otraku/util/debounce.dart';
-import 'package:otraku/widget/input/search_field.dart';
-import 'package:otraku/widget/dialogs.dart';
-import 'package:otraku/widget/sheets.dart';
+import 'package:risutaku/feature/collection/collection_entries_provider.dart';
+import 'package:risutaku/feature/collection/collection_filter_provider.dart';
+import 'package:risutaku/feature/collection/collection_models.dart';
+import 'package:risutaku/feature/collection/collection_provider.dart';
+import 'package:risutaku/feature/collection/collection_filter_view.dart';
+import 'package:risutaku/util/routes.dart';
+import 'package:risutaku/util/debounce.dart';
+import 'package:risutaku/widget/input/search_field.dart';
+import 'package:risutaku/widget/dialogs.dart';
+import 'package:risutaku/widget/sheets.dart';
 
 class CollectionTopBarTrailingContent extends StatelessWidget {
   const CollectionTopBarTrailingContent(this.tag, this.focusNode);

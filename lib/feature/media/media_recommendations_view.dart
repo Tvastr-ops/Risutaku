@@ -2,17 +2,17 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otraku/extension/build_context_extension.dart';
-import 'package:otraku/extension/card_extension.dart';
-import 'package:otraku/feature/media/media_route_tile.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/extension/snack_bar_extension.dart';
-import 'package:otraku/widget/cached_image.dart';
-import 'package:otraku/widget/grid/sliver_grid_delegates.dart';
-import 'package:otraku/widget/paged_view.dart';
-import 'package:otraku/feature/media/media_models.dart';
-import 'package:otraku/feature/media/media_provider.dart';
-import 'package:otraku/widget/text_rail.dart';
+import 'package:risutaku/extension/build_context_extension.dart';
+import 'package:risutaku/extension/card_extension.dart';
+import 'package:risutaku/feature/media/media_route_tile.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/extension/snack_bar_extension.dart';
+import 'package:risutaku/widget/cached_image.dart';
+import 'package:risutaku/widget/grid/sliver_grid_delegates.dart';
+import 'package:risutaku/widget/paged_view.dart';
+import 'package:risutaku/feature/media/media_models.dart';
+import 'package:risutaku/feature/media/media_provider.dart';
+import 'package:risutaku/widget/text_rail.dart';
 
 class MediaRecommendationsSubview extends StatelessWidget {
   const MediaRecommendationsSubview({

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/feature/media/media_models.dart';
-import 'package:otraku/feature/settings/settings_model.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/dialogs.dart';
-import 'package:otraku/widget/input/chip_selector.dart';
-import 'package:otraku/widget/input/stateful_tiles.dart';
-import 'package:otraku/widget/sheets.dart';
+import 'package:risutaku/feature/media/media_models.dart';
+import 'package:risutaku/feature/settings/settings_model.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/dialogs.dart';
+import 'package:risutaku/widget/input/chip_selector.dart';
+import 'package:risutaku/widget/input/stateful_tiles.dart';
+import 'package:risutaku/widget/sheets.dart';
 
 class SettingsContentSubview extends StatelessWidget {
   const SettingsContentSubview(this.scrollCtrl, this.settings, this.highContrast);

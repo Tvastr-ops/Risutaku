@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/dialogs.dart';
+import 'package:risutaku/util/theming.dart';
+import 'package:risutaku/widget/dialogs.dart';
 
 class NotesLabel extends StatelessWidget {
   const NotesLabel(this.notes);

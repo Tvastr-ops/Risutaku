@@ -1,5 +1,5 @@
-import 'package:otraku/extension/enum_extension.dart';
-import 'package:otraku/feature/media/media_models.dart';
+import 'package:risutaku/extension/enum_extension.dart';
+import 'package:risutaku/feature/media/media_models.dart';
 
 class CollectionFilter {
   const CollectionFilter._({required this.search, required this.mediaFilter});

@@ -1,9 +1,9 @@
-import 'package:otraku/extension/string_extension.dart';
-import 'package:otraku/feature/viewer/persistence_model.dart';
-import 'package:otraku/util/paged.dart';
-import 'package:otraku/util/markdown.dart';
-import 'package:otraku/feature/settings/settings_model.dart';
-import 'package:otraku/util/tile_modelable.dart';
+import 'package:risutaku/extension/string_extension.dart';
+import 'package:risutaku/feature/viewer/persistence_model.dart';
+import 'package:risutaku/util/paged.dart';
+import 'package:risutaku/util/markdown.dart';
+import 'package:risutaku/feature/settings/settings_model.dart';
+import 'package:risutaku/util/tile_modelable.dart';
 
 class Character {
   Character._({

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:otraku/extension/build_context_extension.dart';
-import 'package:otraku/util/theming.dart';
+import 'package:risutaku/extension/build_context_extension.dart';
+import 'package:risutaku/util/theming.dart';
 
 const _preferredSize = Size.fromHeight(Theming.normalTapTarget);
 

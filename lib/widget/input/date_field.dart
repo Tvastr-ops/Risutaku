@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:otraku/extension/date_time_extension.dart';
-import 'package:otraku/util/theming.dart';
+import 'package:risutaku/extension/date_time_extension.dart';
+import 'package:risutaku/util/theming.dart';
 
 class DateField extends StatefulWidget {
   const DateField({required this.label, required this.value, required this.onChanged});

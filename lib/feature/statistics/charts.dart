@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:otraku/extension/card_extension.dart';
-import 'package:otraku/util/theming.dart';
+import 'package:risutaku/extension/card_extension.dart';
+import 'package:risutaku/util/theming.dart';
 
 class BarChart extends StatelessWidget {
   const BarChart({required this.title, required this.names, required this.values, this.toolbar})
