@@ -62,6 +62,7 @@ android {
             } else {
                 signingConfigs.getByName("debug")
             }
+        }
     }
 }
 
