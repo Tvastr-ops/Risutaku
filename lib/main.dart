@@ -112,21 +112,16 @@ class AppState extends ConsumerState<_App> {
           }
         }
 
-        Color? lightBackground;
-        Color? darkBackground;
-        if (options.highContrast) {
-          lightBackground = Colors.white;
-          darkBackground = Colors.black;
-        }
-
-        final lightScheme = ColorScheme.fromSeed(
-          seedColor: lightSeed,
+        final lightScheme = Theming.createColorScheme(
+          seed: lightSeed,
           brightness: Brightness.light,
-        ).copyWith(surface: lightBackground);
-        final darkScheme = ColorScheme.fromSeed(
-          seedColor: darkSeed,
+          highContrast: options.highContrast,
+        );
+        final darkScheme = Theming.createColorScheme(
+          seed: darkSeed,
           brightness: Brightness.dark,
-        ).copyWith(surface: darkBackground);
+          highContrast: options.highContrast,
+        );
 
         final isDark = options.themeMode == ThemeMode.system
             ? platformBrightness == Brightness.dark
@@ -152,7 +147,7 @@ class AppState extends ConsumerState<_App> {
 
         return MaterialApp.router(
           debugShowCheckedModeBanner: false,
-          title: 'Otraku',
+          title: 'Risutaku',
           theme: Theming.generateThemeData(lightScheme),
           darkTheme: Theming.generateThemeData(darkScheme),
           themeMode: options.themeMode,

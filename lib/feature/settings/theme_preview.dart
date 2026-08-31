@@ -39,10 +39,11 @@ class ThemePreview extends StatelessWidget {
       children.add(
         _ThemeCard(
           name: 'System',
-          scheme: ColorScheme.fromSeed(
-            seedColor: systemPrimaryColor,
+          scheme: Theming.createColorScheme(
+            seed: systemPrimaryColor,
             brightness: brightness,
-          ).copyWith(surface: background),
+            highContrast: options.highContrast,
+          ),
           active: options.themeBase == null,
           onTap: () => ref
               .read(persistenceProvider.notifier)
@@ -55,10 +56,11 @@ class ThemePreview extends StatelessWidget {
       children.add(
         _ThemeCard(
           name: tb.title,
-          scheme: ColorScheme.fromSeed(
-            seedColor: tb.seed,
+          scheme: Theming.createColorScheme(
+            seed: tb.seed,
             brightness: brightness,
-          ).copyWith(surface: background),
+            highContrast: options.highContrast,
+          ),
           active: options.themeBase == tb,
           onTap: () =>
               ref.read(persistenceProvider.notifier).setOptions(options.copyWith(themeBase: (tb,))),

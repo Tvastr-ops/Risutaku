@@ -93,7 +93,7 @@ class _AccountPicker extends StatefulWidget {
 
 class __AccountPickerState extends State<_AccountPicker> {
   static const _loginLink =
-      'https://anilist.co/api/v2/oauth/authorize?client_id=3535&response_type=token';
+      'https://anilist.co/api/v2/oauth/authorize?client_id=49895&response_type=token';
 
   static const _imageSize = 55.0;
 

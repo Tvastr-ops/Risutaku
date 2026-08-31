@@ -61,7 +61,7 @@ class SettingsAboutSubview extends StatelessWidget {
             ListTile(
               leading: const Icon(LucideIcons.heart),
               title: const Text('Upstream Project'),
-              subtitle: const Text('Forked with appreciation from Otraku by lotusprey'),
+              subtitle: const Text('Original Otraku by Lotusprey'),
               onTap: () =>
                   SnackBarExtension.launch(context, 'https://github.com/lotusprey/otraku'),
             ),

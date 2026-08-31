@@ -80,8 +80,116 @@ class Theming extends ThemeExtension<Theming> {
   static const radiusBig = Radius.circular(24);
   static const borderRadiusSmall = BorderRadius.all(radiusSmall);
   static const borderRadiusBig = BorderRadius.all(radiusBig);
-  static final blurFilter = ImageFilter.blur(sigmaX: 5, sigmaY: 5);
+  static const blurFilter = ImageFilter.blur(sigmaX: 5, sigmaY: 5);
   static const bouncyPhysics = AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics());
+
+  static ColorScheme createColorScheme({
+    required Color seed,
+    required Brightness brightness,
+    required bool highContrast,
+  }) {
+    if (brightness == Brightness.light) {
+      final base = ColorScheme.fromSeed(seedColor: seed, brightness: Brightness.light);
+      if (highContrast) {
+        return base.copyWith(
+          surface: Colors.white,
+          surfaceContainerLowest: Colors.white,
+          surfaceContainerLow: const Color(0xFFF7F7F7),
+          surfaceContainer: const Color(0xFFEFEFEF),
+          surfaceContainerHigh: const Color(0xFFE5E5E5),
+          surfaceContainerHighest: const Color(0xFFDBDBDB),
+        );
+      }
+      return base;
+    }
+
+    final hsl = HSLColor.fromColor(seed);
+    final vibrantPrimary = HSLColor.fromAHSL(
+      1.0,
+      hsl.hue,
+      (hsl.saturation * 1.15).clamp(0.75, 1.0),
+      hsl.lightness.clamp(0.60, 0.72),
+    ).toColor();
+
+    final primaryContainer = HSLColor.fromAHSL(
+      1.0,
+      hsl.hue,
+      (hsl.saturation * 0.9).clamp(0.5, 0.9),
+      0.22,
+    ).toColor();
+
+    final onPrimaryContainer = HSLColor.fromAHSL(
+      1.0,
+      hsl.hue,
+      0.9,
+      0.88,
+    ).toColor();
+
+    final secondary = HSLColor.fromAHSL(
+      1.0,
+      (hsl.hue + 15) % 360,
+      (hsl.saturation * 0.8).clamp(0.4, 0.8),
+      0.70,
+    ).toColor();
+
+    final tertiary = HSLColor.fromAHSL(
+      1.0,
+      (hsl.hue + 45) % 360,
+      (hsl.saturation * 0.8).clamp(0.4, 0.8),
+      0.72,
+    ).toColor();
+
+    if (highContrast) {
+      return ColorScheme.dark(
+        primary: vibrantPrimary,
+        onPrimary: Colors.black,
+        primaryContainer: primaryContainer,
+        onPrimaryContainer: onPrimaryContainer,
+        secondary: secondary,
+        onSecondary: Colors.black,
+        tertiary: tertiary,
+        onTertiary: Colors.black,
+        surface: Colors.black,
+        onSurface: const Color(0xFFF0F0F0),
+        onSurfaceVariant: const Color(0xFFB8B8B8),
+        surfaceContainerLowest: Colors.black,
+        surfaceContainerLow: const Color(0xFF0A0A0A),
+        surfaceContainer: const Color(0xFF111111),
+        surfaceContainerHigh: const Color(0xFF181818),
+        surfaceContainerHighest: const Color(0xFF222222),
+        outline: vibrantPrimary.withValues(alpha: 0.35),
+        outlineVariant: const Color(0xFF2A2A2A),
+      );
+    }
+
+    final bgHue = hsl.hue;
+    final surface = HSLColor.fromAHSL(1.0, bgHue, 0.22, 0.08).toColor();
+    final surfaceLow = HSLColor.fromAHSL(1.0, bgHue, 0.20, 0.11).toColor();
+    final surfaceCont = HSLColor.fromAHSL(1.0, bgHue, 0.18, 0.13).toColor();
+    final surfaceHigh = HSLColor.fromAHSL(1.0, bgHue, 0.16, 0.16).toColor();
+    final surfaceHighest = HSLColor.fromAHSL(1.0, bgHue, 0.14, 0.20).toColor();
+
+    return ColorScheme.dark(
+      primary: vibrantPrimary,
+      onPrimary: Colors.black,
+      primaryContainer: primaryContainer,
+      onPrimaryContainer: onPrimaryContainer,
+      secondary: secondary,
+      onSecondary: Colors.black,
+      tertiary: tertiary,
+      onTertiary: Colors.black,
+      surface: surface,
+      onSurface: const Color(0xFFE8E8E8),
+      onSurfaceVariant: const Color(0xFFAAAAAA),
+      surfaceContainerLowest: HSLColor.fromAHSL(1.0, bgHue, 0.25, 0.06).toColor(),
+      surfaceContainerLow: surfaceLow,
+      surfaceContainer: surfaceCont,
+      surfaceContainerHigh: surfaceHigh,
+      surfaceContainerHighest: surfaceHighest,
+      outline: vibrantPrimary.withValues(alpha: 0.25),
+      outlineVariant: HSLColor.fromAHSL(1.0, bgHue, 0.15, 0.25).toColor(),
+    );
+  }
 
   static ThemeData generateThemeData(ColorScheme scheme) => ThemeData(
     fontFamily: 'Rubik',
