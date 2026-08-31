@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/action_chip_extension.dart';
 import 'package:otraku/extension/card_extension.dart';
 import 'package:otraku/feature/discover/discover_filter_model.dart';
@@ -9,6 +9,7 @@ import 'package:otraku/feature/media/media_provider.dart';
 import 'package:otraku/feature/tag/tag_model.dart';
 import 'package:otraku/util/routes.dart';
 import 'package:otraku/util/theming.dart';
+import 'package:otraku/widget/bento_card.dart';
 import 'package:otraku/widget/html_content.dart';
 import 'package:otraku/widget/loaders.dart';
 import 'package:otraku/widget/table_list.dart';
@@ -97,36 +98,7 @@ class MediaOverviewSubview extends StatelessWidget {
             slivers: [
               if (info.description.isNotEmpty) _Description(info.description, highContrast),
               SliverToBoxAdapter(
-                child: CardExtension.highContrast(highContrast)(
-                  child: Padding(
-                    padding: Theming.paddingAll,
-                    child: Row(
-                      mainAxisAlignment: .spaceEvenly,
-                      children: [
-                        _IconTile(
-                          text: info.favourites.toString(),
-                          tooltip: 'Favorites',
-                          icon: Icons.favorite_outline_rounded,
-                        ),
-                        _IconTile(
-                          text: info.popularity.toString(),
-                          tooltip: 'Popularity',
-                          icon: Icons.person_outline_rounded,
-                        ),
-                        _IconTile(
-                          text: info.averageScore.toString(),
-                          tooltip: 'Weighted Average Score',
-                          icon: Icons.percent_rounded,
-                        ),
-                        _IconTile(
-                          text: info.meanScore.toString(),
-                          tooltip: 'Mean Score',
-                          icon: Ionicons.star_half_outline,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                child: _BentoStatsGrid(info: info, highContrast: highContrast),
               ),
               spacing,
               SliverTableList(details, highContrast: highContrast),
@@ -277,26 +249,82 @@ class _DescriptionState extends State<_Description> {
   }
 }
 
-class _IconTile extends StatelessWidget {
-  const _IconTile({required this.text, required this.tooltip, required this.icon});
+class _BentoStatsGrid extends StatelessWidget {
+  const _BentoStatsGrid({required this.info, required this.highContrast});
 
-  final String text;
-  final String tooltip;
-  final IconData icon;
+  final MediaInfo info;
+  final bool highContrast;
 
   @override
   Widget build(BuildContext context) {
-    return Tooltip(
-      message: tooltip,
-      triggerMode: .tap,
-      child: Column(
-        mainAxisSize: .min,
-        spacing: 5,
-        children: [
-          Icon(icon, size: Theming.iconSmall, color: ColorScheme.of(context).onSurfaceVariant),
-          Text(text),
-        ],
-      ),
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isWide = constraints.maxWidth > 500;
+        final crossAxisCount = isWide ? 4 : 2;
+
+        return GridView.count(
+          crossAxisCount: crossAxisCount,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 8,
+          childAspectRatio: isWide ? 2.4 : 2.1,
+          children: [
+            if (info.averageScore > 0)
+              BentoStatTile(
+                label: 'Score',
+                value: '${info.averageScore}%',
+                icon: const Icon(LucideIcons.star),
+                accentColor: colorScheme.primary,
+              ),
+            if (info.meanScore > 0)
+              BentoStatTile(
+                label: 'Mean',
+                value: '${info.meanScore}%',
+                icon: const Icon(LucideIcons.sparkles),
+                accentColor: colorScheme.secondary,
+              ),
+            if (info.popularity > 0)
+              BentoStatTile(
+                label: 'Popularity',
+                value: info.popularity.toString(),
+                icon: const Icon(LucideIcons.users),
+                accentColor: colorScheme.tertiary,
+              ),
+            if (info.favourites > 0)
+              BentoStatTile(
+                label: 'Favorites',
+                value: info.favourites.toString(),
+                icon: const Icon(LucideIcons.heart),
+                accentColor: Colors.redAccent,
+              ),
+            if (info.format != null || info.episodes != null || info.chapters != null)
+              BentoStatTile(
+                label: info.isAnime ? 'Format & Eps' : 'Format & Chs',
+                value: [
+                  if (info.format != null) info.format!.label,
+                  if (info.episodes != null) '${info.episodes} eps',
+                  if (info.chapters != null) '${info.chapters} chs',
+                ].join(' • '),
+                icon: Icon(info.isAnime ? LucideIcons.tv : LucideIcons.bookOpen),
+                accentColor: colorScheme.primary,
+              ),
+            if (info.status != null || info.season != null)
+              BentoStatTile(
+                label: 'Status',
+                value: [
+                  if (info.status != null) info.status!.label,
+                  if (info.season != null) info.season!,
+                ].join(' • '),
+                icon: const Icon(LucideIcons.info),
+                accentColor: colorScheme.secondary,
+              ),
+          ],
+        );
+      },
     );
   }
 }
@@ -375,8 +403,8 @@ class __TagsWrapState extends State<_TagsWrap> {
       trailingAction: _showSpoilers != null
           ? IconButton(
               icon: _showSpoilers!
-                  ? const Icon(Ionicons.eye_off_outline)
-                  : const Icon(Ionicons.eye_outline),
+                  ? const Icon(LucideIcons.eyeOff)
+                  : const Icon(LucideIcons.eye),
               tooltip: _showSpoilers! ? 'Hide Spoilers' : 'Show Spoilers',
               onPressed: () => setState(() => _showSpoilers = !_showSpoilers!),
             )

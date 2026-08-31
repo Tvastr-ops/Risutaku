@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/build_context_extension.dart';
 import 'package:otraku/extension/card_extension.dart';
 import 'package:otraku/extension/scroll_controller_extension.dart';
@@ -123,11 +123,11 @@ class _FavoritesViewState extends ConsumerState<FavoritesView> with SingleTicker
               onChanged: (i) => _tabCtrl.index = i,
               onSame: (_) => _scrollCtrl.scrollToTop(),
               items: const {
-                'Anime': Ionicons.film_outline,
-                'Manga': Ionicons.book_outline,
-                'Characters': Ionicons.man_outline,
-                'Staff': Ionicons.briefcase_outline,
-                'Studios': Ionicons.business_outline,
+                'Anime': LucideIcons.tv,
+                'Manga': LucideIcons.bookOpen,
+                'Characters': LucideIcons.user,
+                'Staff': LucideIcons.mic,
+                'Studios': LucideIcons.building2,
               },
             ),
       child: AnimatedSwitcher(
@@ -418,11 +418,7 @@ class _EditListState extends State<_EditList> {
     return SliverReorderableList(
       itemExtent: itemExtent,
       itemCount: widget.items.length,
-      onReorder: (oldIndex, newIndex) => setState(() {
-        if (oldIndex < newIndex) {
-          newIndex -= 1;
-        }
-
+      onReorderItem: (oldIndex, newIndex) => setState(() {
         final item = widget.items.removeAt(oldIndex);
         widget.items.insert(newIndex, item);
       }),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/scroll_controller_extension.dart';
 import 'package:otraku/extension/snack_bar_extension.dart';
 import 'package:otraku/feature/settings/settings_model.dart';
@@ -121,10 +121,10 @@ class _SettingsViewState extends ConsumerState<SettingsView> with SingleTickerPr
         onSame: (_) => _scrollCtrl.scrollToTop(),
         onChanged: (i) => _tabCtrl.index = i,
         items: const {
-          'App': Ionicons.color_palette_outline,
-          'Content': Ionicons.tv_outline,
-          'Notifications': Ionicons.notifications_outline,
-          'About': Ionicons.information_outline,
+          'App': LucideIcons.palette,
+          'Content': LucideIcons.tv,
+          'Notifications': LucideIcons.bell,
+          'About': LucideIcons.info,
         },
       ),
       child: TabBarView(controller: _tabCtrl, children: tabs),
@@ -155,7 +155,7 @@ class __SaveButtonState extends State<_SaveButton> {
               await widget.onTap();
               setState(() => _hidden = false);
             },
-      child: _hidden ? const Icon(Ionicons.time_outline) : const Icon(Ionicons.save_outline),
+      child: _hidden ? const Icon(LucideIcons.clock) : const Icon(LucideIcons.save),
     );
   }
 }

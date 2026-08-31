@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/build_context_extension.dart';
 import 'package:otraku/extension/card_extension.dart';
 import 'package:otraku/extension/date_time_extension.dart';
@@ -60,7 +60,7 @@ class _CalendarViewState extends State<CalendarView> {
             child: FloatingActionButton(
               tooltip: 'Filter',
               onPressed: () => showCalendarFilterSheet(context, ref),
-              child: const Icon(Ionicons.funnel_outline),
+              child: const Icon(LucideIcons.slidersHorizontal),
             ),
           ),
           bottomBar: BottomBar([

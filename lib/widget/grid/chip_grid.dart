@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/util/theming.dart';
 
 class ChipGrid extends StatelessWidget {
@@ -31,7 +31,7 @@ class ChipGrid extends StatelessWidget {
                 height: 35,
                 child: IconButton(
                   key: const ValueKey('Clear'),
-                  icon: const Icon(Ionicons.close_outline),
+                  icon: const Icon(LucideIcons.x),
                   tooltip: 'Clear',
                   onPressed: onClear!,
                   color: ColorScheme.of(context).onSurface,
@@ -41,7 +41,7 @@ class ChipGrid extends StatelessWidget {
             SizedBox(
               height: 35,
               child: IconButton(
-                icon: const Icon(Ionicons.add_circle_outline),
+                icon: const Icon(LucideIcons.circlePlus),
                 tooltip: 'Edit',
                 onPressed: onEdit,
                 color: ColorScheme.of(context).onSurface,

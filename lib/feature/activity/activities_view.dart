@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/feature/activity/activities_model.dart';
 import 'package:otraku/feature/viewer/persistence_provider.dart';
 import 'package:otraku/util/routes.dart';
@@ -41,16 +41,16 @@ class _ActivitiesViewState extends ConsumerState<ActivitiesView> {
 
   @override
   Widget build(BuildContext context) {
-    final viewerId = ref.watch(viewerIdProvider);
     final userId = widget.tag.userId;
+    final viewerId = ref.watch(viewerIdProvider);
 
     final floatingAction = viewerId != null
         ? HidingFloatingActionButton(
-            key: const Key('post'),
+            key: const Key('compose'),
             scrollCtrl: _scrollCtrl,
             child: FloatingActionButton(
               tooltip: userId == viewerId ? 'New Post' : 'New Message',
-              child: const Icon(Icons.edit_outlined),
+              child: const Icon(LucideIcons.squarePen),
               onPressed: () => showSheet(
                 context,
                 CompositionView(
@@ -70,7 +70,7 @@ class _ActivitiesViewState extends ConsumerState<ActivitiesView> {
         trailing: [
           IconButton(
             tooltip: 'Filter',
-            icon: const Icon(Ionicons.funnel_outline),
+            icon: const Icon(LucideIcons.slidersHorizontal),
             onPressed: () => showActivityFilterSheet(context, ref, widget.tag),
           ),
         ],

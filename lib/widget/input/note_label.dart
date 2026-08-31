@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/util/theming.dart';
 import 'package:otraku/widget/dialogs.dart';
 
@@ -18,7 +18,7 @@ class NotesLabel extends StatelessWidget {
         message: 'Comment',
         child: InkResponse(
           radius: Theming.radiusSmall.x,
-          child: const Icon(Ionicons.chatbox, size: Theming.iconSmall),
+          child: const Icon(LucideIcons.stickyNote, size: Theming.iconSmall),
           onTap: () => showDialog(
             context: context,
             builder: (context) => TextDialog(title: 'Comment', text: notes),

@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/build_context_extension.dart';
 import 'package:otraku/extension/date_time_extension.dart';
 import 'package:otraku/feature/viewer/persistence_provider.dart';
@@ -74,7 +74,7 @@ class UserHeader extends StatelessWidget {
           ),
           IconButton(
             tooltip: 'Settings',
-            icon: const Icon(Ionicons.cog_outline),
+            icon: const Icon(LucideIcons.settings),
             onPressed: () => context.push(Routes.settings),
           ),
         ] else if (user != null)
@@ -274,7 +274,7 @@ class __FollowButtonState extends State<_FollowButton> {
       padding: const .all(Theming.offset),
       child: ElevatedButton.icon(
         icon: Icon(
-          user.isFollowed ? Ionicons.person_remove_outline : Ionicons.person_add_outline,
+          user.isFollowed ? LucideIcons.userMinus : LucideIcons.userPlus,
           size: Theming.iconSmall,
         ),
         label: Text(

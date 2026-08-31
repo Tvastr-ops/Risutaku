@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/build_context_extension.dart';
 import 'package:otraku/extension/card_extension.dart';
 import 'package:otraku/feature/discover/discover_filter_model.dart';
@@ -128,7 +128,7 @@ class _MediaRankGrid extends StatelessWidget {
                   spacing: Theming.offset,
                   children: [
                     Icon(
-                      ranks[i].typeIsScore ? Ionicons.star : Icons.favorite_rounded,
+                      ranks[i].typeIsScore ? LucideIcons.star : LucideIcons.heart,
                       color: ColorScheme.of(context).onSurfaceVariant,
                     ),
                     Expanded(child: Text(ranks[i].text, overflow: .ellipsis, maxLines: 2)),

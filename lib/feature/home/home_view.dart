@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/scroll_controller_extension.dart';
 import 'package:otraku/feature/activity/activities_model.dart';
 import 'package:otraku/feature/activity/activities_provider.dart';
@@ -255,11 +255,11 @@ class _HomeViewState extends ConsumerState<HomeView> with SingleTickerProviderSt
   }
 
   static final _homeTabs = {
-    HomeTab.feed.label: Ionicons.file_tray_outline,
-    HomeTab.anime.label: Ionicons.film_outline,
-    HomeTab.manga.label: Ionicons.book_outline,
-    HomeTab.discover.label: Ionicons.compass_outline,
-    HomeTab.profile.label: Ionicons.person_outline,
+    HomeTab.feed.label: LucideIcons.activity,
+    HomeTab.anime.label: LucideIcons.tv,
+    HomeTab.manga.label: LucideIcons.bookOpen,
+    HomeTab.discover.label: LucideIcons.compass,
+    HomeTab.profile.label: LucideIcons.user,
   };
 
   void _toggleSearchFocus(FocusNode node) => node.hasFocus ? node.unfocus() : node.requestFocus();

@@ -1,9 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/build_context_extension.dart';
 import 'package:otraku/extension/card_extension.dart';
 import 'package:otraku/extension/snack_bar_extension.dart';
@@ -94,7 +92,7 @@ class ActivityCard extends StatelessWidget {
                 if (message.isPrivate)
                   const Padding(
                     padding: .only(left: Theming.offset),
-                    child: Icon(Ionicons.eye_off_outline),
+                    child: Icon(LucideIcons.eyeOff),
                   ),
                 const Padding(
                   padding: .symmetric(horizontal: Theming.offset),
@@ -229,7 +227,7 @@ class _ActivityFooterState extends State<ActivityFooter> {
             child: InkResponse(
               radius: Theming.radiusSmall.x,
               onTap: _showMoreSheet,
-              child: const Icon(Ionicons.ellipsis_horizontal, size: Theming.iconSmall),
+              child: const Icon(LucideIcons.ellipsis, size: Theming.iconSmall),
             ),
           ),
         ),
@@ -356,7 +354,7 @@ class _ActivityFooterState extends State<ActivityFooter> {
             ownershipButtons.add(
               ListTile(
                 title: const Text('Delete'),
-                leading: const Icon(Ionicons.trash_outline),
+                leading: const Icon(LucideIcons.trash2),
                 onTap: () => ConfirmationDialog.show(
                   context,
                   title: 'Delete?',
@@ -373,8 +371,8 @@ class _ActivityFooterState extends State<ActivityFooter> {
             ListTile(
               title: !activity.isSubscribed ? const Text('Subscribe') : const Text('Unsubscribe'),
               leading: !activity.isSubscribed
-                  ? const Icon(Ionicons.notifications_outline)
-                  : const Icon(Ionicons.notifications_off_outline),
+                  ? const Icon(LucideIcons.bell)
+                  : const Icon(LucideIcons.bellOff),
               onTap: _toggleSubscription,
             ),
           ]);

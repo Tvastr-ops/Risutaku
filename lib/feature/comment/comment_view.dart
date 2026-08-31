@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/snack_bar_extension.dart';
 import 'package:otraku/feature/comment/comment_model.dart';
 import 'package:otraku/feature/comment/comment_provider.dart';
@@ -108,7 +108,7 @@ class _CommentViewState extends ConsumerState<CommentView> {
     const Spacer(),
     IconButton(
       tooltip: 'More',
-      icon: const Icon(Ionicons.ellipsis_horizontal),
+      icon: const Icon(LucideIcons.ellipsis),
       onPressed: () => showSheet(
         context,
         SimpleSheet.link(
@@ -118,7 +118,7 @@ class _CommentViewState extends ConsumerState<CommentView> {
               ? [
                   ListTile(
                     title: const Text('Edit'),
-                    leading: const Icon(Icons.edit_outlined),
+                    leading: const Icon(LucideIcons.squarePen),
                     onTap: () => showSheet(
                       context,
                       CompositionView(
@@ -133,7 +133,7 @@ class _CommentViewState extends ConsumerState<CommentView> {
                   ),
                   ListTile(
                     title: const Text('Delete'),
-                    leading: const Icon(Ionicons.trash_outline),
+                    leading: const Icon(LucideIcons.trash2),
                     onTap: () {
                       Navigator.pop(context);
 

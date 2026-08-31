@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/snack_bar_extension.dart';
 import 'package:otraku/util/routes.dart';
 import 'package:otraku/util/theming.dart';
@@ -69,7 +69,7 @@ class HtmlContent extends StatelessWidget {
           return Container(
             height: 5,
             width: double.infinity,
-            margin: const .symmetric(vertical: 5),
+            margin: const EdgeInsets.symmetric(vertical: 5),
             decoration: BoxDecoration(
               color: ColorScheme.of(context).surfaceContainerHighest,
               borderRadius: Theming.borderRadiusSmall,
@@ -88,7 +88,7 @@ class HtmlContent extends StatelessWidget {
                   constraints: const BoxConstraints(maxWidth: 240, maxHeight: 135),
                   child: CachedImage('https://img.youtube.com/vi/${element.text}/0.jpg'),
                 ),
-                const Icon(Ionicons.logo_youtube, color: Color(0xFFFF0000), size: 40),
+                const Icon(Icons.play_circle_fill, color: Color(0xFFFF0000), size: 44),
               ],
             ),
           );
@@ -102,7 +102,7 @@ class HtmlContent extends StatelessWidget {
             child: Center(
               child: IconButton(
                 tooltip: 'WebM Video',
-                icon: const Icon(Ionicons.videocam, size: 50),
+                icon: const Icon(LucideIcons.video, size: 50),
                 onPressed: () => showSheet(context, SimpleSheet.link(context, url)),
               ),
             ),

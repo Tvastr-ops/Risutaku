@@ -78,11 +78,28 @@ class Theming extends ThemeExtension<Theming> {
     disabledColor: scheme.surface,
     unselectedWidgetColor: scheme.surface,
     highlightColor: Colors.transparent,
-    cardTheme: const CardThemeData(margin: .all(0)),
+    cardTheme: CardThemeData(
+      margin: const .all(0),
+      shape: const RoundedRectangleBorder(borderRadius: borderRadiusSmall),
+      color: scheme.surfaceContainerLow,
+      elevation: 0,
+    ),
+    bottomSheetTheme: BottomSheetThemeData(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: radiusBig),
+      ),
+      backgroundColor: scheme.surfaceContainerHigh,
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      elevation: 2,
+      highlightElevation: 4,
+    ),
     iconTheme: IconThemeData(color: scheme.onSurfaceVariant, size: iconBig),
     navigationBarTheme: NavigationBarThemeData(
       backgroundColor: scheme.surface.withAlpha(190),
       labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+      indicatorShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     ),
     navigationRailTheme: const NavigationRailThemeData(
       labelType: NavigationRailLabelType.all,
@@ -189,7 +206,8 @@ class Theming extends ThemeExtension<Theming> {
     ),
     dividerTheme: const DividerThemeData(thickness: 1),
     dialogTheme: DialogThemeData(
-      backgroundColor: scheme.surface,
+      shape: const RoundedRectangleBorder(borderRadius: borderRadiusBig),
+      backgroundColor: scheme.surfaceContainerHigh,
       titleTextStyle: TextStyle(
         fontSize: fontMedium,
         color: scheme.onSurface,

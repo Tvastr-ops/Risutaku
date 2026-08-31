@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/feature/forum/forum_filter_provider.dart';
 import 'package:otraku/feature/forum/forum_filter_view.dart';
 import 'package:otraku/feature/forum/forum_provider.dart';
@@ -37,6 +37,7 @@ class _ForumViewState extends ConsumerState<ForumView> {
 
     return AdaptiveScaffold(
       topBar: TopBar(
+        title: 'Forum',
         trailing: [
           Consumer(
             builder: (context, ref, filterButton) {
@@ -60,7 +61,7 @@ class _ForumViewState extends ConsumerState<ForumView> {
             },
             child: IconButton(
               tooltip: 'Filter',
-              icon: const Icon(Ionicons.funnel_outline),
+              icon: const Icon(LucideIcons.slidersHorizontal),
               onPressed: () => showForumFilterSheet(context, ref),
             ),
           ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/snack_bar_extension.dart';
 import 'package:otraku/feature/activity/activities_model.dart';
 import 'package:otraku/feature/activity/activity_filter_sheet.dart';
@@ -27,7 +27,7 @@ class FeedTopBarTrailingContent extends StatelessWidget {
 
         Widget notificationIcon = IconButton(
           tooltip: 'Notifications',
-          icon: const Icon(Ionicons.notifications_outline),
+          icon: const Icon(LucideIcons.bell),
           onPressed: openNotifications,
         );
 
@@ -45,13 +45,13 @@ class FeedTopBarTrailingContent extends StatelessWidget {
           children: [
             IconButton(
               tooltip: 'Forum',
-              icon: const Icon(Ionicons.chatbubbles_outline),
+              icon: const Icon(LucideIcons.messagesSquare),
               onPressed: () => context.push(Routes.forum),
             ),
             notificationIcon,
             IconButton(
               tooltip: 'Filter',
-              icon: const Icon(Ionicons.funnel_outline),
+              icon: const Icon(LucideIcons.slidersHorizontal),
               onPressed: () => showActivityFilterSheet(context, ref, HomeActivitiesTag.instance),
             ),
           ],

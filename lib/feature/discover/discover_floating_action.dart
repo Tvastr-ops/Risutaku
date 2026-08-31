@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/feature/discover/discover_filter_provider.dart';
 import 'package:otraku/feature/discover/discover_model.dart';
 import 'package:otraku/widget/input/pill_selector.dart';
@@ -28,6 +29,7 @@ class DiscoverFloatingAction extends StatelessWidget {
                   selected: type.index,
                   items: DiscoverType.values.map((v) => Text(v.label)).toList(),
                   onTap: (i) {
+                    HapticFeedback.selectionClick();
                     ref
                         .read(discoverFilterProvider.notifier)
                         .update((s) => s.copyWith(type: DiscoverType.values[i]));
@@ -39,9 +41,12 @@ class DiscoverFloatingAction extends StatelessWidget {
           },
           child: SwipeSwitcher(
             index: type.index,
-            onChanged: (index) => ref
-                .read(discoverFilterProvider.notifier)
-                .update((s) => s.copyWith(type: DiscoverType.values[index])),
+            onChanged: (index) {
+              HapticFeedback.selectionClick();
+              ref
+                  .read(discoverFilterProvider.notifier)
+                  .update((s) => s.copyWith(type: DiscoverType.values[index]));
+            },
             children: DiscoverType.values.map((v) => Icon(_typeIcon(v))).toList(),
           ),
         );
@@ -50,13 +55,13 @@ class DiscoverFloatingAction extends StatelessWidget {
   }
 
   static IconData _typeIcon(DiscoverType type) => switch (type) {
-    .anime => Ionicons.film_outline,
-    .manga => Ionicons.book_outline,
-    .character => Ionicons.man_outline,
-    .staff => Ionicons.mic_outline,
-    .studio => Ionicons.business_outline,
-    .user => Ionicons.person_outline,
-    .review => Icons.rate_review_outlined,
-    .recommendation => Icons.thumb_up_outlined,
+    .anime => LucideIcons.tv,
+    .manga => LucideIcons.bookOpen,
+    .character => LucideIcons.user,
+    .staff => LucideIcons.mic,
+    .studio => LucideIcons.building2,
+    .user => LucideIcons.users,
+    .review => LucideIcons.fileText,
+    .recommendation => LucideIcons.thumbsUp,
   };
 }

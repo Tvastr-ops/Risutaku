@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/snack_bar_extension.dart';
 import 'package:otraku/feature/composition/composition_model.dart';
 import 'package:otraku/feature/composition/composition_view.dart';
@@ -130,21 +130,21 @@ class _ThreadViewState extends ConsumerState<ThreadView> {
     ),
     IconButton(
       tooltip: 'More',
-      icon: const Icon(Ionicons.ellipsis_horizontal),
+      icon: const Icon(LucideIcons.ellipsis),
       onPressed: () => showSheet(
         context,
         SimpleSheet.link(context, thread.info.siteUrl, [
           ListTile(
             title: !thread.info.isSubscribed ? const Text('Subscribe') : const Text('Unsubscribe'),
             leading: !thread.info.isSubscribed
-                ? const Icon(Ionicons.notifications_outline)
-                : const Icon(Ionicons.notifications_off_outline),
+                ? const Icon(LucideIcons.bell)
+                : const Icon(LucideIcons.bellOff),
             onTap: _toggleSubscription,
           ),
           if (viewerId == thread.info.userId)
             ListTile(
               title: const Text('Delete'),
-              leading: const Icon(Ionicons.trash_outline),
+              leading: const Icon(LucideIcons.trash2),
               onTap: () {
                 Navigator.pop(context);
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/feature/character/character_filter_provider.dart';
 import 'package:otraku/feature/viewer/persistence_provider.dart';
 import 'package:otraku/widget/input/chip_selector.dart';
@@ -18,7 +18,7 @@ class CharacterMediaFilterButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       tooltip: 'Filter',
-      child: const Icon(Ionicons.funnel_outline),
+      child: const Icon(LucideIcons.slidersHorizontal),
       onPressed: () {
         var filter = ref.read(characterFilterProvider(id));
         final onDone = (_) => ref.read(characterFilterProvider(id).notifier).state = filter;

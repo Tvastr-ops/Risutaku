@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/util/theming.dart';
 import 'package:otraku/extension/snack_bar_extension.dart';
 import 'package:otraku/widget/layout/adaptive_scaffold.dart';
@@ -17,11 +17,12 @@ Future<T?> showSheet<T>(BuildContext context, Widget sheet) => showModalBottomSh
 class SimpleSheet extends StatelessWidget {
   const SimpleSheet({required this.builder, this.initialHeight});
 
-  factory SimpleSheet.list(List<Widget> children) => SimpleSheet(
-    initialHeight: Theming.normalTapTarget * children.length + Theming.offset,
+  factory SimpleSheet.list(List<Widget> children, [double? height]) => SimpleSheet(
+    initialHeight: height ?? Theming.normalTapTarget * children.length,
     builder: (context, scrollCtrl) => ListView(
       controller: scrollCtrl,
-      padding: const .only(top: Theming.offset),
+      physics: Theming.bouncyPhysics,
+      padding: const EdgeInsets.symmetric(vertical: Theming.offset),
       children: children,
     ),
   );
@@ -31,7 +32,7 @@ class SimpleSheet extends StatelessWidget {
         ...children,
         ListTile(
           title: const Text('Copy Link'),
-          leading: const Icon(Ionicons.clipboard_outline),
+          leading: const Icon(LucideIcons.clipboard),
           onTap: () {
             SnackBarExtension.copy(context, link);
             Navigator.pop(context);
@@ -39,7 +40,7 @@ class SimpleSheet extends StatelessWidget {
         ),
         ListTile(
           title: const Text('Open in Browser'),
-          leading: const Icon(Ionicons.link_outline),
+          leading: const Icon(LucideIcons.externalLink),
           onTap: () {
             SnackBarExtension.launch(context, link);
             Navigator.pop(context);

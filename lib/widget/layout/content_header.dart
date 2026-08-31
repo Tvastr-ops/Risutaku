@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/build_context_extension.dart';
 import 'package:otraku/util/theming.dart';
 import 'package:otraku/extension/snack_bar_extension.dart';
@@ -238,7 +238,7 @@ class _Delegate extends SliverPersistentHeaderDelegate {
         ...trailingTopButtons,
         IconButton(
           tooltip: 'More',
-          icon: const Icon(Ionicons.ellipsis_horizontal),
+          icon: const Icon(LucideIcons.ellipsis),
           onPressed: siteUrl != null
               ? () => showSheet(context, SimpleSheet.link(context, siteUrl!))
               : null,

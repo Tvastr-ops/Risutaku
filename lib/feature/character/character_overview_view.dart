@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/feature/character/character_model.dart';
 import 'package:otraku/util/theming.dart';
 import 'package:otraku/widget/table_list.dart';
@@ -97,7 +97,7 @@ class __NameTableState extends State<_NameTable> {
           SliverToBoxAdapter(
             child: TextButton.icon(
               label: const Text('Show Spoilers'),
-              icon: const Icon(Ionicons.eye_outline),
+              icon: const Icon(LucideIcons.eye),
               onPressed: () => setState(() => _showSpoilers = true),
             ),
           ),

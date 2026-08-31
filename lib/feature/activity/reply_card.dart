@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/card_extension.dart';
 import 'package:otraku/feature/activity/activity_model.dart';
 import 'package:otraku/feature/activity/activity_provider.dart';
@@ -83,7 +83,7 @@ class ReplyCard extends StatelessWidget {
                                   radius: Theming.radiusSmall.x,
                                   onTap: () => _showMoreSheet(context, ref),
                                   child: const Icon(
-                                    Ionicons.ellipsis_horizontal,
+                                    LucideIcons.ellipsis,
                                     size: Theming.iconSmall,
                                   ),
                                 ),
@@ -109,7 +109,7 @@ class ReplyCard extends StatelessWidget {
       SimpleSheet.list([
         ListTile(
           title: const Text('Edit'),
-          leading: const Icon(Icons.edit_outlined),
+          leading: const Icon(LucideIcons.squarePen),
           onTap: () => showSheet(
             context,
             CompositionView(
@@ -123,7 +123,7 @@ class ReplyCard extends StatelessWidget {
         ),
         ListTile(
           title: const Text('Delete'),
-          leading: const Icon(Ionicons.trash_outline),
+          leading: const Icon(LucideIcons.trash2),
           onTap: () => ConfirmationDialog.show(
             context,
             title: 'Delete?',

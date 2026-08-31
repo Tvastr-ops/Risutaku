@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/feature/activity/activities_model.dart';
 import 'package:otraku/feature/viewer/persistence_provider.dart';
 import 'package:otraku/util/routes.dart';
@@ -105,7 +105,7 @@ class _TopBarContent extends StatelessWidget {
               if (message.isPrivate)
                 const Padding(
                   padding: .only(left: Theming.offset),
-                  child: Icon(Ionicons.eye_off_outline),
+                  child: Icon(LucideIcons.eyeOff),
                 ),
               const Padding(
                 padding: .symmetric(horizontal: Theming.offset),

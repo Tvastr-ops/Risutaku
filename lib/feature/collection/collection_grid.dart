@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/build_context_extension.dart';
 import 'package:otraku/extension/card_extension.dart';
 import 'package:otraku/feature/collection/collection_models.dart';
@@ -152,7 +152,7 @@ class _IncrementButtonState extends State<_IncrementButton> {
               style: const TextStyle(fontSize: Theming.fontSmall),
             ),
             const SizedBox(width: 3),
-            const Icon(Ionicons.add_outline, size: Theming.iconSmall),
+            const Icon(LucideIcons.plus, size: Theming.iconSmall),
           ],
         ),
       ),

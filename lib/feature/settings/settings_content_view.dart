@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
-import 'package:otraku/util/theming.dart';
-import 'package:otraku/widget/dialogs.dart';
-import 'package:otraku/widget/input/stateful_tiles.dart';
-import 'package:otraku/widget/input/chip_selector.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/feature/media/media_models.dart';
 import 'package:otraku/feature/settings/settings_model.dart';
+import 'package:otraku/util/theming.dart';
+import 'package:otraku/widget/dialogs.dart';
+import 'package:otraku/widget/input/chip_selector.dart';
+import 'package:otraku/widget/input/stateful_tiles.dart';
 import 'package:otraku/widget/sheets.dart';
 
 class SettingsContentSubview extends StatelessWidget {
@@ -28,7 +28,8 @@ class SettingsContentSubview extends StatelessWidget {
 
     return ListView(
       controller: scrollCtrl,
-      padding: .only(
+      physics: Theming.bouncyPhysics,
+      padding: EdgeInsets.only(
         top: listPadding.top + Theming.offset,
         bottom: listPadding.bottom + Theming.offset,
       ),
@@ -124,7 +125,7 @@ class SettingsContentSubview extends StatelessWidget {
             ),
             ListTile(
               title: const Text('Anime Custom Lists'),
-              leading: const Icon(Ionicons.film_outline),
+              leading: const Icon(LucideIcons.tv),
               onTap: () => showSheet(
                 context,
                 SimpleSheet(
@@ -145,7 +146,7 @@ class SettingsContentSubview extends StatelessWidget {
             ),
             ListTile(
               title: const Text('Manga Custom Lists'),
-              leading: const Icon(Ionicons.book_outline),
+              leading: const Icon(LucideIcons.bookOpen),
               onTap: () => showSheet(
                 context,
                 SimpleSheet(
@@ -166,7 +167,7 @@ class SettingsContentSubview extends StatelessWidget {
             ),
             ListTile(
               title: const Text('Advanced Score Sections'),
-              leading: const Icon(Ionicons.star_half),
+              leading: const Icon(LucideIcons.star),
               onTap: () => showSheet(
                 context,
                 SimpleSheet(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/date_time_extension.dart';
 import 'package:otraku/util/theming.dart';
 
@@ -37,27 +37,31 @@ class _DateFieldState extends State<DateField> {
     return TextField(
       readOnly: true,
       controller: _ctrl,
-      textAlign: .center,
+      textAlign: TextAlign.center,
       style: TextTheme.of(context).bodyMedium,
-      onTap: () =>
-          showDatePicker(
-            context: context,
-            initialDate: _value ?? DateTime.now(),
-            firstDate: DateTime(1920),
-            lastDate: DateTime.now(),
-            errorInvalidText: 'Enter date in valid range',
-            errorFormatText: 'Enter valid date',
-            confirmText: 'Done',
-            cancelText: 'Cancel',
-            fieldLabelText: '',
-            helpText: '',
-          ).then((pickedDate) {
-            if (pickedDate == null) return;
+      onTap: () => showDatePicker(
+        context: context,
+        initialDate: _value ?? DateTime.now(),
+        firstDate: DateTime(1900),
+        lastDate: DateTime(3000),
+        barrierDismissible: true,
+        builder: (context, child) {
+          final isDark = Theme.of(context).brightness == Brightness.dark;
+          return Theme(
+            data: (isDark ? ThemeData.dark() : ThemeData.light()).copyWith(
+              colorScheme: ColorScheme.of(context),
+              dialogTheme: DialogThemeData(backgroundColor: ColorScheme.of(context).surface),
+            ),
+            child: child!,
+          );
+        },
+      ).then((pickedDate) {
+        if (pickedDate == null) return;
 
-            _value = pickedDate;
-            _ctrl.text = _value?.formattedDate ?? '';
-            widget.onChanged(pickedDate);
-          }),
+        _value = pickedDate;
+        _ctrl.text = _value?.formattedDate ?? '';
+        widget.onChanged(pickedDate);
+      }),
       decoration: InputDecoration(
         labelText: widget.label,
         labelStyle: TextTheme.of(context).bodyMedium,
@@ -68,7 +72,7 @@ class _DateFieldState extends State<DateField> {
             color: Colors.transparent,
             child: InkResponse(
               radius: Theming.radiusSmall.x,
-              child: const Tooltip(message: 'Clear', child: Icon(Ionicons.close_outline)),
+              child: const Tooltip(message: 'Clear', child: Icon(LucideIcons.x)),
               onTap: () {
                 _ctrl.text = '';
                 widget.onChanged(null);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/feature/activity/activities_filter_model.dart';
 import 'package:otraku/feature/activity/activities_model.dart';
 import 'package:otraku/util/theming.dart';
@@ -19,27 +19,32 @@ void showActivityFilterSheet(BuildContext context, WidgetRef ref, ActivitiesTag 
     context,
     SimpleSheet(
       initialHeight: initialHeight,
-      builder: (context, scrollCtrl) =>
-          _FilterList(filter: filter, onChanged: (v) => filter = v, scrollCtrl: scrollCtrl),
+      builder: (context, scrollCtrl) => _ActivityFilterSheet(
+        scrollCtrl: scrollCtrl,
+        filter: filter,
+        onChanged: (filter) => ref.read(activitiesFilterProvider(tag).notifier).state = filter,
+      ),
     ),
-  ).then((_) {
-    ref.read(activitiesFilterProvider(tag).notifier).state = filter;
-  });
+  );
 }
 
-class _FilterList extends StatefulWidget {
-  const _FilterList({required this.filter, required this.onChanged, required this.scrollCtrl});
+class _ActivityFilterSheet extends StatefulWidget {
+  const _ActivityFilterSheet({
+    required this.scrollCtrl,
+    required this.filter,
+    required this.onChanged,
+  });
 
+  final ScrollController scrollCtrl;
   final ActivitiesFilter filter;
   final void Function(ActivitiesFilter) onChanged;
-  final ScrollController scrollCtrl;
 
   @override
-  State<_FilterList> createState() => _FilterListState();
+  State<_ActivityFilterSheet> createState() => _ActivityFilterSheetState();
 }
 
-class _FilterListState extends State<_FilterList> {
-  late var _filter = widget.filter.copy();
+class _ActivityFilterSheetState extends State<_ActivityFilterSheet> {
+  late ActivitiesFilter _filter = widget.filter.copy();
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +57,7 @@ class _FilterListState extends State<_FilterList> {
     return ListView(
       controller: widget.scrollCtrl,
       physics: Theming.bouncyPhysics,
-      padding: const .symmetric(vertical: Theming.offset),
+      padding: const EdgeInsets.symmetric(vertical: Theming.offset),
       children: [
         for (final a in ActivityType.values)
           CheckboxListTile(
@@ -94,12 +99,12 @@ class _FilterListState extends State<_FilterList> {
                   ButtonSegment(
                     value: true,
                     label: Text('Following'),
-                    icon: Icon(Ionicons.people_outline),
+                    icon: Icon(LucideIcons.users),
                   ),
                   ButtonSegment(
                     value: false,
                     label: Text('Global'),
-                    icon: Icon(Ionicons.planet_outline),
+                    icon: Icon(LucideIcons.globe),
                   ),
                 ],
                 selected: {filter.onFollowing},

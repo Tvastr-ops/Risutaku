@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otraku/feature/collection/collection_floating_action.dart';
@@ -196,8 +197,9 @@ class _Content extends StatelessWidget {
             collectionIsExpanded && options.collectionItemView == .simple ||
             !collectionIsExpanded && options.collectionPreviewItemView == .simple;
 
+        final Widget itemsView;
         if (!showAllLists) {
-          return useSimpleGrid
+          itemsView = useSimpleGrid
               ? CollectionGrid(
                   items: lists[0].entries,
                   onProgressUpdated: onProgressUpdated,
@@ -211,34 +213,43 @@ class _Content extends StatelessWidget {
                   ),
                   highContrast: options.highContrast,
                 );
+        } else {
+          itemsView = SliverMainAxisGroup(
+            slivers: [
+              for (final l in lists) ...[
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const .only(bottom: Theming.offset),
+                    child: Text(l.name, style: TextTheme.of(context).bodyLarge),
+                  ),
+                ),
+                useSimpleGrid
+                    ? CollectionGrid(
+                        items: l.entries,
+                        onProgressUpdated: onProgressUpdated,
+                        highContrast: options.highContrast,
+                      )
+                    : CollectionList(
+                        items: l.entries,
+                        onProgressUpdated: onProgressUpdated,
+                        scoreFormat: ref.watch(
+                          collectionProvider(
+                            tag,
+                          ).select((s) => s.value?.scoreFormat ?? .point10Decimal),
+                        ),
+                        highContrast: options.highContrast,
+                      ),
+              ],
+            ],
+          );
         }
 
+        final col = collection;
         return SliverMainAxisGroup(
           slivers: [
-            for (final l in lists) ...[
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const .only(bottom: Theming.offset),
-                  child: Text(l.name, style: TextTheme.of(context).bodyLarge),
-                ),
-              ),
-              useSimpleGrid
-                  ? CollectionGrid(
-                      items: l.entries,
-                      onProgressUpdated: onProgressUpdated,
-                      highContrast: options.highContrast,
-                    )
-                  : CollectionList(
-                      items: l.entries,
-                      onProgressUpdated: onProgressUpdated,
-                      scoreFormat: ref.watch(
-                        collectionProvider(
-                          tag,
-                        ).select((s) => s.value?.scoreFormat ?? .point10Decimal),
-                      ),
-                      highContrast: options.highContrast,
-                    ),
-            ],
+            if (col is FullCollection && col.lists.length > 1)
+              _CollectionStatusChips(tag: tag, collection: col),
+            itemsView,
           ],
         );
       },
@@ -265,5 +276,72 @@ class _Content extends StatelessWidget {
 
     context.go(Routes.home(.discover));
     ref.invalidate(collectionFilterProvider(tag));
+  }
+}
+
+class _CollectionStatusChips extends StatelessWidget {
+  const _CollectionStatusChips({required this.tag, required this.collection});
+
+  final CollectionTag tag;
+  final FullCollection collection;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    final allCount = collection.lists.fold(0, (v, l) => v + l.entries.length);
+    final items = [
+      (name: 'All', count: allCount, index: -1),
+      for (int i = 0; i < collection.lists.length; i++)
+        (name: collection.lists[i].name, count: collection.lists[i].entries.length, index: i),
+    ];
+
+    return SliverToBoxAdapter(
+      child: Container(
+        height: 44,
+        margin: const EdgeInsets.only(bottom: 8),
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          physics: Theming.bouncyPhysics,
+          padding: const EdgeInsets.symmetric(horizontal: Theming.offset),
+          itemCount: items.length,
+          separatorBuilder: (_, _) => const SizedBox(width: 8),
+          itemBuilder: (context, i) {
+            final item = items[i];
+            final isSelected = collection.index == item.index;
+
+            return Consumer(
+              builder: (context, ref, _) {
+                return ChoiceChip(
+                  showCheckmark: false,
+                  selected: isSelected,
+                  label: Text('${item.name} (${item.count})'),
+                  labelStyle: theme.textTheme.labelMedium?.copyWith(
+                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                    color: isSelected ? colorScheme.onPrimary : colorScheme.onSurface,
+                  ),
+                  selectedColor: colorScheme.primary,
+                  backgroundColor: colorScheme.surfaceContainerHigh.withValues(alpha: 0.6),
+                  side: BorderSide(
+                    color: isSelected
+                        ? colorScheme.primary
+                        : colorScheme.outlineVariant.withValues(alpha: 0.4),
+                    width: 1.0,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  onSelected: (_) {
+                    HapticFeedback.selectionClick();
+                    ref.read(collectionProvider(tag).notifier).changeIndex(item.index);
+                  },
+                );
+              },
+            );
+          },
+        ),
+      ),
+    );
   }
 }

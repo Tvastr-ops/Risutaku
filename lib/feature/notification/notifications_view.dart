@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/build_context_extension.dart';
 import 'package:otraku/extension/card_extension.dart';
 import 'package:otraku/feature/notification/notifications_filter_model.dart';
@@ -77,7 +77,7 @@ class _NotificationsViewState extends ConsumerState<NotificationsView> {
               child: FloatingActionButton(
                 tooltip: 'Filter',
                 onPressed: _showFilterSheet,
-                child: const Icon(Ionicons.funnel_outline),
+                child: const Icon(LucideIcons.slidersHorizontal),
               ),
             )
           : null,

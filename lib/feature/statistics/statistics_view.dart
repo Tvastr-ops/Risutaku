@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/build_context_extension.dart';
 import 'package:otraku/extension/card_extension.dart';
 import 'package:otraku/extension/scroll_controller_extension.dart';
@@ -109,7 +109,7 @@ class _StatisticsViewState extends State<StatisticsView> with SingleTickerProvid
         selected: _tabCtrl.index,
         onChanged: (i) => _tabCtrl.index = i,
         onSame: (_) => _scrollCtrl.scrollToTop(),
-        items: const {'Anime': Ionicons.film_outline, 'Manga': Ionicons.book_outline},
+        items: const {'Anime': LucideIcons.tv, 'Manga': LucideIcons.bookOpen},
       ),
       child: child,
     );
@@ -197,23 +197,23 @@ class _Details extends StatelessWidget {
 
     if (ofAnime) {
       subtitles.add(((statistics.amountConsumed / 1440) * 10).round() / 10);
-      icons.add(Ionicons.film_outline);
-      icons.add(Ionicons.play_outline);
-      icons.add(Ionicons.calendar_clear_outline);
+      icons.add(LucideIcons.tv);
+      icons.add(LucideIcons.play);
+      icons.add(LucideIcons.calendar);
       titles.add('Total Anime');
       titles.add('Episodes Watched');
       titles.add('Days Watched');
     } else {
       subtitles.add(statistics.amountConsumed);
-      icons.add(Ionicons.book_outline);
-      icons.add(Ionicons.reader_outline);
-      icons.add(Ionicons.bookmark_outline);
+      icons.add(LucideIcons.bookOpen);
+      icons.add(LucideIcons.bookMarked);
+      icons.add(LucideIcons.library);
       titles.add('Total Manga');
       titles.add('Chapters Read');
       titles.add('Volumes Read');
     }
-    icons.add(Ionicons.star_half_outline);
-    icons.add(Ionicons.calculator_outline);
+    icons.add(LucideIcons.star);
+    icons.add(LucideIcons.calculator);
     titles.add('Mean Score');
     titles.add('Standard Deviation');
     subtitles.add(statistics.meanScore);

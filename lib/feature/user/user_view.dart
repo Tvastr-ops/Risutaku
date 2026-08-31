@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/build_context_extension.dart';
 import 'package:otraku/extension/card_extension.dart';
 import 'package:otraku/feature/viewer/persistence_provider.dart';
@@ -189,7 +189,7 @@ class _ButtonRow extends StatelessWidget {
     final buttons = [
       _Button(
         label: 'Anime',
-        icon: Ionicons.film,
+        icon: LucideIcons.tv,
         highContrast: highContrast,
         onTap: () => isViewer
             ? context.go(Routes.home(.anime))
@@ -197,7 +197,7 @@ class _ButtonRow extends StatelessWidget {
       ),
       _Button(
         label: 'Manga',
-        icon: Ionicons.book,
+        icon: LucideIcons.bookOpen,
         highContrast: highContrast,
         onTap: () => isViewer
             ? context.go(Routes.home(.manga))
@@ -205,31 +205,31 @@ class _ButtonRow extends StatelessWidget {
       ),
       _Button(
         label: 'Activities',
-        icon: Ionicons.chatbox,
+        icon: LucideIcons.activity,
         highContrast: highContrast,
         onTap: () => context.push(Routes.activities(userId)),
       ),
       _Button(
         label: 'Social',
-        icon: Ionicons.people_circle,
+        icon: LucideIcons.users,
         highContrast: highContrast,
         onTap: () => context.push(Routes.social(userId)),
       ),
       _Button(
         label: 'Favourites',
-        icon: Icons.favorite,
+        icon: LucideIcons.heart,
         highContrast: highContrast,
         onTap: () => context.push(Routes.favorites(userId)),
       ),
       _Button(
         label: 'Statistics',
-        icon: Ionicons.stats_chart,
+        icon: LucideIcons.chartColumn,
         highContrast: highContrast,
         onTap: () => context.push(Routes.statistics(userId)),
       ),
       _Button(
         label: 'Reviews',
-        icon: Icons.rate_review,
+        icon: LucideIcons.fileText,
         highContrast: highContrast,
         onTap: () => context.push(Routes.reviews(userId)),
       ),

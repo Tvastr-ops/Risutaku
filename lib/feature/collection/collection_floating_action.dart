@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/feature/collection/collection_models.dart';
 import 'package:otraku/feature/collection/collection_provider.dart';
 import 'package:otraku/feature/home/home_provider.dart';
@@ -25,7 +25,7 @@ class CollectionFloatingAction extends StatelessWidget {
           null => const SizedBox(),
           PreviewCollection _ => FloatingActionButton(
             tooltip: 'Load Entire Collection',
-            child: const Icon(Ionicons.enter_outline),
+            child: const Icon(LucideIcons.arrowDownToLine),
             onPressed: () => ref.read(homeProvider.notifier).expandCollection(tag.ofAnime),
           ),
           FullCollection c => _fullCollectionActionButton(context, ref, c.lists, c.index),
@@ -63,7 +63,7 @@ class CollectionFloatingAction extends StatelessWidget {
       },
       child: SwipeSwitcher(
         index: index + 1,
-        children: List.filled(lists.length + 1, const Icon(Ionicons.menu_outline)),
+        children: List.filled(lists.length + 1, const Icon(LucideIcons.listFilter)),
         onChanged: (index) => ref.read(collectionProvider(tag).notifier).changeIndex(index - 1),
       ),
     );

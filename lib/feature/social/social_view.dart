@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/scroll_controller_extension.dart';
 import 'package:otraku/feature/comment/comment_model.dart';
 import 'package:otraku/feature/comment/comment_tile.dart';
@@ -49,12 +49,10 @@ class _SocialViewState extends ConsumerState<SocialView> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
     final tab = SocialTab.values[_tabCtrl.index];
-
     final viewerId = ref.watch(viewerIdProvider);
     final options = ref.watch(persistenceProvider.select((s) => s.options));
 
     final count = ref.watch(socialProvider(widget.id).select((s) => s.value?.getCount(tab) ?? 0));
-
     final onRefresh = (invalidate) => invalidate(socialProvider(widget.id));
 
     return AdaptiveScaffold(
@@ -76,10 +74,10 @@ class _SocialViewState extends ConsumerState<SocialView> with SingleTickerProvid
         onChanged: (i) => _tabCtrl.index = i,
         onSame: (_) => _scrollCtrl.scrollToTop(),
         items: {
-          SocialTab.following.title: Ionicons.people_circle,
-          SocialTab.followers.title: Ionicons.person_circle,
-          SocialTab.threads.title: Ionicons.chatbubble_outline,
-          SocialTab.comments.title: Ionicons.chatbubbles_outline,
+          SocialTab.following.title: LucideIcons.users,
+          SocialTab.followers.title: LucideIcons.userCheck,
+          SocialTab.threads.title: LucideIcons.messagesSquare,
+          SocialTab.comments.title: LucideIcons.messageSquare,
         },
       ),
       child: TabBarView(

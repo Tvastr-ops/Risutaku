@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/util/markdown.dart';
 import 'package:otraku/feature/composition/composition_model.dart';
 import 'package:otraku/util/theming.dart';
@@ -339,7 +339,7 @@ class _BottomBarState extends State<_BottomBar> {
         _PrivateButton(widget.composition as PrivateComposition),
       IconButton(
         tooltip: 'Post',
-        icon: const Icon(Ionicons.send_outline),
+        icon: const Icon(LucideIcons.send),
         onPressed: _locked
             ? null
             : () async {
@@ -415,8 +415,8 @@ class __PrivateButtonState extends State<_PrivateButton> {
   Widget build(BuildContext context) => IconButton(
     tooltip: widget.composition.isPrivate ? 'Make Public' : 'Make Private',
     icon: widget.composition.isPrivate
-        ? const Icon(Ionicons.eye_outline)
-        : const Icon(Ionicons.eye_off_outline),
+        ? const Icon(LucideIcons.eye)
+        : const Icon(LucideIcons.eyeOff),
     onPressed: () {
       setState(() => widget.composition.isPrivate = !widget.composition.isPrivate);
 

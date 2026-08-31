@@ -1,7 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:flutter/services.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/build_context_extension.dart';
 import 'package:otraku/extension/card_extension.dart';
 import 'package:otraku/extension/date_time_extension.dart';
@@ -184,7 +183,7 @@ class __TileContentState extends State<_TileContent> {
                   mainAxisSize: .min,
                   spacing: 3,
                   children: [
-                    const Icon(Ionicons.repeat, size: Theming.iconSmall),
+                    const Icon(LucideIcons.repeat, size: Theming.iconSmall),
                     Text(item.repeat.toString(), style: TextTheme.of(context).labelSmall),
                   ],
                 ),
@@ -224,6 +223,7 @@ class __TileContentState extends State<_TileContent> {
         iconColor: foregroundColor,
       ),
       onPressed: () {
+        HapticFeedback.lightImpact();
         _debounce.cancel();
 
         if (item.progressMax != null && item.progress >= item.progressMax! - 1) {
@@ -244,7 +244,7 @@ class __TileContentState extends State<_TileContent> {
           spacing: 3,
           children: [
             text,
-            const Icon(Ionicons.add_outline, size: Theming.iconSmall),
+            const Icon(LucideIcons.plus, size: Theming.iconSmall),
           ],
         ),
       ),

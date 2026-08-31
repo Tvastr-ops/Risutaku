@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/extension/snack_bar_extension.dart';
 import 'package:otraku/feature/edit/edit_model.dart';
 import 'package:otraku/feature/edit/edit_provider.dart';
@@ -23,7 +23,7 @@ class EditButtons extends StatelessWidget {
 
     final saveButton = BottomBarButton(
       text: 'Save',
-      icon: Ionicons.save_outline,
+      icon: LucideIcons.save,
       onTap: () async {
         final err = await ref.read(entryEditProvider(tag).notifier).save();
 
@@ -44,7 +44,7 @@ class EditButtons extends StatelessWidget {
         ? const Spacer()
         : BottomBarButton(
             text: 'Remove',
-            icon: Ionicons.trash_bin_outline,
+            icon: LucideIcons.trash2,
             foregroundColor: ColorScheme.of(context).error,
             onTap: () => ConfirmationDialog.show(
               context,

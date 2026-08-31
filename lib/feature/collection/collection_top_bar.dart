@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/feature/collection/collection_entries_provider.dart';
 import 'package:otraku/feature/collection/collection_filter_provider.dart';
 import 'package:otraku/feature/collection/collection_models.dart';
@@ -29,7 +29,7 @@ class CollectionTopBarTrailingContent extends StatelessWidget {
 
         final filterIcon = IconButton(
           tooltip: 'Filter',
-          icon: const Icon(Ionicons.funnel_outline),
+          icon: const Icon(LucideIcons.slidersHorizontal),
           onPressed: () => showSheet(
             context,
             CollectionFilterView(
@@ -58,7 +58,7 @@ class CollectionTopBarTrailingContent extends StatelessWidget {
               ),
               IconButton(
                 tooltip: 'Random',
-                icon: const Icon(Ionicons.shuffle_outline),
+                icon: const Icon(LucideIcons.shuffle),
                 onPressed: () {
                   final lists = ref.read(collectionEntriesProvider(tag));
                   if (lists.isEmpty) {

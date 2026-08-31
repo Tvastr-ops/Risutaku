@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/feature/character/character_item_grid.dart';
 import 'package:otraku/feature/discover/discover_filter_provider.dart';
 import 'package:otraku/feature/discover/discover_media_grid.dart';
@@ -107,7 +109,14 @@ class DiscoverSubview extends StatelessWidget {
           ),
         };
 
-        if (formFactor == .phone) return content;
+        if (formFactor == .phone) {
+          return Column(
+            children: [
+              _DiscoverCategoryChips(currentType: type),
+              Expanded(child: content),
+            ],
+          );
+        }
 
         return Row(
           children: [
@@ -125,4 +134,77 @@ class DiscoverSubview extends StatelessWidget {
       },
     );
   }
+}
+
+class _DiscoverCategoryChips extends StatelessWidget {
+  const _DiscoverCategoryChips({required this.currentType});
+
+  final DiscoverType currentType;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Container(
+      height: 44,
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        physics: Theming.bouncyPhysics,
+        padding: const EdgeInsets.symmetric(horizontal: Theming.offset),
+        itemCount: DiscoverType.values.length,
+        separatorBuilder: (_, _) => const SizedBox(width: 8),
+        itemBuilder: (context, i) {
+          final type = DiscoverType.values[i];
+          final isSelected = currentType == type;
+
+          return Consumer(
+            builder: (context, ref, _) {
+              return ChoiceChip(
+                showCheckmark: false,
+                selected: isSelected,
+                avatar: Icon(
+                  _typeIcon(type),
+                  size: 14,
+                  color: isSelected ? colorScheme.onPrimary : colorScheme.onSurfaceVariant,
+                ),
+                label: Text(type.label),
+                labelStyle: theme.textTheme.labelMedium?.copyWith(
+                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                  color: isSelected ? colorScheme.onPrimary : colorScheme.onSurface,
+                ),
+                selectedColor: colorScheme.primary,
+                backgroundColor: colorScheme.surfaceContainerHigh.withValues(alpha: 0.6),
+                side: BorderSide(
+                  color: isSelected
+                      ? colorScheme.primary
+                      : colorScheme.outlineVariant.withValues(alpha: 0.4),
+                  width: 1.0,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                onSelected: (_) {
+                  HapticFeedback.selectionClick();
+                  ref.read(discoverFilterProvider.notifier).update((s) => s.copyWith(type: type));
+                },
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  static IconData _typeIcon(DiscoverType type) => switch (type) {
+    .anime => LucideIcons.tv,
+    .manga => LucideIcons.bookOpen,
+    .character => LucideIcons.user,
+    .staff => LucideIcons.mic,
+    .studio => LucideIcons.building2,
+    .user => LucideIcons.users,
+    .review => LucideIcons.fileText,
+    .recommendation => LucideIcons.thumbsUp,
+  };
 }

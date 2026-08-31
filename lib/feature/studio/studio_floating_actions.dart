@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/feature/viewer/persistence_provider.dart';
 import 'package:otraku/widget/input/chip_selector.dart';
 import 'package:otraku/feature/media/media_models.dart';
@@ -19,7 +19,7 @@ class StudioFilterButton extends StatelessWidget {
     return FloatingActionButton(
       tooltip: 'Filter',
       heroTag: 'filter',
-      child: const Icon(Ionicons.funnel_outline),
+      child: const Icon(LucideIcons.slidersHorizontal),
       onPressed: () {
         var filter = ref.read(studioFilterProvider(id));
         final onDone = (_) => ref.read(studioFilterProvider(id).notifier).state = filter;

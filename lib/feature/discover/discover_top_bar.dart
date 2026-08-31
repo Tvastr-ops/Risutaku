@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:otraku/feature/discover/discover_filter_model.dart';
 import 'package:otraku/feature/discover/discover_filter_provider.dart';
 import 'package:otraku/feature/discover/discover_media_filter_view.dart';
@@ -57,7 +57,7 @@ class DiscoverTopBarTrailingContent extends StatelessWidget {
               if (filter.type == .anime)
                 IconButton(
                   tooltip: 'Calendar',
-                  icon: const Icon(Ionicons.calendar_outline),
+                  icon: const Icon(LucideIcons.calendar),
                   onPressed: () => context.push(Routes.calendar),
                 ),
               switch (filter.type) {
@@ -73,7 +73,7 @@ class DiscoverTopBarTrailingContent extends StatelessWidget {
                 .character || .staff => _BirthdayFilter(ref),
                 .review => IconButton(
                   tooltip: 'Filter',
-                  icon: const Icon(Ionicons.funnel_outline),
+                  icon: const Icon(LucideIcons.slidersHorizontal),
                   onPressed: () => showReviewsFilterSheet(
                     context: context,
                     filter: filter.reviewsFilter,
@@ -90,7 +90,7 @@ class DiscoverTopBarTrailingContent extends StatelessWidget {
                 ),
                 .recommendation => IconButton(
                   tooltip: 'Filter',
-                  icon: const Icon(Ionicons.funnel_outline),
+                  icon: const Icon(LucideIcons.slidersHorizontal),
                   onPressed: () => showRecommendationsFilterSheet(
                     context: context,
                     filter: filter.recommendationsFilter,
@@ -117,7 +117,7 @@ class DiscoverTopBarTrailingContent extends StatelessWidget {
   Widget _filterIcon(BuildContext context, WidgetRef ref, DiscoverFilter filter) {
     return IconButton(
       tooltip: 'Filter',
-      icon: const Icon(Ionicons.funnel_outline),
+      icon: const Icon(LucideIcons.slidersHorizontal),
       onPressed: () => showSheet(
         context,
         DiscoverMediaFilterView(
