@@ -16,7 +16,7 @@ class SettingsNotificationsSubview extends StatelessWidget {
     return ListView.builder(
       controller: scrollCtrl,
       padding: .only(
-        top: listPadding.top + Theming.normalTapTarget + Theming.offset,
+        top: listPadding.top + Theming.normalTapTarget,
         bottom: listPadding.bottom + Theming.offset + 60,
       ),
       itemCount: settings.notificationOptions.length,

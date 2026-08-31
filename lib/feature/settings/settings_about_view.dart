@@ -28,7 +28,7 @@ class SettingsAboutSubview extends StatelessWidget {
           controller: scrollCtrl,
           physics: Theming.bouncyPhysics,
           padding: EdgeInsets.only(
-            top: padding.top + Theming.normalTapTarget + Theming.offset,
+            top: padding.top + Theming.normalTapTarget,
             left: padding.left + Theming.offset,
             right: padding.right + Theming.offset,
             bottom: padding.bottom + Theming.offset + 60,
@@ -38,19 +38,25 @@ class SettingsAboutSubview extends StatelessWidget {
               child: Image.asset(
                 'assets/icons/about.png',
                 color: ColorScheme.of(context).primary,
-                width: 160,
-                height: 160,
+                width: 100,
+                height: 100,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             Text(
               'Risutaku - v.$appVersion',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleMedium,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
             ),
-            const SizedBox(height: 5),
-            const Text('An expressive Material 3 AniList client', textAlign: TextAlign.center),
-            const SizedBox(height: 30),
+            const SizedBox(height: 4),
+            Text(
+              'An expressive Material 3 AniList client',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 20),
             ListTile(
               leading: const Icon(LucideIcons.code),
               title: const Text('Source Code'),

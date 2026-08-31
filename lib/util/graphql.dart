@@ -446,6 +446,13 @@ abstract class GqlQuery {
         formats {count meanScore minutesWatched chaptersRead format}
         statuses {count meanScore minutesWatched chaptersRead status}
         countries {count meanScore minutesWatched chaptersRead country}
+        genres(limit: 25, sort: [COUNT_DESC]) {genre count meanScore minutesWatched chaptersRead}
+        tags(limit: 25, sort: [COUNT_DESC]) {tag {id name} count meanScore minutesWatched chaptersRead}
+        studios(limit: 25, sort: [COUNT_DESC]) {studio {id name} count meanScore minutesWatched}
+        voiceActors(limit: 25, sort: [COUNT_DESC]) {voiceActor {id name {userPreferred} image {medium}} count meanScore minutesWatched}
+        staff(limit: 25, sort: [COUNT_DESC]) {staff {id name {userPreferred} image {medium}} count meanScore minutesWatched chaptersRead}
+        releaseYears(sort: [RELEASE_YEAR_DESC]) {releaseYear count meanScore minutesWatched chaptersRead}
+        startYears(sort: [START_YEAR_DESC]) {startYear count meanScore minutesWatched chaptersRead}
       }
     ''';
 

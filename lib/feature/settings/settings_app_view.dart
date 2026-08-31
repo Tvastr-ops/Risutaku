@@ -31,7 +31,7 @@ class SettingsAppSubview extends ConsumerWidget {
     return ListView(
       controller: scrollCtrl,
       padding: .only(
-        top: listPadding.top + Theming.normalTapTarget + Theming.offset,
+        top: listPadding.top + Theming.normalTapTarget,
         bottom: listPadding.bottom + Theming.offset + 60,
       ),
       children: [
@@ -122,7 +122,7 @@ class SettingsAppSubview extends ConsumerWidget {
             StatefulSwitchListTile(
               title: const Text('Anime Collection Preview'),
               subtitle: const Text(
-                'Only load your watched/rewatched anime '
+                'Only load your currently watching/rewatching anime '
                 'and expand to full collection with the floating button',
               ),
               value: options.animeCollectionPreview,
@@ -131,7 +131,7 @@ class SettingsAppSubview extends ConsumerWidget {
             StatefulSwitchListTile(
               title: const Text('Manga Collection Preview'),
               subtitle: const Text(
-                'Only load your read/reread manga '
+                'Only load your currently reading/rereading manga '
                 'and expand to full collection with the floating button',
               ),
               value: options.mangaCollectionPreview,

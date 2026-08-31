@@ -26,7 +26,7 @@ class CollectionFloatingAction extends StatelessWidget {
           null => const SizedBox(),
           PreviewCollection _ => FloatingActionButton(
             tooltip: 'Load Entire Collection',
-            child: const Icon(LucideIcons.arrowDownToLine),
+            child: const Icon(LucideIcons.library),
             onPressed: () => ref.read(homeProvider.notifier).expandCollection(tag.ofAnime),
           ),
           FullCollection c => _fullCollectionActionButton(context, ref, c.lists, c.index),
@@ -77,6 +77,11 @@ class CollectionFloatingAction extends StatelessWidget {
 
     final sortedItems = rawItems.map((e) => e.item).toList();
 
+    final switcherIcons = [
+      const Icon(LucideIcons.layers),
+      for (final list in lists) Icon(_listIcon(list.name)),
+    ];
+
     return FloatingActionButton(
       tooltip: 'Lists',
       onPressed: () {
@@ -97,7 +102,7 @@ class CollectionFloatingAction extends StatelessWidget {
       },
       child: SwipeSwitcher(
         index: index + 1,
-        children: List.filled(lists.length + 1, const Icon(LucideIcons.listFilter)),
+        children: switcherIcons,
         onChanged: (index) => ref.read(collectionProvider(tag).notifier).changeIndex(index - 1),
       ),
     );
@@ -123,7 +128,7 @@ class CollectionFloatingAction extends StatelessWidget {
     if (lower.contains('plan')) return LucideIcons.bookmark;
     if (lower.contains('pause') || lower.contains('hold')) return LucideIcons.pause;
     if (lower.contains('drop')) return LucideIcons.x;
-    return LucideIcons.list;
+    return LucideIcons.layoutList;
   }
 }
 
