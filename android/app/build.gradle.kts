@@ -62,15 +62,6 @@ android {
             } else {
                 signingConfigs.getByName("debug")
             }
-        }
-    }
-
-    flavorDimensions += "default"
-    productFlavors {
-        create("dev") {
-            dimension = "default"
-            applicationIdSuffix = ".dev"
-        }
     }
 }
 
