@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:risutaku/feature/collection/collection_models.dart';
 import 'package:risutaku/feature/collection/collection_provider.dart';
 import 'package:risutaku/feature/home/home_provider.dart';
-import 'package:risutaku/widget/input/pill_selector.dart';
+import 'package:risutaku/widget/input/cascading_pill_sheet.dart';
 import 'package:risutaku/widget/swipe_switcher.dart';
 import 'package:risutaku/widget/sheets.dart';
 
@@ -40,22 +41,55 @@ class CollectionFloatingAction extends StatelessWidget {
     List<EntryList> lists,
     int index,
   ) {
-    final items = buildFullCollectionSelectionItems(context, lists);
+    final allCount = lists.fold(0, (v, l) => v + l.entries.length);
+
+    // Build items with original indices
+    final rawItems = [
+      (
+        item: CascadingPillItem<int>(
+          value: -1,
+          label: 'All',
+          count: allCount.toString(),
+          icon: LucideIcons.layers,
+        ),
+        priority: 0,
+        originalIndex: 0,
+      ),
+      for (int i = 0; i < lists.length; i++)
+        (
+          item: CascadingPillItem<int>(
+            value: i,
+            label: lists[i].name,
+            count: lists[i].entries.length.toString(),
+            icon: _listIcon(lists[i].name),
+          ),
+          priority: _listPriority(lists[i].name),
+          originalIndex: i + 1,
+        ),
+    ];
+
+    // Sort by priority so standard AniList lists are at the top
+    rawItems.sort((a, b) {
+      final pComp = a.priority.compareTo(b.priority);
+      if (pComp != 0) return pComp;
+      return a.originalIndex.compareTo(b.originalIndex);
+    });
+
+    final sortedItems = rawItems.map((e) => e.item).toList();
 
     return FloatingActionButton(
       tooltip: 'Lists',
       onPressed: () {
+        HapticFeedback.selectionClick();
         showSheet(
           context,
           SimpleSheet(
-            initialHeight: PillSelector.expectedMinHeight(lists.length),
-            builder: (context, scrollCtrl) => PillSelector(
-              scrollCtrl: scrollCtrl,
-              selected: index + 1,
-              items: items,
-              onTap: (index) {
-                ref.read(collectionProvider(tag).notifier).changeIndex(index - 1);
-                Navigator.pop(context);
+            builder: (context, _) => CascadingPillSheet<int>(
+              title: 'Select List',
+              items: sortedItems,
+              selectedValue: index,
+              onSelected: (val) {
+                ref.read(collectionProvider(tag).notifier).changeIndex(val);
               },
             ),
           ),
@@ -67,6 +101,29 @@ class CollectionFloatingAction extends StatelessWidget {
         onChanged: (index) => ref.read(collectionProvider(tag).notifier).changeIndex(index - 1),
       ),
     );
+  }
+
+  static int _listPriority(String name) {
+    final lower = name.toLowerCase().trim();
+    if (lower == 'all') return 0;
+    if (lower.contains('watch') || lower.contains('read') || lower == 'current') return 1;
+    if (lower.contains('complete')) return 2;
+    if (lower.contains('plan')) return 3;
+    if (lower.contains('pause') || lower.contains('hold')) return 4;
+    if (lower.contains('drop')) return 5;
+    return 100;
+  }
+
+  static IconData _listIcon(String name) {
+    final lower = name.toLowerCase().trim();
+    if (lower.contains('watch') || lower.contains('read') || lower == 'current') {
+      return LucideIcons.play;
+    }
+    if (lower.contains('complete')) return LucideIcons.checkCheck;
+    if (lower.contains('plan')) return LucideIcons.bookmark;
+    if (lower.contains('pause') || lower.contains('hold')) return LucideIcons.pause;
+    if (lower.contains('drop')) return LucideIcons.x;
+    return LucideIcons.list;
   }
 }
 

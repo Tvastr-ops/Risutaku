@@ -28,7 +28,7 @@ class SettingsAboutSubview extends StatelessWidget {
           controller: scrollCtrl,
           physics: Theming.bouncyPhysics,
           padding: EdgeInsets.only(
-            top: Theming.offset,
+            top: padding.top + Theming.offset * 2,
             left: padding.left + Theming.offset,
             right: padding.right + Theming.offset,
             bottom: padding.bottom + Theming.offset,
@@ -38,8 +38,8 @@ class SettingsAboutSubview extends StatelessWidget {
               child: Image.asset(
                 'assets/icons/about.png',
                 color: ColorScheme.of(context).primary,
-                width: 90,
-                height: 90,
+                width: 160,
+                height: 160,
               ),
             ),
             const SizedBox(height: 10),

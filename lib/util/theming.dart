@@ -5,13 +5,25 @@ import 'package:flutter/material.dart';
 enum FormFactor { phone, tablet }
 
 enum ThemeBase {
-  navy('Navy', Color(0xFF45A0F2)),
-  mint('Mint', Color(0xFF2AB8B8)),
-  lavender('Lavender', Color(0xFFB4ABF5)),
-  caramel('Caramel', Color(0xFFF78204)),
-  forest('Forest', Color(0xFF00FFA9)),
+  peach('Peach', Color(0xFFFF9E80)),
+  sakura('Sakura', Color(0xFFFF80AB)),
+  cyberpunk('Cyberpunk', Color(0xFFFF007F)),
+  neonRed('Neon Red', Color(0xFFFF1744)),
+  crimson('Crimson', Color(0xFFE53935)),
   wine('Wine', Color(0xFF894771)),
-  mustard('Mustard', Color(0xFFFFBF02));
+  amethyst('Amethyst', Color(0xFF9C27B0)),
+  lavender('Lavender', Color(0xFFB4ABF5)),
+  indigo('Indigo', Color(0xFF5C6BC0)),
+  navy('Navy', Color(0xFF45A0F2)),
+  neonCyan('Neon Cyan', Color(0xFF00E5FF)),
+  mint('Mint', Color(0xFF2AB8B8)),
+  forest('Forest', Color(0xFF00FFA9)),
+  neonGreen('Neon Green', Color(0xFF00E676)),
+  matcha('Matcha', Color(0xFF8BC34A)),
+  mustard('Mustard', Color(0xFFFFBF02)),
+  sunset('Sunset', Color(0xFFFF6E40)),
+  caramel('Caramel', Color(0xFFF78204)),
+  nordic('Nordic', Color(0xFF607D8B));
 
   const ThemeBase(this.title, this.seed);
 

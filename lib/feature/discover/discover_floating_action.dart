@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:risutaku/feature/discover/discover_filter_provider.dart';
 import 'package:risutaku/feature/discover/discover_model.dart';
-import 'package:risutaku/widget/input/pill_selector.dart';
+import 'package:risutaku/widget/input/cascading_pill_sheet.dart';
 import 'package:risutaku/widget/swipe_switcher.dart';
 import 'package:risutaku/widget/sheets.dart';
 
@@ -17,23 +17,31 @@ class DiscoverFloatingAction extends StatelessWidget {
       builder: (context, ref, child) {
         final type = ref.watch(discoverFilterProvider.select((s) => s.type));
 
+        final items = DiscoverType.values
+            .map(
+              (v) => CascadingPillItem<DiscoverType>(
+                value: v,
+                label: v.label,
+                icon: _typeIcon(v),
+              ),
+            )
+            .toList();
+
         return FloatingActionButton(
-          tooltip: 'Types',
+          tooltip: 'Categories',
           onPressed: () {
+            HapticFeedback.selectionClick();
             showSheet(
               context,
               SimpleSheet(
-                initialHeight: PillSelector.expectedMinHeight(DiscoverType.values.length),
-                builder: (context, scrollCtrl) => PillSelector(
-                  scrollCtrl: scrollCtrl,
-                  selected: type.index,
-                  items: DiscoverType.values.map((v) => Text(v.label)).toList(),
-                  onTap: (i) {
-                    HapticFeedback.selectionClick();
+                builder: (context, _) => CascadingPillSheet<DiscoverType>(
+                  title: 'Explore Categories',
+                  items: items,
+                  selectedValue: type,
+                  onSelected: (selected) {
                     ref
                         .read(discoverFilterProvider.notifier)
-                        .update((s) => s.copyWith(type: DiscoverType.values[i]));
-                    Navigator.pop(context);
+                        .update((s) => s.copyWith(type: selected));
                   },
                 ),
               ),

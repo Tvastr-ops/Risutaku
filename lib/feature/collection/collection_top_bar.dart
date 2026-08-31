@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -9,6 +10,7 @@ import 'package:risutaku/feature/collection/collection_filter_provider.dart';
 import 'package:risutaku/feature/collection/collection_models.dart';
 import 'package:risutaku/feature/collection/collection_provider.dart';
 import 'package:risutaku/feature/collection/collection_filter_view.dart';
+import 'package:risutaku/feature/viewer/persistence_provider.dart';
 import 'package:risutaku/util/routes.dart';
 import 'package:risutaku/util/debounce.dart';
 import 'package:risutaku/widget/input/search_field.dart';
@@ -74,6 +76,34 @@ class CollectionTopBarTrailingContent extends StatelessWidget {
 
                   final entry = list.entries[Random().nextInt(list.entries.length)];
                   context.push(Routes.media(entry.mediaId, entry.imageUrl));
+                },
+              ),
+              IconButton(
+                tooltip: ref.watch(
+                  persistenceProvider.select(
+                    (s) => s.options.collectionItemView == CollectionItemView.simple
+                        ? 'Switch to List View'
+                        : 'Switch to Grid View',
+                  ),
+                ),
+                icon: Icon(
+                  ref.watch(
+                    persistenceProvider.select(
+                      (s) => s.options.collectionItemView == CollectionItemView.simple
+                          ? LucideIcons.list
+                          : LucideIcons.layoutGrid,
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  HapticFeedback.selectionClick();
+                  final current = ref.read(persistenceProvider).options;
+                  final nextView = current.collectionItemView == CollectionItemView.simple
+                      ? CollectionItemView.detailed
+                      : CollectionItemView.simple;
+                  ref.read(persistenceProvider.notifier).setOptions(
+                    current.copyWith(collectionItemView: nextView),
+                  );
                 },
               ),
               if (filter.mediaFilter.isActive)
