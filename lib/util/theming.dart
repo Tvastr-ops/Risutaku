@@ -80,7 +80,7 @@ class Theming extends ThemeExtension<Theming> {
   static const radiusBig = Radius.circular(24);
   static const borderRadiusSmall = BorderRadius.all(radiusSmall);
   static const borderRadiusBig = BorderRadius.all(radiusBig);
-  static const blurFilter = ImageFilter.blur(sigmaX: 5, sigmaY: 5);
+  static final blurFilter = ImageFilter.blur(sigmaX: 5, sigmaY: 5);
   static const bouncyPhysics = AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics());
 
   static ColorScheme createColorScheme({

@@ -26,12 +26,6 @@ class ThemePreview extends StatelessWidget {
       ),
     );
 
-    final background = options.highContrast
-        ? brightness == Brightness.dark
-              ? Colors.black
-              : Colors.white
-        : null;
-
     final bodyMediumLineHeight = context.lineHeight(TextTheme.of(context).bodyMedium!);
 
     final children = <_ThemeCard>[];
