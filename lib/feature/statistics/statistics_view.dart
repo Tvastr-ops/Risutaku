@@ -33,6 +33,7 @@ class _StatisticsViewState extends State<StatisticsView> with SingleTickerProvid
   late final _tabCtrl = TabController(length: 2, vsync: this);
   final _scrollCtrl = ScrollController();
 
+  int _scoreBarChartTab = 0;
   int _lengthBarChartTab = 0;
   int _genreBarChartTab = 0;
   int _yearBarChartTab = 0;
@@ -76,9 +77,11 @@ class _StatisticsViewState extends State<StatisticsView> with SingleTickerProvid
                         statistics: data.animeStats,
                         ofAnime: true,
                         scrollCtrl: _scrollCtrl,
+                        scoreTab: () => _scoreBarChartTab,
                         lengthTab: () => _lengthBarChartTab,
                         genreTab: () => _genreBarChartTab,
                         yearTab: () => _yearBarChartTab,
+                        onScoreTabChanged: (i) => _scoreBarChartTab = i,
                         onLengthTabChanged: (i) => _lengthBarChartTab = i,
                         onGenreTabChanged: (i) => _genreBarChartTab = i,
                         onYearTabChanged: (i) => _yearBarChartTab = i,
@@ -90,9 +93,11 @@ class _StatisticsViewState extends State<StatisticsView> with SingleTickerProvid
                         statistics: data.mangaStats,
                         ofAnime: false,
                         scrollCtrl: _scrollCtrl,
+                        scoreTab: () => _scoreBarChartTab,
                         lengthTab: () => _lengthBarChartTab,
                         genreTab: () => _genreBarChartTab,
                         yearTab: () => _yearBarChartTab,
+                        onScoreTabChanged: (i) => _scoreBarChartTab = i,
                         onLengthTabChanged: (i) => _lengthBarChartTab = i,
                         onGenreTabChanged: (i) => _genreBarChartTab = i,
                         onYearTabChanged: (i) => _yearBarChartTab = i,
@@ -126,9 +131,11 @@ class _StatisticsView extends StatelessWidget {
     required this.statistics,
     required this.ofAnime,
     required this.scrollCtrl,
+    required this.scoreTab,
     required this.lengthTab,
     required this.genreTab,
     required this.yearTab,
+    required this.onScoreTabChanged,
     required this.onLengthTabChanged,
     required this.onGenreTabChanged,
     required this.onYearTabChanged,
@@ -138,9 +145,11 @@ class _StatisticsView extends StatelessWidget {
   final Statistics statistics;
   final bool ofAnime;
   final ScrollController scrollCtrl;
+  final int Function() scoreTab;
   final int Function() lengthTab;
   final int Function() genreTab;
   final int Function() yearTab;
+  final void Function(int) onScoreTabChanged;
   final void Function(int) onLengthTabChanged;
   final void Function(int) onGenreTabChanged;
   final void Function(int) onYearTabChanged;
@@ -149,15 +158,6 @@ class _StatisticsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const spacing = SliverToBoxAdapter(child: SizedBox(height: Theming.offset));
-
-    // Convert score distribution to a map 1..10
-    final scoresMap = <int, int>{};
-    for (final s in statistics.scores) {
-      final val = int.tryParse(s.type);
-      if (val != null && val >= 1 && val <= 10) {
-        scoresMap[val] = s.count;
-      }
-    }
 
     return CustomScrollView(
       controller: scrollCtrl,
@@ -168,16 +168,16 @@ class _StatisticsView extends StatelessWidget {
         ),
         _BentoDetails(statistics, ofAnime, highContrast),
 
-        // 10-Column Vertical Score Bell Curve Histogram
+        // Dynamic Skyscraper Score Histogram (Supports all rating scales with decimal labels & toggle)
         if (statistics.scores.isNotEmpty) ...[
           spacing,
-          SliverToBoxAdapter(
-            child: ScoreHistogram(
-              title: 'Score Distribution',
-              scores: scoresMap,
-              meanScore: statistics.meanScore,
-              highContrast: highContrast,
-            ),
+          _ScoreHistogramChart(
+            scores: statistics.scores,
+            meanScore: statistics.meanScore,
+            ofAnime: ofAnime,
+            initialTab: scoreTab(),
+            onTabChanged: onScoreTabChanged,
+            highContrast: highContrast,
           ),
         ],
 
@@ -216,14 +216,24 @@ class _StatisticsView extends StatelessWidget {
         if (ofAnime && statistics.voiceActors.isNotEmpty) ...[
           spacing,
           _SectionTitle('Top Voice Actors'),
-          _TopPeopleGrid(people: statistics.voiceActors, isVoiceActor: true, highContrast: highContrast),
+          _TopPeopleGrid(
+            people: statistics.voiceActors,
+            isVoiceActor: true,
+            ofAnime: ofAnime,
+            highContrast: highContrast,
+          ),
         ],
 
         // Top Staff / Directors
         if (statistics.staff.isNotEmpty) ...[
           spacing,
           _SectionTitle(ofAnime ? 'Top Staff & Creators' : 'Top Authors & Artists'),
-          _TopPeopleGrid(people: statistics.staff, isVoiceActor: false, highContrast: highContrast),
+          _TopPeopleGrid(
+            people: statistics.staff,
+            isVoiceActor: false,
+            ofAnime: ofAnime,
+            highContrast: highContrast,
+          ),
         ],
 
         // Top Tags & Themes
@@ -392,7 +402,78 @@ class _BentoDetails extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          // Secondary Bento Cells (Twin Row)
+          // Secondary Bento Row 1: Total Titles & Total Episodes/Chapters
+          Row(
+            children: [
+              // Total Titles
+              Expanded(
+                child: CardExtension.highContrast(highContrast)(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(ofAnime ? LucideIcons.film : LucideIcons.bookOpen, size: 16, color: colorScheme.primary),
+                            const SizedBox(width: 6),
+                            Text(
+                              ofAnime ? 'Total Anime' : 'Total Manga',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          '${statistics.count}',
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              // Parts Consumed (Episodes / Chapters)
+              Expanded(
+                child: CardExtension.highContrast(highContrast)(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(ofAnime ? LucideIcons.play : LucideIcons.bookmarkCheck, size: 16, color: colorScheme.primary),
+                            const SizedBox(width: 6),
+                            Text(
+                              ofAnime ? 'Episodes Watched' : 'Chapters Read',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          '${statistics.partsConsumed}',
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          // Secondary Bento Row 2: Mean Score & Standard Deviation
           Row(
             children: [
               // Mean Score Cell
@@ -418,26 +499,13 @@ class _BentoDetails extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 6),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            Text(
-                              statistics.meanScore > 0 ? statistics.meanScore.toStringAsFixed(1) : '—',
-                              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
-                            ),
-                            if (statistics.standardDeviation > 0) ...[
-                              const SizedBox(width: 6),
-                              Text(
-                                '±${statistics.standardDeviation.toStringAsFixed(1)}',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w600,
-                                  color: colorScheme.onSurfaceVariant,
-                                ),
-                              ),
-                            ],
-                          ],
+                        Text(
+                          statistics.meanScore > 0
+                              ? (statistics.meanScore > 10
+                                  ? (statistics.meanScore / 10.0).toStringAsFixed(2)
+                                  : statistics.meanScore.toStringAsFixed(2))
+                              : '—',
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
                         ),
                       ],
                     ),
@@ -445,7 +513,7 @@ class _BentoDetails extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-              // Library Count Cell
+              // Standard Deviation Cell
               Expanded(
                 child: CardExtension.highContrast(highContrast)(
                   child: Padding(
@@ -455,10 +523,10 @@ class _BentoDetails extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Icon(ofAnime ? LucideIcons.tv : LucideIcons.library, size: 16, color: colorScheme.primary),
+                            Icon(LucideIcons.calculator, size: 16, color: colorScheme.primary),
                             const SizedBox(width: 6),
                             Text(
-                              ofAnime ? 'Total Anime' : 'Total Manga',
+                              'Standard Deviation',
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
@@ -469,7 +537,11 @@ class _BentoDetails extends StatelessWidget {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          '${statistics.count} Titles',
+                          statistics.standardDeviation > 0
+                              ? (statistics.standardDeviation > 5
+                                  ? (statistics.standardDeviation / 10.0).toStringAsFixed(2)
+                                  : statistics.standardDeviation.toStringAsFixed(2))
+                              : '—',
                           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
                         ),
                       ],
@@ -480,6 +552,71 @@ class _BentoDetails extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ScoreHistogramChart extends StatefulWidget {
+  const _ScoreHistogramChart({
+    required this.scores,
+    required this.meanScore,
+    required this.ofAnime,
+    required this.initialTab,
+    required this.onTabChanged,
+    required this.highContrast,
+  });
+
+  final List<AmountStatistics> scores;
+  final double meanScore;
+  final bool ofAnime;
+  final int initialTab;
+  final void Function(int) onTabChanged;
+  final bool highContrast;
+
+  @override
+  State<_ScoreHistogramChart> createState() => _ScoreHistogramChartState();
+}
+
+class _ScoreHistogramChartState extends State<_ScoreHistogramChart> {
+  late int _tab = widget.initialTab;
+
+  @override
+  Widget build(BuildContext context) {
+    final sortedScores = List<AmountStatistics>.from(widget.scores)
+      ..sort((a, b) => (double.tryParse(a.type) ?? 0).compareTo(double.tryParse(b.type) ?? 0));
+
+    final names = sortedScores.map((s) => s.type).toList();
+    final values = _tab == 0
+        ? sortedScores.map((s) => s.count).toList()
+        : sortedScores.map((s) => s.amount).toList();
+
+    return SliverToBoxAdapter(
+      child: ScoreHistogram(
+        title: 'Score Distribution',
+        names: names,
+        values: values,
+        meanScore: widget.meanScore,
+        highContrast: widget.highContrast,
+        toolbar: SegmentedButton<int>(
+          segments: [
+            const ButtonSegment(
+              value: 0,
+              label: Text('Titles'),
+              icon: Icon(LucideIcons.hash, size: 16),
+            ),
+            ButtonSegment(
+              value: 1,
+              label: Text(widget.ofAnime ? 'Hours' : 'Chapters'),
+              icon: Icon(widget.ofAnime ? LucideIcons.clock : LucideIcons.bookmark, size: 16),
+            ),
+          ],
+          selected: {_tab},
+          onSelectionChanged: (v) {
+            setState(() => _tab = v.first);
+            widget.onTabChanged(v.first);
+          },
+        ),
       ),
     );
   }
@@ -523,30 +660,23 @@ class _BarChartState extends State<_BarChart> {
     return SliverToBoxAdapter(
       child: BarChart(
         title: widget.title,
-        toolbar: SegmentedButton(
+        toolbar: SegmentedButton<int>(
           segments: [
             const ButtonSegment(
               value: 0,
               label: Text('Titles'),
-              icon: Icon(Icons.numbers_outlined),
+              icon: Icon(LucideIcons.hash, size: 16),
             ),
-            if (widget.ofAnime)
-              const ButtonSegment(
-                value: 1,
-                label: Text('Hours'),
-                icon: Icon(Icons.hourglass_bottom_outlined),
-              )
-            else
-              const ButtonSegment(
-                value: 1,
-                label: Text('Chapters'),
-                icon: Icon(Icons.hourglass_bottom_outlined),
-              ),
+            ButtonSegment(
+              value: 1,
+              label: Text(widget.ofAnime ? 'Hours' : 'Chapters'),
+              icon: Icon(widget.ofAnime ? LucideIcons.clock : LucideIcons.bookmark, size: 16),
+            ),
             if (widget.full && widget.statistics.any((s) => s.meanScore > 0))
               const ButtonSegment(
                 value: 2,
                 label: Text('Score'),
-                icon: Icon(Icons.star_half_outlined),
+                icon: Icon(LucideIcons.star, size: 16),
               ),
           ],
           selected: {_tab},
@@ -597,23 +727,23 @@ class _TopGenresChartState extends State<_TopGenresChart> {
     return SliverToBoxAdapter(
       child: BarChart(
         title: 'Top Genres',
-        toolbar: SegmentedButton(
+        toolbar: SegmentedButton<int>(
           segments: [
             const ButtonSegment(
               value: 0,
               label: Text('Titles'),
-              icon: Icon(Icons.numbers_outlined),
+              icon: Icon(LucideIcons.hash, size: 16),
             ),
             ButtonSegment(
               value: 1,
               label: Text(widget.ofAnime ? 'Hours' : 'Chapters'),
-              icon: const Icon(Icons.hourglass_bottom_outlined),
+              icon: Icon(widget.ofAnime ? LucideIcons.clock : LucideIcons.bookmark, size: 16),
             ),
             if (displayGenres.any((g) => g.meanScore > 0))
               const ButtonSegment(
                 value: 2,
                 label: Text('Score'),
-                icon: Icon(Icons.star_half_outlined),
+                icon: Icon(LucideIcons.star, size: 16),
               ),
           ],
           selected: {_tab},
@@ -629,241 +759,348 @@ class _TopGenresChartState extends State<_TopGenresChart> {
   }
 }
 
-class _TopStudiosGrid extends StatelessWidget {
+class _TopStudiosGrid extends StatefulWidget {
   const _TopStudiosGrid({required this.studios, required this.highContrast});
 
   final List<StudioStatistic> studios;
   final bool highContrast;
 
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final displayStudios = studios.take(10).toList();
-
-    return SliverGrid(
-      gridDelegate: const SliverGridDelegateWithMinWidthAndFixedHeight(
-        minWidth: 175,
-        height: 72,
-        mainAxisSpacing: 8,
-        crossAxisSpacing: 8,
-      ),
-      delegate: SliverChildBuilderDelegate(
-        childCount: displayStudios.length,
-        (context, i) {
-          final studio = displayStudios[i];
-          final badgeColor = i == 0
-              ? const Color(0xFFFFD700) // Gold
-              : i == 1
-                  ? const Color(0xFFC0C0C0) // Silver
-                  : i == 2
-                      ? const Color(0xFFCD7F32) // Bronze
-                      : colorScheme.primaryContainer;
-          final textColor = i < 3 ? Colors.black : colorScheme.onPrimaryContainer;
-
-          return CardExtension.highContrast(highContrast)(
-            child: InkWell(
-              borderRadius: Theming.borderRadiusSmall,
-              onTap: () => context.push(Routes.studio(studio.id, studio.name)),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 28,
-                      height: 28,
-                      decoration: BoxDecoration(
-                        color: badgeColor,
-                        borderRadius: Theming.borderRadiusSmall,
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        '#${i + 1}',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w800,
-                          color: textColor,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            studio.name,
-                            style: theme.textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 2),
-                          Row(
-                            children: [
-                              Text(
-                                '${studio.count} anime',
-                                style: theme.textTheme.labelSmall?.copyWith(
-                                  color: colorScheme.onSurfaceVariant,
-                                ),
-                              ),
-                              if (studio.meanScore > 0) ...[
-                                const Text(' • '),
-                                Icon(LucideIcons.star, size: 11, color: colorScheme.primary),
-                                const SizedBox(width: 2),
-                                Text(
-                                  '${studio.meanScore.toStringAsFixed(0)}%',
-                                  style: theme.textTheme.labelSmall?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: colorScheme.primary,
-                                  ),
-                                ),
-                              ],
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
+  State<_TopStudiosGrid> createState() => _TopStudiosGridState();
 }
 
-class _TopPeopleGrid extends StatelessWidget {
-  const _TopPeopleGrid({
-    required this.people,
-    required this.isVoiceActor,
-    required this.highContrast,
-  });
-
-  final List<PersonStatistic> people;
-  final bool isVoiceActor;
-  final bool highContrast;
+class _TopStudiosGridState extends State<_TopStudiosGrid> {
+  int _sortTab = 0; // 0: Count, 1: Score
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final displayPeople = people.take(10).toList();
 
-    return SliverGrid(
-      gridDelegate: const SliverGridDelegateWithMinWidthAndFixedHeight(
-        minWidth: 180,
-        height: 72,
-        mainAxisSpacing: 8,
-        crossAxisSpacing: 8,
-      ),
-      delegate: SliverChildBuilderDelegate(
-        childCount: displayPeople.length,
-        (context, i) {
-          final person = displayPeople[i];
-          final podiumBorderColor = i == 0
-              ? const Color(0xFFFFD700)
-              : i == 1
-                  ? const Color(0xFFC0C0C0)
-                  : i == 2
-                      ? const Color(0xFFCD7F32)
-                      : Colors.transparent;
+    final sorted = List<StudioStatistic>.from(widget.studios);
+    if (_sortTab == 0) {
+      sorted.sort((a, b) => b.count.compareTo(a.count));
+    } else {
+      sorted.sort((a, b) => b.meanScore.compareTo(a.meanScore));
+    }
 
-          return CardExtension.highContrast(highContrast)(
-            child: InkWell(
-              borderRadius: Theming.borderRadiusSmall,
-              onTap: () => context.push(Routes.staff(person.id, person.avatarUrl)),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                child: Row(
-                  children: [
-                    Stack(
-                      alignment: Alignment.bottomRight,
-                      children: [
-                        Container(
-                          width: 44,
-                          height: 44,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: podiumBorderColor,
-                              width: i < 3 ? 2.0 : 0.0,
-                            ),
-                          ),
-                          child: ClipOval(
-                            child: person.avatarUrl != null
-                                ? CachedImage(person.avatarUrl!)
-                                : Container(
-                                    color: colorScheme.surfaceContainerHighest,
-                                    child: Icon(LucideIcons.user, size: 20, color: colorScheme.onSurfaceVariant),
-                                  ),
-                          ),
-                        ),
-                        if (i < 3)
-                          Container(
-                            padding: const EdgeInsets.all(2),
-                            decoration: BoxDecoration(
-                              color: podiumBorderColor,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Text(
-                              '#${i + 1}',
-                              style: const TextStyle(
-                                fontSize: 8,
-                                fontWeight: FontWeight.w900,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            person.name,
-                            style: theme.textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 2),
-                          Row(
-                            children: [
-                              Text(
-                                '${person.count} ${isVoiceActor ? "roles" : "works"}',
-                                style: theme.textTheme.labelSmall?.copyWith(
-                                  color: colorScheme.onSurfaceVariant,
-                                ),
-                              ),
-                              if (person.meanScore > 0) ...[
-                                const Text(' • '),
-                                Icon(LucideIcons.star, size: 11, color: colorScheme.primary),
-                                const SizedBox(width: 2),
-                                Text(
-                                  '${person.meanScore.toStringAsFixed(0)}%',
-                                  style: theme.textTheme.labelSmall?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: colorScheme.primary,
-                                  ),
-                                ),
-                              ],
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+    final displayStudios = sorted.take(6).toList();
+
+    return SliverMainAxisGroup(
+      slivers: [
+        if (widget.studios.any((s) => s.meanScore > 0))
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: SegmentedButton<int>(
+                segments: const [
+                  ButtonSegment(
+                    value: 0,
+                    label: Text('Most Titles'),
+                    icon: Icon(LucideIcons.film, size: 16),
+                  ),
+                  ButtonSegment(
+                    value: 1,
+                    label: Text('Highest Rated'),
+                    icon: Icon(LucideIcons.star, size: 16),
+                  ),
+                ],
+                selected: {_sortTab},
+                onSelectionChanged: (v) => setState(() => _sortTab = v.first),
               ),
             ),
-          );
-        },
-      ),
+          ),
+        SliverGrid(
+          gridDelegate: const SliverGridDelegateWithMinWidthAndFixedHeight(
+            minWidth: 175,
+            height: 72,
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+          ),
+          delegate: SliverChildBuilderDelegate(
+            childCount: displayStudios.length,
+            (context, i) {
+              final studio = displayStudios[i];
+              final badgeColor = i == 0
+                  ? const Color(0xFFFFD700) // Gold
+                  : i == 1
+                      ? const Color(0xFFC0C0C0) // Silver
+                      : i == 2
+                          ? const Color(0xFFCD7F32) // Bronze
+                          : colorScheme.primaryContainer;
+              final textColor = i < 3 ? Colors.black : colorScheme.onPrimaryContainer;
+
+              final scoreText = studio.meanScore > 10
+                  ? (studio.meanScore / 10.0).toStringAsFixed(1)
+                  : (studio.meanScore > 0 ? studio.meanScore.toStringAsFixed(1) : '');
+
+              return CardExtension.highContrast(widget.highContrast)(
+                child: InkWell(
+                  borderRadius: Theming.borderRadiusSmall,
+                  onTap: () => context.push(Routes.studio(studio.id, studio.name)),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 28,
+                          height: 28,
+                          decoration: BoxDecoration(
+                            color: badgeColor,
+                            borderRadius: Theming.borderRadiusSmall,
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            '#${i + 1}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w800,
+                              color: textColor,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                studio.name,
+                                style: theme.textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 2),
+                              Row(
+                                children: [
+                                  Text(
+                                    '${studio.count} anime',
+                                    style: theme.textTheme.labelSmall?.copyWith(
+                                      color: colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                  if (scoreText.isNotEmpty) ...[
+                                    const Text(' • '),
+                                    Icon(LucideIcons.star, size: 11, color: colorScheme.primary),
+                                    const SizedBox(width: 2),
+                                    Text(
+                                      scoreText,
+                                      style: theme.textTheme.labelSmall?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        color: colorScheme.primary,
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _TopPeopleGrid extends StatefulWidget {
+  const _TopPeopleGrid({
+    required this.people,
+    required this.isVoiceActor,
+    required this.ofAnime,
+    required this.highContrast,
+  });
+
+  final List<PersonStatistic> people;
+  final bool isVoiceActor;
+  final bool ofAnime;
+  final bool highContrast;
+
+  @override
+  State<_TopPeopleGrid> createState() => _TopPeopleGridState();
+}
+
+class _TopPeopleGridState extends State<_TopPeopleGrid> {
+  int _sortTab = 0; // 0: Count, 1: Score, 2: Time
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    final sorted = List<PersonStatistic>.from(widget.people);
+    if (_sortTab == 0) {
+      sorted.sort((a, b) => b.count.compareTo(a.count));
+    } else if (_sortTab == 1) {
+      sorted.sort((a, b) => b.meanScore.compareTo(a.meanScore));
+    } else {
+      sorted.sort((a, b) => b.amount.compareTo(a.amount));
+    }
+
+    final displayPeople = sorted.take(6).toList();
+
+    return SliverMainAxisGroup(
+      slivers: [
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: SegmentedButton<int>(
+              segments: [
+                ButtonSegment(
+                  value: 0,
+                  label: Text(widget.isVoiceActor ? 'Roles' : 'Works'),
+                  icon: Icon(
+                    widget.isVoiceActor
+                        ? LucideIcons.mic
+                        : (widget.ofAnime ? LucideIcons.clapperboard : LucideIcons.bookOpen),
+                    size: 16,
+                  ),
+                ),
+                if (widget.people.any((p) => p.meanScore > 0))
+                  const ButtonSegment(
+                    value: 1,
+                    label: Text('Score'),
+                    icon: Icon(LucideIcons.star, size: 16),
+                  ),
+                if (widget.people.any((p) => p.amount > 0))
+                  ButtonSegment(
+                    value: 2,
+                    label: Text(widget.ofAnime ? 'Hours' : 'Chapters'),
+                    icon: Icon(widget.ofAnime ? LucideIcons.clock : LucideIcons.bookmark, size: 16),
+                  ),
+              ],
+              selected: {_sortTab},
+              onSelectionChanged: (v) => setState(() => _sortTab = v.first),
+            ),
+          ),
+        ),
+        SliverGrid(
+          gridDelegate: const SliverGridDelegateWithMinWidthAndFixedHeight(
+            minWidth: 180,
+            height: 72,
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+          ),
+          delegate: SliverChildBuilderDelegate(
+            childCount: displayPeople.length,
+            (context, i) {
+              final person = displayPeople[i];
+              final podiumBorderColor = i == 0
+                  ? const Color(0xFFFFD700)
+                  : i == 1
+                      ? const Color(0xFFC0C0C0)
+                      : i == 2
+                          ? const Color(0xFFCD7F32)
+                          : Colors.transparent;
+
+              final scoreText = person.meanScore > 10
+                  ? (person.meanScore / 10.0).toStringAsFixed(1)
+                  : (person.meanScore > 0 ? person.meanScore.toStringAsFixed(1) : '');
+
+              return CardExtension.highContrast(widget.highContrast)(
+                child: InkWell(
+                  borderRadius: Theming.borderRadiusSmall,
+                  onTap: () => context.push(Routes.staff(person.id, person.avatarUrl)),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    child: Row(
+                      children: [
+                        Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            Container(
+                              width: 44,
+                              height: 44,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: podiumBorderColor,
+                                  width: i < 3 ? 2.0 : 0.0,
+                                ),
+                              ),
+                              child: ClipOval(
+                                child: person.avatarUrl != null
+                                    ? CachedImage(person.avatarUrl!)
+                                    : Container(
+                                        color: colorScheme.surfaceContainerHighest,
+                                        child: Icon(LucideIcons.user, size: 20, color: colorScheme.onSurfaceVariant),
+                                      ),
+                              ),
+                            ),
+                            if (i < 3)
+                              Container(
+                                padding: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  color: podiumBorderColor,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Text(
+                                  '#${i + 1}',
+                                  style: const TextStyle(
+                                    fontSize: 8,
+                                    fontWeight: FontWeight.w900,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                person.name,
+                                style: theme.textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 2),
+                              Row(
+                                children: [
+                                  Text(
+                                    _sortTab == 2 && person.amount > 0
+                                        ? '${person.amount} ${widget.ofAnime ? "hrs" : "ch"}'
+                                        : '${person.count} ${widget.isVoiceActor ? "roles" : "works"}',
+                                    style: theme.textTheme.labelSmall?.copyWith(
+                                      color: colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                  if (scoreText.isNotEmpty) ...[
+                                    const Text(' • '),
+                                    Icon(LucideIcons.star, size: 11, color: colorScheme.primary),
+                                    const SizedBox(width: 2),
+                                    Text(
+                                      scoreText,
+                                      style: theme.textTheme.labelSmall?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        color: colorScheme.primary,
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
@@ -1002,23 +1239,23 @@ class _YearsTimelineChartState extends State<_YearsTimelineChart> {
         values: values,
         subtitles: subtitles,
         highContrast: widget.highContrast,
-        toolbar: SegmentedButton(
+        toolbar: SegmentedButton<int>(
           segments: [
             const ButtonSegment(
               value: 0,
               label: Text('Titles'),
-              icon: Icon(Icons.numbers_outlined),
+              icon: Icon(LucideIcons.hash, size: 16),
             ),
             ButtonSegment(
               value: 1,
               label: Text(widget.ofAnime ? 'Hours' : 'Chapters'),
-              icon: const Icon(Icons.hourglass_bottom_outlined),
+              icon: Icon(widget.ofAnime ? LucideIcons.clock : LucideIcons.bookmark, size: 16),
             ),
             if (validYears.any((y) => y.meanScore > 0))
               const ButtonSegment(
                 value: 2,
                 label: Text('Score'),
-                icon: Icon(Icons.star_half_outlined),
+                icon: Icon(LucideIcons.star, size: 16),
               ),
           ],
           selected: {_tab},

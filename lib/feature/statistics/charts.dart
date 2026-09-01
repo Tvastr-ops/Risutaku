@@ -106,24 +106,56 @@ class BarChart extends StatelessWidget {
 class ScoreHistogram extends StatelessWidget {
   const ScoreHistogram({
     required this.title,
-    required this.scores,
+    required this.names,
+    required this.values,
     required this.meanScore,
+    this.toolbar,
     required this.highContrast,
     super.key,
-  });
+  }) : assert(names.length == values.length);
 
   final String title;
-  final Map<int, int> scores; // Score 1..10 -> count
+  final List<String> names;
+  final List<num> values;
   final double meanScore;
+  final Widget? toolbar;
   final bool highContrast;
+
+  String _formatScore(String raw) {
+    final val = double.tryParse(raw);
+    if (val == null) return raw;
+    if (val > 10) {
+      final dec = val / 10.0;
+      return dec % 1 == 0 ? dec.toInt().toString() : dec.toStringAsFixed(1);
+    }
+    return val % 1 == 0 ? val.toInt().toString() : val.toStringAsFixed(1);
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    final maxCount = scores.values.fold<int>(0, (prev, val) => val > prev ? val : prev);
-    final roundedMean = meanScore.round();
+    final maxValue = values.fold<num>(0, (prev, val) => val > prev ? val : prev);
+
+    final displayMean = meanScore > 10
+        ? (meanScore / 10.0).toStringAsFixed(2)
+        : (meanScore > 0 ? meanScore.toStringAsFixed(2) : '—');
+
+    int closestIdx = -1;
+    double minDiff = double.infinity;
+    for (int i = 0; i < names.length; i++) {
+      final val = double.tryParse(names[i]);
+      if (val != null && meanScore > 0) {
+        final normalizedVal = val <= 10 ? val * 10 : val;
+        final normalizedMean = meanScore <= 10 ? meanScore * 10 : meanScore;
+        final diff = (normalizedVal - normalizedMean).abs();
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestIdx = i;
+        }
+      }
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,7 +179,7 @@ class ScoreHistogram extends StatelessWidget {
                       Icon(LucideIcons.star, size: 13, color: colorScheme.primary),
                       const SizedBox(width: 4),
                       Text(
-                        '${meanScore.toStringAsFixed(1)} Avg',
+                        '★ $displayMean Avg',
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
@@ -160,28 +192,60 @@ class ScoreHistogram extends StatelessWidget {
             ],
           ),
         ),
+        if (toolbar != null) ...[
+          SizedBox(width: double.infinity, child: toolbar!),
+          const SizedBox(height: Theming.offset),
+        ],
         CardExtension.highContrast(highContrast)(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(12, 16, 12, 10),
-            child: SizedBox(
-              height: 125,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  for (int score = 1; score <= 10; score++) ...[
-                    if (score > 1) const SizedBox(width: 6),
-                    Expanded(
-                      child: _HistogramBar(
-                        score: score,
-                        count: scores[score] ?? 0,
-                        maxCount: maxCount,
-                        isMean: score == roundedMean && meanScore > 0,
-                        colorScheme: colorScheme,
-                      ),
-                    ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final useScroll = names.length > 10;
+                final colWidth = useScroll
+                    ? math.max(34.0, (constraints.maxWidth - 24) / names.length)
+                    : null;
+
+                Widget content = Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    for (int i = 0; i < names.length; i++) ...[
+                      if (i > 0) SizedBox(width: useScroll ? 6 : 4),
+                      useScroll
+                          ? SizedBox(
+                              width: colWidth,
+                              child: _HistogramBar(
+                                label: _formatScore(names[i]),
+                                count: values[i],
+                                maxCount: maxValue,
+                                isMean: i == closestIdx,
+                                colorScheme: colorScheme,
+                              ),
+                            )
+                          : Expanded(
+                              child: _HistogramBar(
+                                label: _formatScore(names[i]),
+                                count: values[i],
+                                maxCount: maxValue,
+                                isMean: i == closestIdx,
+                                colorScheme: colorScheme,
+                              ),
+                            ),
+                    ],
                   ],
-                ],
-              ),
+                );
+
+                return SizedBox(
+                  height: 135,
+                  child: useScroll
+                      ? SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          physics: Theming.bouncyPhysics,
+                          child: content,
+                        )
+                      : content,
+                );
+              },
             ),
           ),
         ),
@@ -192,16 +256,16 @@ class ScoreHistogram extends StatelessWidget {
 
 class _HistogramBar extends StatelessWidget {
   const _HistogramBar({
-    required this.score,
+    required this.label,
     required this.count,
     required this.maxCount,
     required this.isMean,
     required this.colorScheme,
   });
 
-  final int score;
-  final int count;
-  final int maxCount;
+  final String label;
+  final num count;
+  final num maxCount;
   final bool isMean;
   final ColorScheme colorScheme;
 
@@ -215,10 +279,12 @@ class _HistogramBar extends StatelessWidget {
         Text(
           count > 0 ? count.toString() : '',
           style: TextStyle(
-            fontSize: 10,
-            fontWeight: isMean ? FontWeight.w800 : FontWeight.w500,
+            fontSize: 9.5,
+            fontWeight: isMean ? FontWeight.w800 : FontWeight.w600,
             color: isMean ? colorScheme.primary : colorScheme.onSurfaceVariant,
           ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
         const SizedBox(height: 4),
         AnimatedContainer(
@@ -250,12 +316,13 @@ class _HistogramBar extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         Text(
-          score.toString(),
+          label,
           style: TextStyle(
-            fontSize: 11,
-            fontWeight: isMean ? FontWeight.w800 : FontWeight.w600,
-            color: isMean ? colorScheme.primary : colorScheme.onSurface,
+            fontSize: 10,
+            fontWeight: isMean ? FontWeight.w800 : FontWeight.w500,
+            color: isMean ? colorScheme.primary : colorScheme.onSurfaceVariant,
           ),
+          maxLines: 1,
         ),
       ],
     );
