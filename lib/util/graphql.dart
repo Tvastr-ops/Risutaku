@@ -430,6 +430,7 @@ abstract class GqlQuery {
           donatorTier
           donatorBadge
           moderatorRoles
+          mediaListOptions {scoreFormat}
           statistics {anime {...stats} manga {...stats}}
         }
       }
@@ -446,11 +447,11 @@ abstract class GqlQuery {
         formats {count meanScore minutesWatched chaptersRead format}
         statuses {count meanScore minutesWatched chaptersRead status}
         countries {count meanScore minutesWatched chaptersRead country}
-        genres(limit: 15, sort: [COUNT_DESC]) {genre count meanScore minutesWatched chaptersRead}
-        tags(limit: 15, sort: [COUNT_DESC]) {tag {id name} count meanScore minutesWatched chaptersRead}
-        studios(limit: 15, sort: [COUNT_DESC]) {studio {id name} count meanScore minutesWatched}
-        voiceActors(limit: 15, sort: [COUNT_DESC]) {voiceActor {id name {userPreferred} image {medium}} count meanScore minutesWatched}
-        staff(limit: 15, sort: [COUNT_DESC]) {staff {id name {userPreferred} image {medium}} count meanScore minutesWatched chaptersRead}
+        genres(limit: 25, sort: [COUNT_DESC]) {genre count meanScore minutesWatched chaptersRead}
+        tags(limit: 30, sort: [COUNT_DESC]) {tag {id name} count meanScore minutesWatched chaptersRead}
+        studios(limit: 25, sort: [COUNT_DESC]) {studio {id name} count meanScore minutesWatched}
+        voiceActors(limit: 25, sort: [COUNT_DESC]) {voiceActor {id name {userPreferred} image {medium}} count meanScore minutesWatched}
+        staff(limit: 25, sort: [COUNT_DESC]) {staff {id name {userPreferred} image {medium}} count meanScore minutesWatched chaptersRead}
         releaseYears {releaseYear count meanScore minutesWatched chaptersRead}
       }
     ''';

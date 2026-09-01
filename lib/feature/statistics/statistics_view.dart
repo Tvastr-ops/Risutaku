@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:risutaku/extension/card_extension.dart';
 import 'package:risutaku/extension/scroll_controller_extension.dart';
+import 'package:risutaku/feature/media/media_models.dart';
 import 'package:risutaku/feature/statistics/statistics_model.dart';
 import 'package:risutaku/feature/user/user_model.dart';
 import 'package:risutaku/feature/user/user_providers.dart';
@@ -77,6 +78,8 @@ class _StatisticsViewState extends State<StatisticsView> with SingleTickerProvid
                         statistics: data.animeStats,
                         ofAnime: true,
                         scrollCtrl: _scrollCtrl,
+                        scoreFormat: data.scoreFormat,
+                        tag: tag,
                         scoreTab: () => _scoreBarChartTab,
                         lengthTab: () => _lengthBarChartTab,
                         genreTab: () => _genreBarChartTab,
@@ -93,6 +96,8 @@ class _StatisticsViewState extends State<StatisticsView> with SingleTickerProvid
                         statistics: data.mangaStats,
                         ofAnime: false,
                         scrollCtrl: _scrollCtrl,
+                        scoreFormat: data.scoreFormat,
+                        tag: tag,
                         scoreTab: () => _scoreBarChartTab,
                         lengthTab: () => _lengthBarChartTab,
                         genreTab: () => _genreBarChartTab,
@@ -126,11 +131,13 @@ class _StatisticsViewState extends State<StatisticsView> with SingleTickerProvid
   }
 }
 
-class _StatisticsView extends StatelessWidget {
+class _StatisticsView extends ConsumerWidget {
   const _StatisticsView({
     required this.statistics,
     required this.ofAnime,
     required this.scrollCtrl,
+    required this.scoreFormat,
+    required this.tag,
     required this.scoreTab,
     required this.lengthTab,
     required this.genreTab,
@@ -145,6 +152,8 @@ class _StatisticsView extends StatelessWidget {
   final Statistics statistics;
   final bool ofAnime;
   final ScrollController scrollCtrl;
+  final ScoreFormat scoreFormat;
+  final UserTag tag;
   final int Function() scoreTab;
   final int Function() lengthTab;
   final int Function() genreTab;
@@ -156,17 +165,18 @@ class _StatisticsView extends StatelessWidget {
   final bool highContrast;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     const spacing = SliverToBoxAdapter(child: SizedBox(height: Theming.offset));
 
     return CustomScrollView(
       controller: scrollCtrl,
       physics: Theming.bouncyPhysics,
       slivers: [
+        SliverRefreshControl(onRefresh: () => ref.refresh(userProvider(tag).future)),
         SliverToBoxAdapter(
           child: SizedBox(height: MediaQuery.paddingOf(context).top + Theming.offset),
         ),
-        _BentoDetails(statistics, ofAnime, highContrast),
+        _BentoDetails(statistics, ofAnime, scoreFormat, highContrast),
 
         // Dynamic Skyscraper Score Histogram (Supports all rating scales with decimal labels & toggle)
         if (statistics.scores.isNotEmpty) ...[
@@ -174,6 +184,7 @@ class _StatisticsView extends StatelessWidget {
           _ScoreHistogramChart(
             scores: statistics.scores,
             meanScore: statistics.meanScore,
+            scoreFormat: scoreFormat,
             ofAnime: ofAnime,
             initialTab: scoreTab(),
             onTabChanged: onScoreTabChanged,
@@ -312,11 +323,50 @@ class _SectionTitle extends StatelessWidget {
 
 /// Asymmetrical Modern Bento Grid
 class _BentoDetails extends StatelessWidget {
-  const _BentoDetails(this.statistics, this.ofAnime, this.highContrast);
+  const _BentoDetails(this.statistics, this.ofAnime, this.scoreFormat, this.highContrast);
 
   final Statistics statistics;
   final bool ofAnime;
+  final ScoreFormat scoreFormat;
   final bool highContrast;
+
+  String _formatMean(double mean) {
+    if (mean <= 0) return '—';
+    switch (scoreFormat) {
+      case ScoreFormat.point100:
+        return '${mean.toStringAsFixed(1)}%';
+      case ScoreFormat.point10Decimal:
+        final dec = mean > 10 ? mean / 10.0 : mean;
+        return dec.toStringAsFixed(2);
+      case ScoreFormat.point10:
+        final dec = mean > 10 ? mean / 10.0 : mean;
+        return dec.toStringAsFixed(1);
+      case ScoreFormat.point5:
+        final stars = mean > 5 ? mean / 20.0 : mean;
+        return '${stars.toStringAsFixed(2)} ★';
+      case ScoreFormat.point3:
+        final smiley = mean > 3 ? mean / 33.33 : mean;
+        return smiley.toStringAsFixed(2);
+    }
+  }
+
+  String _formatStdDev(double stdDev) {
+    if (stdDev <= 0) return '—';
+    switch (scoreFormat) {
+      case ScoreFormat.point100:
+        return stdDev.toStringAsFixed(1);
+      case ScoreFormat.point10Decimal:
+      case ScoreFormat.point10:
+        final dec = stdDev > 10 ? stdDev / 10.0 : stdDev;
+        return dec.toStringAsFixed(2);
+      case ScoreFormat.point5:
+        final stars = stdDev > 5 ? stdDev / 20.0 : stdDev;
+        return stars.toStringAsFixed(2);
+      case ScoreFormat.point3:
+        final smiley = stdDev > 3 ? stdDev / 33.33 : stdDev;
+        return smiley.toStringAsFixed(2);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -360,8 +410,8 @@ class _BentoDetails extends StatelessWidget {
                     ),
                     child: Icon(
                       ofAnime ? LucideIcons.hourglass : LucideIcons.bookOpen,
-                      color: colorScheme.onPrimary,
                       size: 26,
+                      color: colorScheme.onPrimary,
                     ),
                   ),
                   const SizedBox(width: 14),
@@ -370,10 +420,11 @@ class _BentoDetails extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          heroTitle,
+                          heroTitle.toUpperCase(),
                           style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1.1,
                             color: colorScheme.onSurfaceVariant,
                           ),
                         ),
@@ -382,15 +433,16 @@ class _BentoDetails extends StatelessWidget {
                           heroValue,
                           style: const TextStyle(
                             fontSize: 22,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w900,
                             letterSpacing: -0.5,
                           ),
                         ),
+                        const SizedBox(height: 1),
                         Text(
                           heroSubtitle,
                           style: TextStyle(
                             fontSize: 12,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                             color: colorScheme.onSurfaceVariant,
                           ),
                         ),
@@ -402,7 +454,7 @@ class _BentoDetails extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          // Secondary Bento Row 1: Total Titles & Total Episodes/Chapters
+          // Secondary Bento Row 1: Titles & Consumed Parts
           Row(
             children: [
               // Total Titles
@@ -500,11 +552,7 @@ class _BentoDetails extends StatelessWidget {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          statistics.meanScore > 0
-                              ? (statistics.meanScore > 10
-                                  ? (statistics.meanScore / 10.0).toStringAsFixed(2)
-                                  : statistics.meanScore.toStringAsFixed(2))
-                              : '—',
+                          _formatMean(statistics.meanScore),
                           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
                         ),
                       ],
@@ -537,11 +585,7 @@ class _BentoDetails extends StatelessWidget {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          statistics.standardDeviation > 0
-                              ? (statistics.standardDeviation > 5
-                                  ? (statistics.standardDeviation / 10.0).toStringAsFixed(2)
-                                  : statistics.standardDeviation.toStringAsFixed(2))
-                              : '—',
+                          _formatStdDev(statistics.standardDeviation),
                           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
                         ),
                       ],
@@ -561,6 +605,7 @@ class _ScoreHistogramChart extends StatefulWidget {
   const _ScoreHistogramChart({
     required this.scores,
     required this.meanScore,
+    required this.scoreFormat,
     required this.ofAnime,
     required this.initialTab,
     required this.onTabChanged,
@@ -569,6 +614,7 @@ class _ScoreHistogramChart extends StatefulWidget {
 
   final List<AmountStatistics> scores;
   final double meanScore;
+  final ScoreFormat scoreFormat;
   final bool ofAnime;
   final int initialTab;
   final void Function(int) onTabChanged;
@@ -597,6 +643,7 @@ class _ScoreHistogramChartState extends State<_ScoreHistogramChart> {
         names: names,
         values: values,
         meanScore: widget.meanScore,
+        scoreFormat: widget.scoreFormat,
         highContrast: widget.highContrast,
         toolbar: SegmentedButton<int>(
           segments: [
@@ -784,7 +831,7 @@ class _TopStudiosGridState extends State<_TopStudiosGrid> {
       sorted.sort((a, b) => b.meanScore.compareTo(a.meanScore));
     }
 
-    final displayStudios = sorted.take(6).toList();
+    final displayStudios = sorted.take(12).toList();
 
     return SliverMainAxisGroup(
       slivers: [
@@ -812,7 +859,7 @@ class _TopStudiosGridState extends State<_TopStudiosGrid> {
           ),
         SliverGrid(
           gridDelegate: const SliverGridDelegateWithMinWidthAndFixedHeight(
-            minWidth: 175,
+            minWidth: 140,
             height: 72,
             mainAxisSpacing: 8,
             crossAxisSpacing: 8,
@@ -944,7 +991,7 @@ class _TopPeopleGridState extends State<_TopPeopleGrid> {
       sorted.sort((a, b) => b.amount.compareTo(a.amount));
     }
 
-    final displayPeople = sorted.take(6).toList();
+    final displayPeople = sorted.take(16).toList();
 
     return SliverMainAxisGroup(
       slivers: [
@@ -983,7 +1030,7 @@ class _TopPeopleGridState extends State<_TopPeopleGrid> {
         ),
         SliverGrid(
           gridDelegate: const SliverGridDelegateWithMinWidthAndFixedHeight(
-            minWidth: 180,
+            minWidth: 140,
             height: 72,
             mainAxisSpacing: 8,
             crossAxisSpacing: 8,
@@ -1115,7 +1162,7 @@ class _TopTagsWrap extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final displayTags = tags.take(18).toList();
+    final displayTags = tags.take(28).toList();
     final maxCount = displayTags.fold<int>(1, (prev, t) => t.count > prev ? t.count : prev);
 
     return SliverToBoxAdapter(

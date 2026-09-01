@@ -1,5 +1,6 @@
 import 'package:risutaku/extension/date_time_extension.dart';
 import 'package:risutaku/extension/string_extension.dart';
+import 'package:risutaku/feature/media/media_models.dart';
 import 'package:risutaku/util/markdown.dart';
 import 'package:risutaku/feature/statistics/statistics_model.dart';
 
@@ -18,6 +19,7 @@ class User {
     required this.donatorTier,
     required this.donatorBadge,
     required this.modRoles,
+    required this.scoreFormat,
     required this.animeStats,
     required this.mangaStats,
   });
@@ -46,6 +48,7 @@ class User {
       donatorTier: map['donatorTier'] ?? 0,
       donatorBadge: map['donatorBadge'] ?? '',
       modRoles: modRoles,
+      scoreFormat: ScoreFormat.from(map['mediaListOptions']?['scoreFormat']),
       animeStats: Statistics(map['statistics']['anime'], true),
       mangaStats: Statistics(map['statistics']['manga'], false),
     );
@@ -58,6 +61,7 @@ class User {
   final String imageUrl;
   final String? bannerUrl;
   final String? siteUrl;
+  final ScoreFormat scoreFormat;
   bool isFollowed;
   final bool isFollower;
   final bool isBlocked;

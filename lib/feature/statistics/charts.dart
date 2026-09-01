@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:risutaku/extension/card_extension.dart';
+import 'package:risutaku/feature/media/media_models.dart';
 import 'package:risutaku/util/theming.dart';
 
 typedef PieChart = SpieChart;
@@ -109,6 +110,7 @@ class ScoreHistogram extends StatelessWidget {
     required this.names,
     required this.values,
     required this.meanScore,
+    required this.scoreFormat,
     this.toolbar,
     required this.highContrast,
     super.key,
@@ -118,17 +120,51 @@ class ScoreHistogram extends StatelessWidget {
   final List<String> names;
   final List<num> values;
   final double meanScore;
+  final ScoreFormat scoreFormat;
   final Widget? toolbar;
   final bool highContrast;
 
   String _formatScore(String raw) {
     final val = double.tryParse(raw);
     if (val == null) return raw;
-    if (val > 10) {
-      final dec = val / 10.0;
-      return dec % 1 == 0 ? dec.toInt().toString() : dec.toStringAsFixed(1);
+
+    switch (scoreFormat) {
+      case ScoreFormat.point100:
+        return val.toInt().toString(); // e.g. 10, 40, 55, 70, 85, 100
+      case ScoreFormat.point10Decimal:
+        final dec = val > 10 ? val / 10.0 : (val == 10 ? 1.0 : val);
+        return dec % 1 == 0 ? dec.toInt().toString() : dec.toStringAsFixed(1);
+      case ScoreFormat.point10:
+        final intVal = val > 10 ? (val / 10).round() : val.round();
+        return intVal.toString();
+      case ScoreFormat.point5:
+        final stars = val > 5 ? (val / 20).round() : val.round();
+        return '★$stars';
+      case ScoreFormat.point3:
+        if (val == 3 || val >= 67) return '🙂';
+        if (val == 2 || val >= 34) return '😐';
+        return '🙁';
     }
-    return val % 1 == 0 ? val.toInt().toString() : val.toStringAsFixed(1);
+  }
+
+  String _formatMean(double mean) {
+    if (mean <= 0) return '—';
+    switch (scoreFormat) {
+      case ScoreFormat.point100:
+        return '${mean.toStringAsFixed(1)}%';
+      case ScoreFormat.point10Decimal:
+        final dec = mean > 10 ? mean / 10.0 : mean;
+        return dec.toStringAsFixed(2);
+      case ScoreFormat.point10:
+        final dec = mean > 10 ? mean / 10.0 : mean;
+        return dec.toStringAsFixed(1);
+      case ScoreFormat.point5:
+        final stars = mean > 5 ? mean / 20.0 : mean;
+        return '${stars.toStringAsFixed(2)} ★';
+      case ScoreFormat.point3:
+        final smiley = mean > 3 ? mean / 33.33 : mean;
+        return smiley.toStringAsFixed(2);
+    }
   }
 
   @override
@@ -137,10 +173,7 @@ class ScoreHistogram extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     final maxValue = values.fold<num>(0, (prev, val) => val > prev ? val : prev);
-
-    final displayMean = meanScore > 10
-        ? (meanScore / 10.0).toStringAsFixed(2)
-        : (meanScore > 0 ? meanScore.toStringAsFixed(2) : '—');
+    final displayMean = _formatMean(meanScore);
 
     int closestIdx = -1;
     double minDiff = double.infinity;
