@@ -152,11 +152,19 @@ class PersistenceNotifier extends Notifier<Persistence> {
   Future<void> removeAccount(int index) async {
     final accountGroup = state.accountGroup;
 
-    if (index == accountGroup.accountIndex) return;
     if (index < 0 || index >= accountGroup.accounts.length) return;
 
     final account = accountGroup.accounts[index];
     await const FlutterSecureStorage().delete(key: Account.accessTokenKeyById(account.id));
+
+    int? newAccountIndex = accountGroup.accountIndex;
+    if (newAccountIndex != null) {
+      if (index == newAccountIndex) {
+        newAccountIndex = null;
+      } else if (index < newAccountIndex) {
+        newAccountIndex = newAccountIndex - 1;
+      }
+    }
 
     _setAccountGroup(
       AccountGroup(
@@ -164,7 +172,7 @@ class PersistenceNotifier extends Notifier<Persistence> {
           ...accountGroup.accounts.sublist(0, index),
           ...accountGroup.accounts.sublist(index + 1),
         ],
-        accountIndex: accountGroup.accountIndex,
+        accountIndex: newAccountIndex,
       ),
     );
   }

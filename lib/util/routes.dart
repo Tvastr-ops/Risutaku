@@ -114,13 +114,10 @@ class Routes {
           final fragment = state.uri.fragment;
           if (fragment.isEmpty) return const _AuthView(null);
 
-          final start = fragment.indexOf('=') + 1;
-          final middle = fragment.indexOf('&');
-          final end = fragment.lastIndexOf('=') + 1;
-
-          final token = fragment.substring(start, middle);
-          final expiration = int.tryParse(fragment.substring(end)) ?? -1;
-          if (token.isEmpty || expiration <= 0) return const _AuthView(null);
+          final params = Uri.splitQueryString(fragment);
+          final token = params['access_token'];
+          final expiration = int.tryParse(params['expires_in'] ?? '') ?? -1;
+          if (token == null || token.isEmpty || expiration <= 0) return const _AuthView(null);
 
           return _AuthView((token, expiration));
         },
