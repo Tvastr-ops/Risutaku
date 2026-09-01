@@ -34,7 +34,6 @@ class Statistics {
     final voiceActors = <PersonStatistic>[];
     final staff = <PersonStatistic>[];
     final releaseYears = <YearStatistic>[];
-    final startYears = <YearStatistic>[];
 
     if (map['scores'] != null) {
       for (final s in map['scores']) {
@@ -93,12 +92,6 @@ class Statistics {
       }
       releaseYears.sort((a, b) => (int.tryParse(b.year) ?? 0).compareTo(int.tryParse(a.year) ?? 0));
     }
-    if (map['startYears'] != null) {
-      for (final sy in map['startYears']) {
-        startYears.add(YearStatistic.start(sy, ofAnime));
-      }
-      startYears.sort((a, b) => (int.tryParse(b.year) ?? 0).compareTo(int.tryParse(a.year) ?? 0));
-    }
 
     // The backend can't sort lengths naturally, so it has to be done locally.
     lengths.sort((a, b) {
@@ -127,11 +120,8 @@ class Statistics {
       countries: countries,
       genres: genres,
       tags: tags,
-      studios: studios,
-      voiceActors: voiceActors,
       staff: staff,
       releaseYears: releaseYears,
-      startYears: startYears,
     );
   }
 
@@ -151,7 +141,6 @@ class Statistics {
   final List<PersonStatistic> voiceActors;
   final List<PersonStatistic> staff;
   final List<YearStatistic> releaseYears;
-  final List<YearStatistic> startYears;
 }
 
 class AmountStatistics {

@@ -3,7 +3,7 @@ description: An unofficial AniList app.
 
 publish_to: 'none'
 
-version: 1.12.9+102
+version: 1.13.0+103
 
 environment:
   sdk: '>=3.10.0 <4.0.0'
@@ -59,6 +59,9 @@ dependencies:
 
   # Modern Lucide icon pack.
   lucide_icons_flutter: ^3.1.17
+
+  # Biometric and PIN authentication.
+  local_auth: ^2.3.0
 
 dev_dependencies:
   flutter_test:

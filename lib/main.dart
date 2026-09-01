@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:risutaku/feature/viewer/persistence_model.dart';
 import 'package:risutaku/feature/viewer/persistence_provider.dart';
+import 'package:risutaku/feature/security/app_lock_gate.dart';
 import 'package:risutaku/util/routes.dart';
 import 'package:risutaku/util/background_handler.dart';
 import 'package:risutaku/util/theming.dart';
@@ -164,7 +165,7 @@ class AppState extends ConsumerState<_App> {
 
             return Theme(
               data: Theme.of(context).copyWith(extensions: [theming]),
-              child: child!,
+              child: AppLockGate(child: child!),
             );
           },
         );

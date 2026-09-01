@@ -8,6 +8,7 @@ import 'package:risutaku/widget/input/stateful_tiles.dart';
 import 'package:risutaku/feature/discover/discover_model.dart';
 import 'package:risutaku/widget/input/chip_selector.dart';
 import 'package:risutaku/feature/home/home_model.dart';
+import 'package:risutaku/feature/security/app_lock_service.dart';
 import 'package:risutaku/feature/settings/theme_preview.dart';
 
 class SettingsAppSubview extends ConsumerWidget {
@@ -114,6 +115,37 @@ class SettingsAppSubview extends ConsumerWidget {
                     update(options.copyWith(buttonOrientation: buttonOrientation)),
               ),
             ),
+          ],
+        ),
+        ExpansionTile(
+          title: const Text('Security & Privacy'),
+          children: [
+            StatefulSwitchListTile(
+              title: const Text('App Lock'),
+              subtitle: const Text('Require biometrics or device PIN to open Risutaku'),
+              value: options.appLock,
+              onChanged: (enabled) async {
+                final success = await AppLockService.authenticate(
+                  localizedReason: enabled
+                      ? 'Authenticate to enable App Lock'
+                      : 'Authenticate to disable App Lock',
+                );
+                if (success) {
+                  update(options.copyWith(appLock: enabled));
+                }
+              },
+            ),
+            if (options.appLock)
+              Padding(
+                padding: tilePadding,
+                child: ChipSelector.ensureSelected(
+                  title: 'Auto-Lock Timeout',
+                  items: LockTimeout.values.map((v) => (v.label, v)).toList(),
+                  value: options.lockTimeout,
+                  onChanged: (v) => update(options.copyWith(lockTimeout: v)),
+                  highContrast: options.highContrast,
+                ),
+              ),
           ],
         ),
         ExpansionTile(

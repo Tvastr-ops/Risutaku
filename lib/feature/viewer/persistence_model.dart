@@ -9,7 +9,7 @@ import 'package:risutaku/feature/discover/discover_model.dart';
 import 'package:risutaku/feature/home/home_model.dart';
 import 'package:risutaku/util/theming.dart';
 
-const appVersion = '1.12.9';
+const appVersion = '1.13.0';
 
 class Persistence {
   const Persistence({
@@ -197,6 +197,8 @@ class Options {
     required this.discoverItemView,
     required this.collectionItemView,
     required this.collectionPreviewItemView,
+    required this.appLock,
+    required this.lockTimeout,
   });
 
   factory Options.empty() => const Options(
@@ -214,6 +216,8 @@ class Options {
     discoverItemView: .detailed,
     collectionItemView: .detailed,
     collectionPreviewItemView: .detailed,
+    appLock: false,
+    lockTimeout: LockTimeout.immediately,
   );
 
   factory Options.fromPersistenceMap(Map<dynamic, dynamic> map) => Options(
@@ -231,6 +235,8 @@ class Options {
     discoverItemView: DiscoverItemView.values.getOrFirst(map['discoverItemView']),
     collectionItemView: .values.getOrFirst(map['collectionItemView']),
     collectionPreviewItemView: .values.getOrFirst(map['collectionPreviewItemView']),
+    appLock: map['appLock'] ?? false,
+    lockTimeout: LockTimeout.values.getOrFirst(map['lockTimeout']),
   );
 
   final ThemeMode themeMode;
@@ -247,6 +253,8 @@ class Options {
   final DiscoverItemView discoverItemView;
   final CollectionItemView collectionItemView;
   final CollectionItemView collectionPreviewItemView;
+  final bool appLock;
+  final LockTimeout lockTimeout;
 
   Options copyWith({
     ThemeMode? themeMode,
@@ -263,6 +271,8 @@ class Options {
     DiscoverItemView? discoverItemView,
     CollectionItemView? collectionItemView,
     CollectionItemView? collectionPreviewItemView,
+    bool? appLock,
+    LockTimeout? lockTimeout,
   }) => Options(
     themeMode: themeMode ?? this.themeMode,
     themeBase: themeBase == null ? this.themeBase : themeBase.$1,
@@ -278,6 +288,8 @@ class Options {
     discoverItemView: discoverItemView ?? this.discoverItemView,
     collectionItemView: collectionItemView ?? this.collectionItemView,
     collectionPreviewItemView: collectionPreviewItemView ?? this.collectionPreviewItemView,
+    appLock: appLock ?? this.appLock,
+    lockTimeout: lockTimeout ?? this.lockTimeout,
   );
 
   Map<String, dynamic> toPersistenceMap() => {
@@ -295,6 +307,8 @@ class Options {
     'discoverItemView': discoverItemView.index,
     'collectionItemView': collectionItemView.index,
     'collectionPreviewItemView': collectionPreviewItemView.index,
+    'appLock': appLock,
+    'lockTimeout': lockTimeout.index,
   };
 }
 
@@ -316,6 +330,18 @@ enum ImageQuality {
 }
 
 enum ButtonOrientation { auto, left, right }
+
+enum LockTimeout {
+  immediately('Immediately', Duration.zero),
+  oneMinute('1 min', Duration(minutes: 1)),
+  fiveMinutes('5 min', Duration(minutes: 5)),
+  tenMinutes('10 min', Duration(minutes: 10));
+
+  const LockTimeout(this.label, this.duration);
+
+  final String label;
+  final Duration duration;
+}
 
 class AppMeta {
   const AppMeta({

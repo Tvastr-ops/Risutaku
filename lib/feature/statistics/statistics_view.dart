@@ -1,10 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:risutaku/extension/build_context_extension.dart';
 import 'package:risutaku/extension/card_extension.dart';
 import 'package:risutaku/extension/scroll_controller_extension.dart';
 import 'package:risutaku/feature/statistics/statistics_model.dart';
@@ -36,7 +33,6 @@ class _StatisticsViewState extends State<StatisticsView> with SingleTickerProvid
   late final _tabCtrl = TabController(length: 2, vsync: this);
   final _scrollCtrl = ScrollController();
 
-  int _scoreBarChartTab = 0;
   int _lengthBarChartTab = 0;
   int _genreBarChartTab = 0;
   int _yearBarChartTab = 0;
@@ -80,11 +76,9 @@ class _StatisticsViewState extends State<StatisticsView> with SingleTickerProvid
                         statistics: data.animeStats,
                         ofAnime: true,
                         scrollCtrl: _scrollCtrl,
-                        scoreTab: () => _scoreBarChartTab,
                         lengthTab: () => _lengthBarChartTab,
                         genreTab: () => _genreBarChartTab,
                         yearTab: () => _yearBarChartTab,
-                        onScoreTabChanged: (i) => _scoreBarChartTab = i,
                         onLengthTabChanged: (i) => _lengthBarChartTab = i,
                         onGenreTabChanged: (i) => _genreBarChartTab = i,
                         onYearTabChanged: (i) => _yearBarChartTab = i,
@@ -96,11 +90,9 @@ class _StatisticsViewState extends State<StatisticsView> with SingleTickerProvid
                         statistics: data.mangaStats,
                         ofAnime: false,
                         scrollCtrl: _scrollCtrl,
-                        scoreTab: () => _scoreBarChartTab,
                         lengthTab: () => _lengthBarChartTab,
                         genreTab: () => _genreBarChartTab,
                         yearTab: () => _yearBarChartTab,
-                        onScoreTabChanged: (i) => _scoreBarChartTab = i,
                         onLengthTabChanged: (i) => _lengthBarChartTab = i,
                         onGenreTabChanged: (i) => _genreBarChartTab = i,
                         onYearTabChanged: (i) => _yearBarChartTab = i,
@@ -134,11 +126,9 @@ class _StatisticsView extends StatelessWidget {
     required this.statistics,
     required this.ofAnime,
     required this.scrollCtrl,
-    required this.scoreTab,
     required this.lengthTab,
     required this.genreTab,
     required this.yearTab,
-    required this.onScoreTabChanged,
     required this.onLengthTabChanged,
     required this.onGenreTabChanged,
     required this.onYearTabChanged,
@@ -148,11 +138,9 @@ class _StatisticsView extends StatelessWidget {
   final Statistics statistics;
   final bool ofAnime;
   final ScrollController scrollCtrl;
-  final int Function() scoreTab;
   final int Function() lengthTab;
   final int Function() genreTab;
   final int Function() yearTab;
-  final void Function(int) onScoreTabChanged;
   final void Function(int) onLengthTabChanged;
   final void Function(int) onGenreTabChanged;
   final void Function(int) onYearTabChanged;
@@ -162,6 +150,15 @@ class _StatisticsView extends StatelessWidget {
   Widget build(BuildContext context) {
     const spacing = SliverToBoxAdapter(child: SizedBox(height: Theming.offset));
 
+    // Convert score distribution to a map 1..10
+    final scoresMap = <int, int>{};
+    for (final s in statistics.scores) {
+      final val = int.tryParse(s.type);
+      if (val != null && val >= 1 && val <= 10) {
+        scoresMap[val] = s.count;
+      }
+    }
+
     return CustomScrollView(
       controller: scrollCtrl,
       physics: Theming.bouncyPhysics,
@@ -169,18 +166,18 @@ class _StatisticsView extends StatelessWidget {
         SliverToBoxAdapter(
           child: SizedBox(height: MediaQuery.paddingOf(context).top + Theming.offset),
         ),
-        _Details(statistics, ofAnime, highContrast),
+        _BentoDetails(statistics, ofAnime, highContrast),
 
-        // Score Distribution
+        // 10-Column Vertical Score Bell Curve Histogram
         if (statistics.scores.isNotEmpty) ...[
           spacing,
-          _BarChart(
-            title: 'Score Distribution',
-            statistics: statistics.scores,
-            ofAnime: ofAnime,
-            full: false,
-            initialTab: scoreTab(),
-            onTabChanged: onScoreTabChanged,
+          SliverToBoxAdapter(
+            child: ScoreHistogram(
+              title: 'Score Distribution',
+              scores: scoresMap,
+              meanScore: statistics.meanScore,
+              highContrast: highContrast,
+            ),
           ),
         ],
 
@@ -247,7 +244,7 @@ class _StatisticsView extends StatelessWidget {
           ),
         ],
 
-        // Distributions (Format, Status, Country)
+        // Spie Distribution Charts (Format, Status, Country)
         if (statistics.count > 0) ...[
           spacing,
           SliverGrid(
@@ -256,9 +253,27 @@ class _StatisticsView extends StatelessWidget {
               height: 200,
             ),
             delegate: SliverChildListDelegate([
-              _PieChart('Format Distribution', statistics.formats, highContrast),
-              _PieChart('Status Distribution', statistics.statuses, highContrast),
-              _PieChart('Country Distribution', statistics.countries, highContrast),
+              if (statistics.formats.isNotEmpty)
+                SpieChart(
+                  title: 'Format Distribution',
+                  names: statistics.formats.map((f) => f.value).toList(),
+                  values: statistics.formats.map((f) => f.count).toList(),
+                  highContrast: highContrast,
+                ),
+              if (statistics.statuses.isNotEmpty)
+                SpieChart(
+                  title: 'Status Distribution',
+                  names: statistics.statuses.map((s) => s.value).toList(),
+                  values: statistics.statuses.map((s) => s.count).toList(),
+                  highContrast: highContrast,
+                ),
+              if (statistics.countries.isNotEmpty)
+                SpieChart(
+                  title: 'Country Distribution',
+                  names: statistics.countries.map((c) => c.value).toList(),
+                  values: statistics.countries.map((c) => c.count).toList(),
+                  highContrast: highContrast,
+                ),
             ]),
           ),
         ],
@@ -284,81 +299,90 @@ class _SectionTitle extends StatelessWidget {
   }
 }
 
-class _Details extends StatelessWidget {
-  _Details(Statistics statistics, bool ofAnime, this.highContrast) {
-    subtitles.add(statistics.count);
-    subtitles.add(statistics.partsConsumed);
+/// Asymmetrical Modern Bento Grid
+class _BentoDetails extends StatelessWidget {
+  const _BentoDetails(this.statistics, this.ofAnime, this.highContrast);
 
-    if (ofAnime) {
-      subtitles.add(((statistics.amountConsumed / 1440) * 10).round() / 10);
-      icons.add(LucideIcons.tv);
-      icons.add(LucideIcons.play);
-      icons.add(LucideIcons.calendar);
-      titles.add('Total Anime');
-      titles.add('Episodes Watched');
-      titles.add('Days Watched');
-    } else {
-      subtitles.add(statistics.amountConsumed);
-      icons.add(LucideIcons.bookOpen);
-      icons.add(LucideIcons.bookMarked);
-      icons.add(LucideIcons.library);
-      titles.add('Total Manga');
-      titles.add('Chapters Read');
-      titles.add('Volumes Read');
-    }
-    icons.add(LucideIcons.star);
-    icons.add(LucideIcons.calculator);
-    titles.add('Mean Score');
-    titles.add('Standard Deviation');
-    subtitles.add(statistics.meanScore);
-    subtitles.add(statistics.standardDeviation);
-  }
-
-  final icons = <IconData>[];
-  final titles = <String>[];
-  final subtitles = <num>[];
+  final Statistics statistics;
+  final bool ofAnime;
   final bool highContrast;
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = TextTheme.of(context);
-    final bodyMediumLineHeight = context.lineHeight(textTheme.bodyMedium!);
-    final labelMediumLineHeight = context.lineHeight(textTheme.labelMedium!);
-    final tileHeight = max(bodyMediumLineHeight + labelMediumLineHeight, Theming.iconBig) + 10;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
-    return SliverGrid(
-      gridDelegate: SliverGridDelegateWithMinWidthAndFixedHeight(
-        minWidth: 190,
-        height: tileHeight,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-      ),
-      delegate: SliverChildBuilderDelegate(
-        childCount: titles.length,
-        (context, i) => Tooltip(
-          message: titles[i],
-          triggerMode: .tap,
-          child: CardExtension.highContrast(highContrast)(
-            child: Padding(
-              padding: const .symmetric(horizontal: Theming.offset, vertical: 5),
+    final heroTitle = ofAnime ? 'Time Watched' : 'Reading Progress';
+    final heroValue = ofAnime
+        ? '${((statistics.amountConsumed / 1440) * 10).round() / 10} Days'
+        : '${statistics.partsConsumed} Chapters';
+    final heroSubtitle = ofAnime
+        ? '${statistics.partsConsumed} Episodes total'
+        : '${statistics.amountConsumed} Volumes read';
+
+    return SliverToBoxAdapter(
+      child: Column(
+        children: [
+          // Hero Bento Banner (Full Width)
+          CardExtension.highContrast(highContrast)(
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                borderRadius: Theming.borderRadiusBig,
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    colorScheme.primaryContainer.withValues(alpha: 0.8),
+                    colorScheme.surfaceContainerHigh,
+                  ],
+                ),
+              ),
               child: Row(
-                spacing: Theming.offset,
                 children: [
-                  Icon(icons[i], size: Theming.iconBig),
+                  Container(
+                    width: 52,
+                    height: 52,
+                    decoration: BoxDecoration(
+                      color: colorScheme.primary,
+                      borderRadius: Theming.borderRadiusSmall,
+                    ),
+                    child: Icon(
+                      ofAnime ? LucideIcons.hourglass : LucideIcons.bookOpen,
+                      color: colorScheme.onPrimary,
+                      size: 26,
+                    ),
+                  ),
+                  const SizedBox(width: 14),
                   Expanded(
                     child: Column(
-                      mainAxisAlignment: .center,
-                      crossAxisAlignment: .start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Text(
-                            titles[i],
-                            style: TextTheme.of(context).labelMedium,
-                            overflow: .ellipsis,
-                            maxLines: 1,
+                        Text(
+                          heroTitle,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: colorScheme.onSurfaceVariant,
                           ),
                         ),
-                        Text(subtitles[i].toString()),
+                        const SizedBox(height: 2),
+                        Text(
+                          heroValue,
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                        Text(
+                          heroSubtitle,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -366,7 +390,95 @@ class _Details extends StatelessWidget {
               ),
             ),
           ),
-        ),
+          const SizedBox(height: 10),
+          // Secondary Bento Cells (Twin Row)
+          Row(
+            children: [
+              // Mean Score Cell
+              Expanded(
+                child: CardExtension.highContrast(highContrast)(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(LucideIcons.star, size: 16, color: colorScheme.primary),
+                            const SizedBox(width: 6),
+                            Text(
+                              'Mean Score',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Text(
+                              statistics.meanScore > 0 ? statistics.meanScore.toStringAsFixed(1) : '—',
+                              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                            ),
+                            if (statistics.standardDeviation > 0) ...[
+                              const SizedBox(width: 6),
+                              Text(
+                                '±${statistics.standardDeviation.toStringAsFixed(1)}',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                  color: colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              // Library Count Cell
+              Expanded(
+                child: CardExtension.highContrast(highContrast)(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(ofAnime ? LucideIcons.tv : LucideIcons.library, size: 16, color: colorScheme.primary),
+                            const SizedBox(width: 6),
+                            Text(
+                              ofAnime ? 'Total Anime' : 'Total Manga',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          '${statistics.count} Titles',
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -539,6 +651,15 @@ class _TopStudiosGrid extends StatelessWidget {
         childCount: displayStudios.length,
         (context, i) {
           final studio = displayStudios[i];
+          final badgeColor = i == 0
+              ? const Color(0xFFFFD700) // Gold
+              : i == 1
+                  ? const Color(0xFFC0C0C0) // Silver
+                  : i == 2
+                      ? const Color(0xFFCD7F32) // Bronze
+                      : colorScheme.primaryContainer;
+          final textColor = i < 3 ? Colors.black : colorScheme.onPrimaryContainer;
+
           return CardExtension.highContrast(highContrast)(
             child: InkWell(
               borderRadius: Theming.borderRadiusSmall,
@@ -551,7 +672,7 @@ class _TopStudiosGrid extends StatelessWidget {
                       width: 28,
                       height: 28,
                       decoration: BoxDecoration(
-                        color: colorScheme.primaryContainer,
+                        color: badgeColor,
                         borderRadius: Theming.borderRadiusSmall,
                       ),
                       alignment: Alignment.center,
@@ -560,7 +681,7 @@ class _TopStudiosGrid extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w800,
-                          color: colorScheme.onPrimaryContainer,
+                          color: textColor,
                         ),
                       ),
                     ),
@@ -641,6 +762,14 @@ class _TopPeopleGrid extends StatelessWidget {
         childCount: displayPeople.length,
         (context, i) {
           final person = displayPeople[i];
+          final podiumBorderColor = i == 0
+              ? const Color(0xFFFFD700)
+              : i == 1
+                  ? const Color(0xFFC0C0C0)
+                  : i == 2
+                      ? const Color(0xFFCD7F32)
+                      : Colors.transparent;
+
           return CardExtension.highContrast(highContrast)(
             child: InkWell(
               borderRadius: Theming.borderRadiusSmall,
@@ -649,17 +778,45 @@ class _TopPeopleGrid extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                 child: Row(
                   children: [
-                    ClipOval(
-                      child: SizedBox(
-                        width: 42,
-                        height: 42,
-                        child: person.avatarUrl != null
-                            ? CachedImage(person.avatarUrl!)
-                            : Container(
-                                color: colorScheme.surfaceContainerHighest,
-                                child: Icon(LucideIcons.user, size: 20, color: colorScheme.onSurfaceVariant),
+                    Stack(
+                      alignment: Alignment.bottomRight,
+                      children: [
+                        Container(
+                          width: 44,
+                          height: 44,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: podiumBorderColor,
+                              width: i < 3 ? 2.0 : 0.0,
+                            ),
+                          ),
+                          child: ClipOval(
+                            child: person.avatarUrl != null
+                                ? CachedImage(person.avatarUrl!)
+                                : Container(
+                                    color: colorScheme.surfaceContainerHighest,
+                                    child: Icon(LucideIcons.user, size: 20, color: colorScheme.onSurfaceVariant),
+                                  ),
+                          ),
+                        ),
+                        if (i < 3)
+                          Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: podiumBorderColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text(
+                              '#${i + 1}',
+                              style: const TextStyle(
+                                fontSize: 8,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.black,
                               ),
-                      ),
+                            ),
+                          ),
+                      ],
                     ),
                     const SizedBox(width: 10),
                     Expanded(
@@ -721,51 +878,69 @@ class _TopTagsWrap extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final displayTags = tags.take(18).toList();
+    final maxCount = displayTags.fold<int>(1, (prev, t) => t.count > prev ? t.count : prev);
 
     return SliverToBoxAdapter(
       child: Wrap(
         spacing: 6,
         runSpacing: 6,
         children: [
-          for (final tag in displayTags)
-            Material(
-              color: colorScheme.surfaceContainerHigh,
-              shape: RoundedRectangleBorder(
-                borderRadius: Theming.borderRadiusSmall,
-                side: BorderSide(
-                  color: colorScheme.outlineVariant.withValues(alpha: 0.35),
-                  width: 1.0,
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      tag.name,
-                      style: theme.textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w600),
+          for (final tag in displayTags) ...[
+            Builder(
+              builder: (context) {
+                final ratio = (tag.count / maxCount).clamp(0.0, 1.0);
+                final isHot = ratio >= 0.5;
+
+                return Material(
+                  color: isHot
+                      ? colorScheme.primaryContainer.withValues(alpha: 0.6 + (ratio * 0.4))
+                      : colorScheme.surfaceContainerHigh,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: Theming.borderRadiusSmall,
+                    side: BorderSide(
+                      color: isHot
+                          ? colorScheme.primary.withValues(alpha: 0.5)
+                          : colorScheme.outlineVariant.withValues(alpha: 0.35),
+                      width: 1.0,
                     ),
-                    const SizedBox(width: 6),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
-                      decoration: BoxDecoration(
-                        color: colorScheme.primary.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        '${tag.count}',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w800,
-                          color: colorScheme.primary,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          tag.name,
+                          style: theme.textTheme.labelMedium?.copyWith(
+                            fontWeight: isHot ? FontWeight.w700 : FontWeight.w600,
+                            color: isHot ? colorScheme.onPrimaryContainer : null,
+                          ),
                         ),
-                      ),
+                        const SizedBox(width: 6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                          decoration: BoxDecoration(
+                            color: isHot
+                                ? colorScheme.primary
+                                : colorScheme.primary.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            '${tag.count}',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w800,
+                              color: isHot ? colorScheme.onPrimary : colorScheme.primary,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             ),
+          ],
         ],
       ),
     );
@@ -794,10 +969,15 @@ class _YearsTimelineChartState extends State<_YearsTimelineChart> {
 
   @override
   Widget build(BuildContext context) {
-    // Sort chronologically ascending for the timeline
-    final sortedYears = List<YearStatistic>.from(widget.years)
-      ..sort((a, b) => (int.tryParse(a.year) ?? 0).compareTo(int.tryParse(b.year) ?? 0));
-    final displayYears = sortedYears.take(20).toList();
+    // Filter out invalid/dummy years (e.g. 0 or ancient corrupt dates)
+    final validYears = widget.years.where((y) {
+      final yNum = int.tryParse(y.year) ?? 0;
+      return yNum >= 1970 && y.count > 0;
+    }).toList();
+
+    // Sort descending so the most recent years appear at the top
+    validYears.sort((a, b) => (int.tryParse(b.year) ?? 0).compareTo(int.tryParse(a.year) ?? 0));
+    final displayYears = validYears.take(15).toList();
 
     late List<num> values;
     if (_tab == 0) {
@@ -842,19 +1022,3 @@ class _YearsTimelineChartState extends State<_YearsTimelineChart> {
     );
   }
 }
-
-class _PieChart extends StatelessWidget {
-  const _PieChart(this.title, this.stats, this.highContrast);
-
-  final String title;
-  final List<TypeStatistics> stats;
-  final bool highContrast;
-
-  @override
-  Widget build(BuildContext context) {
-    final names = stats.map((s) => s.value).toList();
-    final values = stats.map((s) => s.count).toList();
-    return PieChart(title: title, names: names, values: values, highContrast: highContrast);
-  }
-}
-
