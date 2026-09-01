@@ -876,8 +876,9 @@ class _TimelinePainter extends CustomPainter {
         final valText = values[i] is double
             ? (values[i] as double).toStringAsFixed(1)
             : values[i].toString();
-        final subText = subtitles != null && i < subtitles!.length ? ' • ${subtitles![i]}' : '';
-        final tipString = '${years[i]}: $valText$subText';
+        final tipString = subtitles != null && i < subtitles!.length
+            ? '${years[i]}: ${subtitles![i]}'
+            : '${years[i]}: $valText';
 
         textPainter.text = TextSpan(
           text: tipString,

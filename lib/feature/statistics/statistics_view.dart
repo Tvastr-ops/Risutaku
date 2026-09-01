@@ -173,8 +173,8 @@ class _StatisticsView extends ConsumerWidget {
       physics: Theming.bouncyPhysics,
       slivers: [
         SliverRefreshControl(onRefresh: () => ref.refresh(userProvider(tag).future)),
-        SliverToBoxAdapter(
-          child: SizedBox(height: MediaQuery.paddingOf(context).top + Theming.offset),
+        const SliverToBoxAdapter(
+          child: SizedBox(height: Theming.offset),
         ),
         _BentoDetails(statistics, ofAnime, scoreFormat, highContrast),
 
@@ -646,15 +646,19 @@ class _ScoreHistogramChartState extends State<_ScoreHistogramChart> {
         scoreFormat: widget.scoreFormat,
         highContrast: widget.highContrast,
         toolbar: SegmentedButton<int>(
+          style: SegmentedButton.styleFrom(
+            visualDensity: VisualDensity.compact,
+            textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+          ),
           segments: [
             const ButtonSegment(
               value: 0,
-              label: Text('Titles'),
+              label: Text('Titles', softWrap: false, maxLines: 1),
               icon: Icon(LucideIcons.hash, size: 16),
             ),
             ButtonSegment(
               value: 1,
-              label: Text(widget.ofAnime ? 'Hours' : 'Chapters'),
+              label: Text(widget.ofAnime ? 'Hours' : 'Chapters', softWrap: false, maxLines: 1),
               icon: Icon(widget.ofAnime ? LucideIcons.clock : LucideIcons.bookmark, size: 16),
             ),
           ],
@@ -708,21 +712,25 @@ class _BarChartState extends State<_BarChart> {
       child: BarChart(
         title: widget.title,
         toolbar: SegmentedButton<int>(
+          style: SegmentedButton.styleFrom(
+            visualDensity: VisualDensity.compact,
+            textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+          ),
           segments: [
             const ButtonSegment(
               value: 0,
-              label: Text('Titles'),
+              label: Text('Titles', softWrap: false, maxLines: 1),
               icon: Icon(LucideIcons.hash, size: 16),
             ),
             ButtonSegment(
               value: 1,
-              label: Text(widget.ofAnime ? 'Hours' : 'Chapters'),
+              label: Text(widget.ofAnime ? 'Hours' : 'Chapters', softWrap: false, maxLines: 1),
               icon: Icon(widget.ofAnime ? LucideIcons.clock : LucideIcons.bookmark, size: 16),
             ),
             if (widget.full && widget.statistics.any((s) => s.meanScore > 0))
               const ButtonSegment(
                 value: 2,
-                label: Text('Score'),
+                label: Text('Score', softWrap: false, maxLines: 1),
                 icon: Icon(LucideIcons.star, size: 16),
               ),
           ],
@@ -775,21 +783,25 @@ class _TopGenresChartState extends State<_TopGenresChart> {
       child: BarChart(
         title: 'Top Genres',
         toolbar: SegmentedButton<int>(
+          style: SegmentedButton.styleFrom(
+            visualDensity: VisualDensity.compact,
+            textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+          ),
           segments: [
             const ButtonSegment(
               value: 0,
-              label: Text('Titles'),
+              label: Text('Titles', softWrap: false, maxLines: 1),
               icon: Icon(LucideIcons.hash, size: 16),
             ),
             ButtonSegment(
               value: 1,
-              label: Text(widget.ofAnime ? 'Hours' : 'Chapters'),
+              label: Text(widget.ofAnime ? 'Hours' : 'Chapters', softWrap: false, maxLines: 1),
               icon: Icon(widget.ofAnime ? LucideIcons.clock : LucideIcons.bookmark, size: 16),
             ),
             if (displayGenres.any((g) => g.meanScore > 0))
               const ButtonSegment(
                 value: 2,
-                label: Text('Score'),
+                label: Text('Score', softWrap: false, maxLines: 1),
                 icon: Icon(LucideIcons.star, size: 16),
               ),
           ],
@@ -840,15 +852,19 @@ class _TopStudiosGridState extends State<_TopStudiosGrid> {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: SegmentedButton<int>(
+                style: SegmentedButton.styleFrom(
+                  visualDensity: VisualDensity.compact,
+                  textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                ),
                 segments: const [
                   ButtonSegment(
                     value: 0,
-                    label: Text('Most Titles'),
+                    label: Text('Most Titles', softWrap: false, maxLines: 1),
                     icon: Icon(LucideIcons.film, size: 16),
                   ),
                   ButtonSegment(
                     value: 1,
-                    label: Text('Highest Rated'),
+                    label: Text('Highest Rated', softWrap: false, maxLines: 1),
                     icon: Icon(LucideIcons.star, size: 16),
                   ),
                 ],
@@ -999,10 +1015,14 @@ class _TopPeopleGridState extends State<_TopPeopleGrid> {
           child: Padding(
             padding: const EdgeInsets.only(bottom: 8),
             child: SegmentedButton<int>(
+              style: SegmentedButton.styleFrom(
+                visualDensity: VisualDensity.compact,
+                textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+              ),
               segments: [
                 ButtonSegment(
                   value: 0,
-                  label: Text(widget.isVoiceActor ? 'Roles' : 'Works'),
+                  label: Text(widget.isVoiceActor ? 'Roles' : 'Works', softWrap: false, maxLines: 1),
                   icon: Icon(
                     widget.isVoiceActor
                         ? LucideIcons.mic
@@ -1013,13 +1033,13 @@ class _TopPeopleGridState extends State<_TopPeopleGrid> {
                 if (widget.people.any((p) => p.meanScore > 0))
                   const ButtonSegment(
                     value: 1,
-                    label: Text('Score'),
+                    label: Text('Score', softWrap: false, maxLines: 1),
                     icon: Icon(LucideIcons.star, size: 16),
                   ),
                 if (widget.people.any((p) => p.amount > 0))
                   ButtonSegment(
                     value: 2,
-                    label: Text(widget.ofAnime ? 'Hours' : 'Chapters'),
+                    label: Text(widget.ofAnime ? 'Hours' : 'Chapters', softWrap: false, maxLines: 1),
                     icon: Icon(widget.ofAnime ? LucideIcons.clock : LucideIcons.bookmark, size: 16),
                   ),
               ],
@@ -1269,14 +1289,18 @@ class _YearsTimelineChartState extends State<_YearsTimelineChart> {
     if (_tab == 0) {
       values = validYears.map((y) => y.count).toList();
       subtitles = validYears
-          .map((y) => y.meanScore > 0 ? '${y.meanScore.toStringAsFixed(1)} avg' : '')
+          .map((y) => '${y.count} ${widget.ofAnime ? "titles" : "manga"}')
           .toList();
     } else if (_tab == 1) {
       values = validYears.map((y) => y.amount).toList();
-      subtitles = validYears.map((y) => '${y.count} titles').toList();
+      subtitles = validYears
+          .map((y) => '${y.amount} ${widget.ofAnime ? "hours" : "chapters"}')
+          .toList();
     } else {
       values = validYears.map((y) => y.meanScore).toList();
-      subtitles = validYears.map((y) => '${y.count} titles').toList();
+      subtitles = validYears
+          .map((y) => '${y.meanScore.toStringAsFixed(1)}% score')
+          .toList();
     }
 
     return SliverToBoxAdapter(
@@ -1287,21 +1311,25 @@ class _YearsTimelineChartState extends State<_YearsTimelineChart> {
         subtitles: subtitles,
         highContrast: widget.highContrast,
         toolbar: SegmentedButton<int>(
+          style: SegmentedButton.styleFrom(
+            visualDensity: VisualDensity.compact,
+            textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+          ),
           segments: [
             const ButtonSegment(
               value: 0,
-              label: Text('Titles'),
+              label: Text('Titles', softWrap: false, maxLines: 1),
               icon: Icon(LucideIcons.hash, size: 16),
             ),
             ButtonSegment(
               value: 1,
-              label: Text(widget.ofAnime ? 'Hours' : 'Chapters'),
+              label: Text(widget.ofAnime ? 'Hours' : 'Chapters', softWrap: false, maxLines: 1),
               icon: Icon(widget.ofAnime ? LucideIcons.clock : LucideIcons.bookmark, size: 16),
             ),
             if (validYears.any((y) => y.meanScore > 0))
               const ButtonSegment(
                 value: 2,
-                label: Text('Score'),
+                label: Text('Score', softWrap: false, maxLines: 1),
                 icon: Icon(LucideIcons.star, size: 16),
               ),
           ],
