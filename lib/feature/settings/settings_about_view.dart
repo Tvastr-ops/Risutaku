@@ -28,7 +28,7 @@ class SettingsAboutSubview extends StatelessWidget {
           controller: scrollCtrl,
           physics: Theming.bouncyPhysics,
           padding: EdgeInsets.only(
-            top: padding.top + Theming.normalTapTarget,
+            top: padding.top + Theming.offset * 2,
             left: padding.left + Theming.offset,
             right: padding.right + Theming.offset,
             bottom: padding.bottom + Theming.offset + 60,

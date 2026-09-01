@@ -30,7 +30,7 @@ class SettingsContentSubview extends StatelessWidget {
       controller: scrollCtrl,
       physics: Theming.bouncyPhysics,
       padding: EdgeInsets.only(
-        top: listPadding.top + Theming.normalTapTarget,
+        top: listPadding.top + Theming.offset,
         bottom: listPadding.bottom + Theming.offset + 60,
       ),
       children: [
