@@ -84,7 +84,7 @@ class AppState extends ConsumerState<_App> {
 
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
-        Color lightSeed = (options.themeBase ?? .navy).seed;
+        Color lightSeed = (options.themeBase ?? .cobalt).seed;
         Color darkSeed = lightSeed;
         if (lightDynamic != null && darkDynamic != null) {
           _systemLightPrimaryColor = lightDynamic.primary;
