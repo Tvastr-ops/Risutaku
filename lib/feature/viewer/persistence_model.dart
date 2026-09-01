@@ -9,7 +9,7 @@ import 'package:risutaku/feature/discover/discover_model.dart';
 import 'package:risutaku/feature/home/home_model.dart';
 import 'package:risutaku/util/theming.dart';
 
-const appVersion = '1.13.0';
+const appVersion = '1.13.1';
 
 class Persistence {
   const Persistence({

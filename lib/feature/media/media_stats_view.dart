@@ -52,14 +52,11 @@ class MediaStatsSubview extends StatelessWidget {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const .only(top: Theming.offset),
-                child: SizedBox(
-                  height: 200,
-                  child: PieChart(
-                    title: 'Status Distribution',
-                    names: stats.statusNames,
-                    values: stats.statusValues,
-                    highContrast: highContrast,
-                  ),
+                child: SpieChart(
+                  title: 'Status Distribution',
+                  names: stats.statusNames,
+                  values: stats.statusValues,
+                  highContrast: highContrast,
                 ),
               ),
             ),

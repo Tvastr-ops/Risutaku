@@ -241,6 +241,7 @@ class _StatisticsView extends StatelessWidget {
             ofAnime: ofAnime,
             initialTab: yearTab(),
             onTabChanged: onYearTabChanged,
+            highContrast: highContrast,
           ),
         ],
 
@@ -953,12 +954,14 @@ class _YearsTimelineChart extends StatefulWidget {
     required this.ofAnime,
     required this.initialTab,
     required this.onTabChanged,
+    required this.highContrast,
   });
 
   final List<YearStatistic> years;
   final bool ofAnime;
   final int initialTab;
   final void Function(int) onTabChanged;
+  final bool highContrast;
 
   @override
   State<_YearsTimelineChart> createState() => _YearsTimelineChartState();
@@ -969,28 +972,36 @@ class _YearsTimelineChartState extends State<_YearsTimelineChart> {
 
   @override
   Widget build(BuildContext context) {
-    // Filter out invalid/dummy years (e.g. 0 or ancient corrupt dates)
+    // Filter out invalid/zero dates and sort chronologically ascending
     final validYears = widget.years.where((y) {
       final yNum = int.tryParse(y.year) ?? 0;
-      return yNum >= 1970 && y.count > 0;
+      return yNum > 0 && y.count > 0;
     }).toList();
 
-    // Sort descending so the most recent years appear at the top
-    validYears.sort((a, b) => (int.tryParse(b.year) ?? 0).compareTo(int.tryParse(a.year) ?? 0));
-    final displayYears = validYears.take(15).toList();
+    validYears.sort((a, b) => (int.tryParse(a.year) ?? 0).compareTo(int.tryParse(b.year) ?? 0));
 
     late List<num> values;
+    late List<String> subtitles;
     if (_tab == 0) {
-      values = displayYears.map((y) => y.count).toList();
+      values = validYears.map((y) => y.count).toList();
+      subtitles = validYears
+          .map((y) => y.meanScore > 0 ? '${y.meanScore.toStringAsFixed(1)} avg' : '')
+          .toList();
     } else if (_tab == 1) {
-      values = displayYears.map((y) => y.amount).toList();
+      values = validYears.map((y) => y.amount).toList();
+      subtitles = validYears.map((y) => '${y.count} titles').toList();
     } else {
-      values = displayYears.map((y) => y.meanScore).toList();
+      values = validYears.map((y) => y.meanScore).toList();
+      subtitles = validYears.map((y) => '${y.count} titles').toList();
     }
 
     return SliverToBoxAdapter(
-      child: BarChart(
+      child: ScrollableTimelineChart(
         title: 'Release Year Timeline',
+        years: validYears.map((y) => y.year).toList(),
+        values: values,
+        subtitles: subtitles,
+        highContrast: widget.highContrast,
         toolbar: SegmentedButton(
           segments: [
             const ButtonSegment(
@@ -1003,7 +1014,7 @@ class _YearsTimelineChartState extends State<_YearsTimelineChart> {
               label: Text(widget.ofAnime ? 'Hours' : 'Chapters'),
               icon: const Icon(Icons.hourglass_bottom_outlined),
             ),
-            if (displayYears.any((y) => y.meanScore > 0))
+            if (validYears.any((y) => y.meanScore > 0))
               const ButtonSegment(
                 value: 2,
                 label: Text('Score'),
@@ -1016,8 +1027,6 @@ class _YearsTimelineChartState extends State<_YearsTimelineChart> {
             widget.onTabChanged(v.first);
           },
         ),
-        names: displayYears.map((y) => y.year).toList(),
-        values: values,
       ),
     );
   }

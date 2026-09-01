@@ -19,7 +19,6 @@ class Statistics {
     required this.voiceActors,
     required this.staff,
     required this.releaseYears,
-    required this.startYears,
   });
 
   factory Statistics(Map<String, dynamic> map, bool ofAnime) {
@@ -120,6 +119,8 @@ class Statistics {
       countries: countries,
       genres: genres,
       tags: tags,
+      studios: studios,
+      voiceActors: voiceActors,
       staff: staff,
       releaseYears: releaseYears,
     );

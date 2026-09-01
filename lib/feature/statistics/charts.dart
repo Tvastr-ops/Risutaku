@@ -5,6 +5,8 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:risutaku/extension/card_extension.dart';
 import 'package:risutaku/util/theming.dart';
 
+typedef PieChart = SpieChart;
+
 class BarChart extends StatelessWidget {
   const BarChart({required this.title, required this.names, required this.values, this.toolbar})
     : assert(names.length == values.length);
@@ -305,108 +307,116 @@ class SpieChart extends StatelessWidget {
         CardExtension.highContrast(highContrast)(
           child: Padding(
             padding: const EdgeInsets.all(12),
-            child: Row(
-              children: [
-                // Spie Canvas with Center Metric
-                SizedBox(
-                  width: 140,
-                  height: 140,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      CustomPaint(
-                        size: const Size(140, 140),
-                        painter: _SpiePainter(
-                          values: values,
-                          radiiValues: radiiValues,
-                          colors: colors,
-                          outlineColor: colorScheme.surface,
-                        ),
-                      ),
-                      // Center Hole Badge
-                      Container(
-                        width: 54,
-                        height: 54,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: colorScheme.surface,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.15),
-                              blurRadius: 4,
-                            ),
-                          ],
-                        ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final spieSize = math.min(130.0, constraints.maxWidth * 0.40).clamp(90.0, 130.0);
+                final centerBadgeSize = spieSize * 0.40;
+
+                return Row(
+                  children: [
+                    // Spie Canvas with Center Metric
+                    SizedBox(
+                      width: spieSize,
+                      height: spieSize,
+                      child: Stack(
                         alignment: Alignment.center,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '$dominantPct%',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w800,
-                                color: colorScheme.primary,
-                              ),
+                        children: [
+                          CustomPaint(
+                            size: Size(spieSize, spieSize),
+                            painter: _SpiePainter(
+                              values: values,
+                              radiiValues: radiiValues,
+                              colors: colors,
+                              outlineColor: colorScheme.surface,
                             ),
-                            Text(
-                              dominantLabel,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 8,
-                                fontWeight: FontWeight.w600,
-                                color: colorScheme.onSurfaceVariant,
-                              ),
+                          ),
+                          // Center Hole Badge
+                          Container(
+                            width: centerBadgeSize,
+                            height: centerBadgeSize,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: colorScheme.surface,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.15),
+                                  blurRadius: 4,
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '$dominantPct%',
+                                  style: TextStyle(
+                                    fontSize: centerBadgeSize > 45 ? 12 : 10,
+                                    fontWeight: FontWeight.w800,
+                                    color: colorScheme.primary,
+                                  ),
+                                ),
+                                if (centerBadgeSize > 42)
+                                  Text(
+                                    dominantLabel,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 8,
+                                      fontWeight: FontWeight.w600,
+                                      color: colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 16),
-                // Legend
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (int i = 0; i < names.length; i++) ...[
-                        if (i > 0) const SizedBox(height: 6),
-                        Row(
-                          children: [
-                            Container(
-                              width: 10,
-                              height: 10,
-                              decoration: BoxDecoration(
-                                color: colors[i],
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                names[i],
-                                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            Text(
-                              '${values[i]}',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w700,
-                                color: colorScheme.onSurfaceVariant,
-                              ),
+                    ),
+                    const SizedBox(width: 12),
+                    // Legend
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          for (int i = 0; i < names.length; i++) ...[
+                            if (i > 0) const SizedBox(height: 5),
+                            Row(
+                              children: [
+                                Container(
+                                  width: 8,
+                                  height: 8,
+                                  decoration: BoxDecoration(
+                                    color: colors[i],
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                                const SizedBox(width: 6),
+                                Expanded(
+                                  child: Text(
+                                    names[i],
+                                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                Text(
+                                  '${values[i]}',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w700,
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              ],
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         ),
@@ -505,3 +515,308 @@ class _SpiePainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _SpiePainter oldDelegate) => true;
 }
+
+/// Interactive Line + Bar Timeline Chart with horizontal scroll
+class ScrollableTimelineChart extends StatefulWidget {
+  const ScrollableTimelineChart({
+    required this.title,
+    required this.years,
+    required this.values,
+    this.subtitles,
+    this.toolbar,
+    required this.highContrast,
+    super.key,
+  }) : assert(years.length == values.length);
+
+  final String title;
+  final List<String> years;
+  final List<num> values;
+  final List<String>? subtitles;
+  final Widget? toolbar;
+  final bool highContrast;
+
+  @override
+  State<ScrollableTimelineChart> createState() => _ScrollableTimelineChartState();
+}
+
+class _ScrollableTimelineChartState extends State<ScrollableTimelineChart> {
+  final _scrollCtrl = ScrollController();
+  int? _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollCtrl.hasClients && _scrollCtrl.position.maxScrollExtent > 0) {
+        _scrollCtrl.jumpTo(_scrollCtrl.position.maxScrollExtent);
+      }
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant ScrollableTimelineChart oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.values != widget.values) {
+      _selectedIndex = null;
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    const itemWidth = 44.0;
+    const padding = 16.0;
+    final totalWidth = padding * 2 + widget.years.length * itemWidth;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          child: Text(widget.title, style: theme.textTheme.titleSmall),
+        ),
+        if (widget.toolbar != null) ...[
+          SizedBox(width: double.infinity, child: widget.toolbar!),
+          const SizedBox(height: Theming.offset),
+        ],
+        CardExtension.highContrast(widget.highContrast)(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: SizedBox(
+              height: 190,
+              child: SingleChildScrollView(
+                controller: _scrollCtrl,
+                scrollDirection: Axis.horizontal,
+                physics: Theming.bouncyPhysics,
+                child: GestureDetector(
+                  onTapDown: (details) {
+                    final dx = details.localPosition.dx - padding;
+                    if (dx >= 0) {
+                      final idx = (dx / itemWidth).floor();
+                      if (idx >= 0 && idx < widget.years.length) {
+                        setState(() {
+                          _selectedIndex = _selectedIndex == idx ? null : idx;
+                        });
+                      }
+                    }
+                  },
+                  child: CustomPaint(
+                    size: Size(math.max(totalWidth, MediaQuery.sizeOf(context).width - 32), 190),
+                    painter: _TimelinePainter(
+                      years: widget.years,
+                      values: widget.values,
+                      subtitles: widget.subtitles,
+                      selectedIndex: _selectedIndex,
+                      colorScheme: colorScheme,
+                      itemWidth: itemWidth,
+                      padding: padding,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _TimelinePainter extends CustomPainter {
+  _TimelinePainter({
+    required this.years,
+    required this.values,
+    required this.subtitles,
+    required this.selectedIndex,
+    required this.colorScheme,
+    required this.itemWidth,
+    required this.padding,
+  });
+
+  final List<String> years;
+  final List<num> values;
+  final List<String>? subtitles;
+  final int? selectedIndex;
+  final ColorScheme colorScheme;
+  final double itemWidth;
+  final double padding;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (years.isEmpty) return;
+
+    final maxValue = values.fold<num>(0.0, (p, v) => v > p ? v : p);
+    final topPadding = selectedIndex != null ? 36.0 : 20.0;
+    const bottomPadding = 32.0;
+    final graphHeight = size.height - topPadding - bottomPadding;
+    final bottomY = size.height - bottomPadding;
+
+    final points = <Offset>[];
+
+    for (int i = 0; i < years.length; i++) {
+      final x = padding + (i * itemWidth) + (itemWidth / 2);
+      final ratio = maxValue > 0 ? (values[i] / maxValue).clamp(0.0, 1.0) : 0.0;
+      final y = bottomY - (ratio * graphHeight);
+      points.add(Offset(x, y));
+    }
+
+    // 1. Draw Subtle Vertical Pillar Bars
+    for (int i = 0; i < points.length; i++) {
+      final p = points[i];
+      final isSelected = selectedIndex == i;
+
+      final barRect = Rect.fromLTRB(p.dx - 4, p.dy, p.dx + 4, bottomY);
+      final barPaint = Paint()
+        ..color = isSelected
+            ? colorScheme.primary
+            : colorScheme.surfaceContainerHighest.withValues(alpha: 0.6)
+        ..style = PaintingStyle.fill;
+
+      canvas.drawRRect(
+        RRect.fromRectAndRadius(barRect, const Radius.circular(2.5)),
+        barPaint,
+      );
+    }
+
+    // 2. Draw Area Gradient & Glowing Curve Line
+    if (points.length > 1) {
+      final linePath = Path();
+      final areaPath = Path();
+
+      linePath.moveTo(points.first.dx, points.first.dy);
+      areaPath.moveTo(points.first.dx, bottomY);
+      areaPath.lineTo(points.first.dx, points.first.dy);
+
+      for (int i = 0; i < points.length - 1; i++) {
+        final p0 = points[i];
+        final p1 = points[i + 1];
+        final controlX = (p0.dx + p1.dx) / 2;
+
+        linePath.cubicTo(controlX, p0.dy, controlX, p1.dy, p1.dx, p1.dy);
+        areaPath.cubicTo(controlX, p0.dy, controlX, p1.dy, p1.dx, p1.dy);
+      }
+
+      areaPath.lineTo(points.last.dx, bottomY);
+      areaPath.close();
+
+      // Area gradient
+      final areaPaint = Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            colorScheme.primary.withValues(alpha: 0.28),
+            colorScheme.primary.withValues(alpha: 0.0),
+          ],
+        ).createShader(Rect.fromLTRB(0, topPadding, size.width, bottomY))
+        ..style = PaintingStyle.fill;
+
+      canvas.drawPath(areaPath, areaPaint);
+
+      // Stroke line
+      final linePaint = Paint()
+        ..color = colorScheme.primary
+        ..strokeWidth = 2.5
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round
+        ..style = PaintingStyle.stroke;
+
+      canvas.drawPath(linePath, linePaint);
+    }
+
+    // 3. Draw Points & Tooltips & Year Labels
+    final textPainter = TextPainter(textDirection: TextDirection.ltr);
+
+    for (int i = 0; i < points.length; i++) {
+      final p = points[i];
+      final isSelected = selectedIndex == i;
+
+      // Circle Dot
+      final dotPaint = Paint()
+        ..color = isSelected ? colorScheme.primary : colorScheme.surface
+        ..style = PaintingStyle.fill;
+      final ringPaint = Paint()
+        ..color = isSelected ? colorScheme.onPrimary : colorScheme.primary
+        ..strokeWidth = isSelected ? 2.5 : 1.8
+        ..style = PaintingStyle.stroke;
+
+      canvas.drawCircle(p, isSelected ? 5.5 : 3.5, dotPaint);
+      canvas.drawCircle(p, isSelected ? 5.5 : 3.5, ringPaint);
+
+      // Year Label on bottom
+      final yearStr = years[i];
+      final label = yearStr.length == 4 && int.tryParse(yearStr) != null && int.parse(yearStr) >= 2000
+          ? "'${yearStr.substring(2)}"
+          : yearStr;
+
+      textPainter.text = TextSpan(
+        text: label,
+        style: TextStyle(
+          fontSize: 10,
+          fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
+          color: isSelected ? colorScheme.primary : colorScheme.onSurfaceVariant,
+        ),
+      );
+      textPainter.layout();
+      textPainter.paint(
+        canvas,
+        Offset(p.dx - (textPainter.width / 2), bottomY + 8),
+      );
+
+      // Floating Tooltip Bubble
+      if (isSelected) {
+        final valText = values[i] is double
+            ? (values[i] as double).toStringAsFixed(1)
+            : values[i].toString();
+        final subText = subtitles != null && i < subtitles!.length ? ' • ${subtitles![i]}' : '';
+        final tipString = '${years[i]}: $valText$subText';
+
+        textPainter.text = TextSpan(
+          text: tipString,
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+            color: colorScheme.onPrimary,
+          ),
+        );
+        textPainter.layout();
+
+        final bubbleWidth = textPainter.width + 16;
+        const bubbleHeight = 24.0;
+        final bubbleRect = RRect.fromRectAndRadius(
+          Rect.fromCenter(
+            center: Offset(p.dx, math.max(14, p.dy - 18)),
+            width: bubbleWidth,
+            height: bubbleHeight,
+          ),
+          const Radius.circular(12),
+        );
+
+        final bubblePaint = Paint()
+          ..color = colorScheme.primary
+          ..style = PaintingStyle.fill;
+
+        canvas.drawRRect(bubbleRect, bubblePaint);
+        textPainter.paint(
+          canvas,
+          Offset(p.dx - (textPainter.width / 2), math.max(14, p.dy - 18) - (textPainter.height / 2)),
+        );
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _TimelinePainter oldDelegate) =>
+      oldDelegate.selectedIndex != selectedIndex ||
+      oldDelegate.values != values ||
+      oldDelegate.years != years;
+}
+
