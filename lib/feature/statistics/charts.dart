@@ -250,7 +250,7 @@ class _ScoreHistogramState extends State<ScoreHistogram> {
                         Icon(LucideIcons.star, size: 13, color: colorScheme.primary),
                         const SizedBox(width: 4),
                         Text(
-                          '★ $displayMean Avg',
+                          '★ $displayMean Mean',
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
@@ -524,14 +524,28 @@ class _HistogramBar extends StatelessWidget {
                 color: colorScheme.primaryContainer.withValues(alpha: 0.85),
                 borderRadius: BorderRadius.circular(3),
               ),
-              child: Text(
-                'Avg',
-                style: TextStyle(
-                  fontSize: 7.5,
-                  fontWeight: FontWeight.w800,
-                  color: colorScheme.onPrimaryContainer,
-                  letterSpacing: -0.2,
-                ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '▲',
+                    style: TextStyle(
+                      fontSize: 5.5,
+                      color: colorScheme.primary,
+                      height: 1.0,
+                    ),
+                  ),
+                  const SizedBox(width: 1.5),
+                  Text(
+                    'μ',
+                    style: TextStyle(
+                      fontSize: 7.5,
+                      fontWeight: FontWeight.w900,
+                      color: colorScheme.onPrimaryContainer,
+                      height: 1.0,
+                    ),
+                  ),
+                ],
               ),
             )
           else
