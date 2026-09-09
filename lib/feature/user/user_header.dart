@@ -292,6 +292,7 @@ class __FollowButtonState extends State<_FollowButton> {
 
           widget.toggleFollow().then((err) {
             if (err == null) return;
+            if (!mounted) return;
 
             setState(() => user.isFollowed = isFollowed);
 

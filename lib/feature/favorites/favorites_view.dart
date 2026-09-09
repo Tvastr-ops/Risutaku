@@ -459,6 +459,7 @@ class _EditListState extends State<_EditList> {
 
                   final err = await widget.toggleFavorite(item.id);
                   if (err == null) return;
+                  if (!mounted) return;
 
                   setState(() => item.isFavorite = isFavorite);
                   if (context.mounted) {

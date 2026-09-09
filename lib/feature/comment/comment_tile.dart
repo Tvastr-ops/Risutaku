@@ -234,11 +234,12 @@ class __LikeButtonState extends State<_LikeButton> {
 
           setState(() {
             comment.isLiked = !prevIsLiked;
-            comment.likeCount = prevLikeCount + 1;
+            comment.likeCount = prevLikeCount + (prevIsLiked ? -1 : 1);
           });
 
           final err = await widget.toggleLike(comment.id);
           if (err == null) return;
+          if (!mounted) return;
 
           setState(() {
             comment.isLiked = prevIsLiked;

@@ -421,12 +421,13 @@ class __LikeButtonState extends State<_LikeButton> {
 
           setState(() {
             info.isLiked = !prevIsLiked;
-            info.likeCount = prevLikeCount + 1;
+            info.likeCount = prevLikeCount + (prevIsLiked ? -1 : 1);
           });
 
           final err = await widget.ref.read(threadProvider(info.id).notifier).toggleThreadLike();
 
           if (err == null) return;
+          if (!mounted) return;
 
           setState(() {
             info.isLiked = prevIsLiked;

@@ -10,7 +10,6 @@ import 'package:risutaku/feature/review/reviews_filter_sheet.dart';
 import 'package:risutaku/feature/viewer/persistence_provider.dart';
 import 'package:risutaku/util/routes.dart';
 import 'package:risutaku/util/theming.dart';
-import 'package:risutaku/util/debounce.dart';
 import 'package:risutaku/widget/input/search_field.dart';
 import 'package:risutaku/widget/sheets.dart';
 
@@ -44,7 +43,7 @@ class DiscoverTopBarTrailingContent extends StatelessWidget {
                     style: TextTheme.of(context).bodyMedium,
                   ),
                   _ => SearchField(
-                    debounce: Debounce(),
+                    debounce: true,
                     focusNode: focusNode,
                     hint: filter.type.label,
                     value: filter.search,

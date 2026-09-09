@@ -270,8 +270,8 @@ class _StatisticsView extends ConsumerWidget {
         if (statistics.count > 0) ...[
           spacing,
           SliverGrid(
-            gridDelegate: const SliverGridDelegateWithMinWidthAndFixedHeight(
-              minWidth: 340,
+            gridDelegate: SliverGridDelegateWithMinWidthAndFixedHeight(
+              minWidth: MediaQuery.sizeOf(context).width > 600 ? 250 : 340,
               height: 200,
             ),
             delegate: SliverChildListDelegate([
@@ -381,221 +381,262 @@ class _BentoDetails extends StatelessWidget {
         ? '${statistics.partsConsumed} Episodes total'
         : '${statistics.amountConsumed} Volumes read';
 
-    return SliverToBoxAdapter(
-      child: Column(
-        children: [
-          // Hero Bento Banner (Full Width)
-          CardExtension.highContrast(highContrast)(
-            child: Container(
-              padding: const EdgeInsets.all(16),
+    Widget buildHeroBanner({bool isTablet = false}) => CardExtension.highContrast(highContrast)(
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        height: isTablet ? double.infinity : null,
+        decoration: BoxDecoration(
+          borderRadius: Theming.borderRadiusBig,
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              colorScheme.primaryContainer.withValues(alpha: 0.8),
+              colorScheme.surfaceContainerHigh,
+            ],
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 52,
+              height: 52,
               decoration: BoxDecoration(
-                borderRadius: Theming.borderRadiusBig,
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    colorScheme.primaryContainer.withValues(alpha: 0.8),
-                    colorScheme.surfaceContainerHigh,
-                  ],
-                ),
+                color: colorScheme.primary,
+                borderRadius: Theming.borderRadiusSmall,
               ),
-              child: Row(
+              child: Icon(
+                ofAnime ? LucideIcons.hourglass : LucideIcons.bookOpen,
+                size: 26,
+                color: colorScheme.onPrimary,
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: isTablet ? MainAxisAlignment.center : MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: 52,
-                    height: 52,
-                    decoration: BoxDecoration(
-                      color: colorScheme.primary,
-                      borderRadius: Theming.borderRadiusSmall,
-                    ),
-                    child: Icon(
-                      ofAnime ? LucideIcons.hourglass : LucideIcons.bookOpen,
-                      size: 26,
-                      color: colorScheme.onPrimary,
+                  Text(
+                    heroTitle.toUpperCase(),
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1.1,
+                      color: colorScheme.onSurfaceVariant,
                     ),
                   ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          heroTitle.toUpperCase(),
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 1.1,
-                            color: colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          heroValue,
-                          style: const TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-                        const SizedBox(height: 1),
-                        Text(
-                          heroSubtitle,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ],
+                  const SizedBox(height: 2),
+                  Text(
+                    heroValue,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  const SizedBox(height: 1),
+                  Text(
+                    heroSubtitle,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-          const SizedBox(height: 10),
-          // Secondary Bento Row 1: Titles & Consumed Parts
-          Row(
+          ],
+        ),
+      ),
+    );
+
+    final cardTitles = CardExtension.highContrast(highContrast)(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(ofAnime ? LucideIcons.film : LucideIcons.bookOpen, size: 16, color: colorScheme.primary),
+                const SizedBox(width: 6),
+                Text(
+                  ofAnime ? 'Total Anime' : 'Total Manga',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(
+              '${statistics.count}',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    final cardParts = CardExtension.highContrast(highContrast)(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(ofAnime ? LucideIcons.play : LucideIcons.bookmarkCheck, size: 16, color: colorScheme.primary),
+                const SizedBox(width: 6),
+                Text(
+                  ofAnime ? 'Episodes Watched' : 'Chapters Read',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(
+              '${statistics.partsConsumed}',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    final cardMean = CardExtension.highContrast(highContrast)(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(LucideIcons.star, size: 16, color: colorScheme.primary),
+                const SizedBox(width: 6),
+                Text(
+                  'Mean Score',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(
+              _formatMean(statistics.meanScore),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    final cardStdDev = CardExtension.highContrast(highContrast)(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(LucideIcons.calculator, size: 16, color: colorScheme.primary),
+                const SizedBox(width: 6),
+                Text(
+                  'Standard Deviation',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(
+              _formatStdDev(statistics.standardDeviation),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    return SliverToBoxAdapter(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isTablet = constraints.maxWidth > 600;
+
+          if (isTablet) {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 5,
+                  child: SizedBox(
+                    height: 172,
+                    child: buildHeroBanner(isTablet: true),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  flex: 6,
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(child: cardTitles),
+                          const SizedBox(width: 10),
+                          Expanded(child: cardParts),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Expanded(child: cardMean),
+                          const SizedBox(width: 10),
+                          Expanded(child: cardStdDev),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          }
+
+          return Column(
             children: [
-              // Total Titles
-              Expanded(
-                child: CardExtension.highContrast(highContrast)(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(ofAnime ? LucideIcons.film : LucideIcons.bookOpen, size: 16, color: colorScheme.primary),
-                            const SizedBox(width: 6),
-                            Text(
-                              ofAnime ? 'Total Anime' : 'Total Manga',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          '${statistics.count}',
-                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+              buildHeroBanner(),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(child: cardTitles),
+                  const SizedBox(width: 10),
+                  Expanded(child: cardParts),
+                ],
               ),
-              const SizedBox(width: 10),
-              // Parts Consumed (Episodes / Chapters)
-              Expanded(
-                child: CardExtension.highContrast(highContrast)(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(ofAnime ? LucideIcons.play : LucideIcons.bookmarkCheck, size: 16, color: colorScheme.primary),
-                            const SizedBox(width: 6),
-                            Text(
-                              ofAnime ? 'Episodes Watched' : 'Chapters Read',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          '${statistics.partsConsumed}',
-                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(child: cardMean),
+                  const SizedBox(width: 10),
+                  Expanded(child: cardStdDev),
+                ],
               ),
             ],
-          ),
-          const SizedBox(height: 10),
-          // Secondary Bento Row 2: Mean Score & Standard Deviation
-          Row(
-            children: [
-              // Mean Score Cell
-              Expanded(
-                child: CardExtension.highContrast(highContrast)(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(LucideIcons.star, size: 16, color: colorScheme.primary),
-                            const SizedBox(width: 6),
-                            Text(
-                              'Mean Score',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          _formatMean(statistics.meanScore),
-                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              // Standard Deviation Cell
-              Expanded(
-                child: CardExtension.highContrast(highContrast)(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(LucideIcons.calculator, size: 16, color: colorScheme.primary),
-                            const SizedBox(width: 6),
-                            Text(
-                              'Standard Deviation',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          _formatStdDev(statistics.standardDeviation),
-                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -636,12 +677,16 @@ class _ScoreHistogramChartState extends State<_ScoreHistogramChart> {
     final values = _tab == 0
         ? sortedScores.map((s) => s.count).toList()
         : sortedScores.map((s) => s.amount).toList();
+    final barMeanScores = sortedScores.map((s) => s.meanScore).toList();
+    final unitLabel = _tab == 0 ? 'titles' : (widget.ofAnime ? 'hours' : 'chapters');
 
     return SliverToBoxAdapter(
       child: ScoreHistogram(
         title: 'Score Distribution',
         names: names,
         values: values,
+        barMeanScores: barMeanScores,
+        unitLabel: unitLabel,
         meanScore: widget.meanScore,
         scoreFormat: widget.scoreFormat,
         highContrast: widget.highContrast,

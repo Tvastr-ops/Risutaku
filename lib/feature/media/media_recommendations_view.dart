@@ -177,6 +177,7 @@ class _RecommendationRatingState extends State<_RecommendationRating> {
 
                     final err = await widget.rateRecommendation(item.id, item.userRating);
                     if (err == null) return;
+                    if (!mounted) return;
 
                     setState(() {
                       item.rating = oldRating;
@@ -226,6 +227,7 @@ class _RecommendationRatingState extends State<_RecommendationRating> {
 
                     final err = await widget.rateRecommendation(item.id, item.userRating);
                     if (err == null) return;
+                    if (!mounted) return;
 
                     setState(() {
                       item.rating = oldRating;

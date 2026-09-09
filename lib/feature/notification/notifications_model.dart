@@ -8,7 +8,7 @@ enum NotificationType {
   activityMessage('Messages', 'ACTIVITY_MESSAGE'),
   activityLike('Activity likes', 'ACTIVITY_LIKE'),
   activityReply('Activity replies', 'ACTIVITY_REPLY'),
-  acrivityReplyLike('Activity reply likes', 'ACTIVITY_REPLY_LIKE'),
+  activityReplyLike('Activity reply likes', 'ACTIVITY_REPLY_LIKE'),
   activityReplySubscribed('Subscribed activity replies', 'ACTIVITY_REPLY_SUBSCRIBED'),
   threadLike('Thread likes', 'THREAD_LIKE'),
   threadReplySubscribed('Subscribed thread replies', 'THREAD_SUBSCRIBED'),
@@ -52,7 +52,7 @@ sealed class SiteNotification {
       .activityMessage ||
       .activityLike ||
       .activityReply ||
-      .acrivityReplyLike ||
+      .activityReplyLike ||
       .activityReplySubscribed => ActivityNotification(map, type),
       .threadLike => ThreadNotification(map, type),
       .threadReplySubscribed ||
@@ -112,7 +112,7 @@ class ActivityNotification extends SiteNotification {
       .activityMessage => [map['user']?['name'] ?? '?', ' sent you a message'],
       .activityLike => [map['user']?['name'] ?? '?', ' liked your activity'],
       .activityReply => [map['user']?['name'] ?? '?', ' replied to your activity'],
-      .acrivityReplyLike => [map['user']?['name'] ?? '?', ' liked your reply'],
+      .activityReplyLike => [map['user']?['name'] ?? '?', ' liked your reply'],
       .activityReplySubscribed => [
         map['user']?['name'] ?? '?',
         ' replied to a subscribed activity',

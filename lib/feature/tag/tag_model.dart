@@ -4,21 +4,21 @@ import 'package:risutaku/extension/iterable_extension.dart';
 
 class Tag {
   final String name;
-  final String desciption;
+  final String description;
   final bool isSpoiler;
   final int? rank;
 
   Tag._({
     required this.name,
     required this.rank,
-    required this.desciption,
+    required this.description,
     required this.isSpoiler,
   });
 
   factory Tag(Map<String, dynamic> map) => Tag._(
     name: map['name'],
     rank: map['rank'],
-    desciption: map['description'] ?? 'No description',
+    description: map['description'] ?? 'No description',
     isSpoiler: map['isMediaSpoiler'] ?? false,
   );
 }

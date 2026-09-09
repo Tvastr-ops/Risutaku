@@ -12,7 +12,6 @@ import 'package:risutaku/feature/collection/collection_provider.dart';
 import 'package:risutaku/feature/collection/collection_filter_view.dart';
 import 'package:risutaku/feature/viewer/persistence_provider.dart';
 import 'package:risutaku/util/routes.dart';
-import 'package:risutaku/util/debounce.dart';
 import 'package:risutaku/widget/input/search_field.dart';
 import 'package:risutaku/widget/dialogs.dart';
 import 'package:risutaku/widget/sheets.dart';
@@ -49,7 +48,7 @@ class CollectionTopBarTrailingContent extends StatelessWidget {
             children: [
               Expanded(
                 child: SearchField(
-                  debounce: Debounce(),
+                  debounce: true,
                   focusNode: focusNode,
                   hint: ref.watch(collectionProvider(tag).select((s) => s.value?.listName ?? '')),
                   value: filter.search,

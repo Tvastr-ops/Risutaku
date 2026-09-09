@@ -6,7 +6,6 @@ import 'package:risutaku/feature/forum/forum_filter_view.dart';
 import 'package:risutaku/feature/forum/forum_provider.dart';
 import 'package:risutaku/feature/forum/thread_item_list.dart';
 import 'package:risutaku/feature/viewer/persistence_provider.dart';
-import 'package:risutaku/util/debounce.dart';
 import 'package:risutaku/util/paged_controller.dart';
 import 'package:risutaku/widget/input/search_field.dart';
 import 'package:risutaku/widget/layout/adaptive_scaffold.dart';
@@ -46,7 +45,7 @@ class _ForumViewState extends ConsumerState<ForumView> {
                   children: [
                     Expanded(
                       child: SearchField(
-                        debounce: Debounce(),
+                        debounce: true,
                         hint: 'Forum',
                         value: ref.watch(forumFilterProvider.select((s) => s.search)),
                         onChanged: (search) => ref

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:risutaku/extension/iterable_extension.dart';
 import 'package:risutaku/extension/snack_bar_extension.dart';
 import 'package:risutaku/util/routes.dart';
 import 'package:risutaku/util/theming.dart';
@@ -95,8 +96,8 @@ class HtmlContent extends StatelessWidget {
         }
 
         if (element.localName == 'video') {
-          final source = element.children.firstWhere((e) => e.localName == 'source');
-          final url = source.attributes['src'] ?? '';
+          final source = element.children.firstWhereOrNull((e) => e.localName == 'source');
+          final url = source?.attributes['src'] ?? element.attributes['src'] ?? '';
           return SizedBox(
             width: double.infinity,
             child: Center(

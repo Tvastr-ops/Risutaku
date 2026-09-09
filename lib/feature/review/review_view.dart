@@ -155,6 +155,7 @@ class _RateButtonsState extends State<_RateButtons> {
 
     final err = await widget.rate(rating);
     if (err == null) return;
+    if (!mounted) return;
 
     setState(() {
       review.rating = oldRating;

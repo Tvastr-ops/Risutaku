@@ -91,7 +91,10 @@ class _AppLockGateState extends ConsumerState<AppLockGate> with WidgetsBindingOb
 
     return Stack(
       children: [
-        widget.child,
+        ExcludeSemantics(
+          excluding: true,
+          child: widget.child,
+        ),
         Positioned.fill(
           child: Material(
             color: colorScheme.surface,

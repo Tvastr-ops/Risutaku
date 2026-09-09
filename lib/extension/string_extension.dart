@@ -36,11 +36,14 @@ extension StringExtension on String {
     return String.fromCharCodes(parsedRunes);
   }
 
-  String get noScreamingSnakeCase => splitMapJoin(
-    '_',
-    onMatch: (_) => ' ',
-    onNonMatch: (s) => s[0].toUpperCase() + s.substring(1).toLowerCase(),
-  );
+  String get noScreamingSnakeCase {
+    if (isEmpty) return '';
+    return splitMapJoin(
+      '_',
+      onMatch: (_) => ' ',
+      onNonMatch: (s) => s.isEmpty ? '' : s[0].toUpperCase() + s.substring(1).toLowerCase(),
+    );
+  }
 
   static String? fromFuzzyDate(Map<String, dynamic>? map) {
     if (map?['year'] == null) return null;

@@ -90,5 +90,7 @@
 	    </array>
 	  </dict>
 	</dict>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Risutaku uses Face ID to protect your account and app access.</string>
 </dict>
 </plist>

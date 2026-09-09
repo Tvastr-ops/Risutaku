@@ -35,11 +35,12 @@ extension DateTimeExtension on DateTime {
 
   String formattedTime(bool analogClock) {
     if (analogClock) {
-      final (overflows, realHour) = hour > 12 ? (true, hour - 12) : (false, hour);
+      final isPm = hour >= 12;
+      final realHour = hour % 12 == 0 ? 12 : hour % 12;
 
       return '${realHour < 10 ? 0 : ''}$realHour'
           ':${minute < 10 ? 0 : ''}$minute '
-          '${overflows ? 'PM' : 'AM'}';
+          '${isPm ? 'PM' : 'AM'}';
     }
 
     return '${hour <= 9 ? 0 : ''}$hour'

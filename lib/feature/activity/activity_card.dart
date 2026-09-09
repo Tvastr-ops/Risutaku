@@ -392,6 +392,7 @@ class _ActivityFooterState extends State<ActivityFooter> {
 
     final err = await widget.toggleLike();
     if (err == null) return;
+    if (!mounted) return;
 
     setState(() {
       activity.isLiked = isLiked;

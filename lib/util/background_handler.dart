@@ -151,7 +151,7 @@ void _fetch() => Workmanager().executeTask((_, _) async {
         'New Activity Like',
         Routes.activity((notification as ActivityNotification).activityId),
       ),
-      .acrivityReplyLike => _show(
+      .activityReplyLike => _show(
         notification,
         'New Reply Like',
         Routes.activity((notification as ActivityNotification).activityId),

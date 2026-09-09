@@ -435,7 +435,7 @@ class __TagsWrapState extends State<_TagsWrap> {
       },
       onLongTap: () => showDialog(
         context: context,
-        builder: (context) => TextDialog(title: tag.name, text: tag.desciption),
+        builder: (context) => TextDialog(title: tag.name, text: tag.description),
       ),
     );
   }

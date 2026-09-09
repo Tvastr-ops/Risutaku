@@ -104,11 +104,14 @@ class BarChart extends StatelessWidget {
 }
 
 /// 10-Column Vertical Score Histogram (Bell Curve)
-class ScoreHistogram extends StatelessWidget {
+/// 10-Column Vertical Score Histogram (Bell Curve)
+class ScoreHistogram extends StatefulWidget {
   const ScoreHistogram({
     required this.title,
     required this.names,
     required this.values,
+    this.barMeanScores,
+    this.unitLabel = 'titles',
     required this.meanScore,
     required this.scoreFormat,
     this.toolbar,
@@ -119,16 +122,39 @@ class ScoreHistogram extends StatelessWidget {
   final String title;
   final List<String> names;
   final List<num> values;
+  final List<double>? barMeanScores;
+  final String unitLabel;
   final double meanScore;
   final ScoreFormat scoreFormat;
   final Widget? toolbar;
   final bool highContrast;
 
+  @override
+  State<ScoreHistogram> createState() => _ScoreHistogramState();
+}
+
+class _ScoreHistogramState extends State<ScoreHistogram> {
+  int? _selectedIdx;
+
+  double _normalizeScore(double rawVal) {
+    switch (widget.scoreFormat) {
+      case ScoreFormat.point100:
+        return rawVal;
+      case ScoreFormat.point10Decimal:
+      case ScoreFormat.point10:
+        return rawVal <= 10 ? rawVal * 10 : rawVal;
+      case ScoreFormat.point5:
+        return rawVal <= 5 ? rawVal * 20 : rawVal;
+      case ScoreFormat.point3:
+        return rawVal <= 3 ? rawVal * 33.33 : rawVal;
+    }
+  }
+
   String _formatScore(String raw) {
     final val = double.tryParse(raw);
     if (val == null) return raw;
 
-    switch (scoreFormat) {
+    switch (widget.scoreFormat) {
       case ScoreFormat.point100:
         return val.toInt().toString(); // e.g. 10, 40, 55, 70, 85, 100
       case ScoreFormat.point10Decimal:
@@ -149,7 +175,7 @@ class ScoreHistogram extends StatelessWidget {
 
   String _formatMean(double mean) {
     if (mean <= 0) return '—';
-    switch (scoreFormat) {
+    switch (widget.scoreFormat) {
       case ScoreFormat.point100:
         return '${mean.toStringAsFixed(1)}%';
       case ScoreFormat.point10Decimal:
@@ -172,17 +198,28 @@ class ScoreHistogram extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
+    final names = widget.names;
+    final values = widget.values;
     final maxValue = values.fold<num>(0, (prev, val) => val > prev ? val : prev);
-    final displayMean = _formatMean(meanScore);
+    final totalCount = values.fold<num>(0, (prev, val) => prev + val);
+    final displayMean = _formatMean(widget.meanScore);
+
+    int peakIdx = -1;
+    num peakVal = 0;
+    for (int i = 0; i < values.length; i++) {
+      if (values[i] > peakVal) {
+        peakVal = values[i];
+        peakIdx = i;
+      }
+    }
 
     int closestIdx = -1;
     double minDiff = double.infinity;
     for (int i = 0; i < names.length; i++) {
       final val = double.tryParse(names[i]);
-      if (val != null && meanScore > 0) {
-        final normalizedVal = val <= 10 ? val * 10 : val;
-        final normalizedMean = meanScore <= 10 ? meanScore * 10 : meanScore;
-        final diff = (normalizedVal - normalizedMean).abs();
+      if (val != null && widget.meanScore > 0) {
+        final normalizedVal = _normalizeScore(val);
+        final diff = (normalizedVal - widget.meanScore).abs();
         if (diff < minDiff) {
           minDiff = diff;
           closestIdx = i;
@@ -190,99 +227,177 @@ class ScoreHistogram extends StatelessWidget {
       }
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(title, style: theme.textTheme.titleSmall),
-              if (meanScore > 0)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: colorScheme.primaryContainer,
-                    borderRadius: Theming.borderRadiusSmall,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(LucideIcons.star, size: 13, color: colorScheme.primary),
-                      const SizedBox(width: 4),
-                      Text(
-                        '★ $displayMean Avg',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          color: colorScheme.onPrimaryContainer,
+    return RepaintBoundary(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(widget.title, style: theme.textTheme.titleSmall),
+                if (widget.meanScore > 0)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: colorScheme.primaryContainer,
+                      borderRadius: Theming.borderRadiusSmall,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(LucideIcons.star, size: 13, color: colorScheme.primary),
+                        const SizedBox(width: 4),
+                        Text(
+                          '★ $displayMean Avg',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: colorScheme.onPrimaryContainer,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-            ],
-          ),
-        ),
-        if (toolbar != null) ...[
-          SizedBox(width: double.infinity, child: toolbar!),
-          const SizedBox(height: Theming.offset),
-        ],
-        CardExtension.highContrast(highContrast)(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(12, 16, 12, 10),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final useScroll = names.length > 10;
-                final colWidth = useScroll
-                    ? math.max(34.0, (constraints.maxWidth - 24) / names.length)
-                    : null;
-
-                Widget content = Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    for (int i = 0; i < names.length; i++) ...[
-                      if (i > 0) SizedBox(width: useScroll ? 6 : 4),
-                      useScroll
-                          ? SizedBox(
-                              width: colWidth,
-                              child: _HistogramBar(
-                                label: _formatScore(names[i]),
-                                count: values[i],
-                                maxCount: maxValue,
-                                isMean: i == closestIdx,
-                                colorScheme: colorScheme,
-                              ),
-                            )
-                          : Expanded(
-                              child: _HistogramBar(
-                                label: _formatScore(names[i]),
-                                count: values[i],
-                                maxCount: maxValue,
-                                isMean: i == closestIdx,
-                                colorScheme: colorScheme,
-                              ),
-                            ),
-                    ],
-                  ],
-                );
-
-                return SizedBox(
-                  height: 135,
-                  child: useScroll
-                      ? SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          physics: Theming.bouncyPhysics,
-                          child: content,
-                        )
-                      : content,
-                );
-              },
+              ],
             ),
           ),
-        ),
-      ],
+          if (widget.toolbar != null) ...[
+            SizedBox(width: double.infinity, child: widget.toolbar!),
+            const SizedBox(height: Theming.offset),
+          ],
+          CardExtension.highContrast(widget.highContrast)(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 16, 12, 10),
+              child: Column(
+                children: [
+                  // Animated Touch Tooltip
+                  AnimatedCrossFade(
+                    duration: const Duration(milliseconds: 200),
+                    crossFadeState: _selectedIdx != null && _selectedIdx! < names.length
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
+                    firstChild: _selectedIdx != null && _selectedIdx! < names.length
+                        ? Container(
+                            margin: const EdgeInsets.only(bottom: 12),
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: colorScheme.primaryContainer.withValues(alpha: 0.85),
+                              borderRadius: Theming.borderRadiusSmall,
+                              border: Border.all(color: colorScheme.primary.withValues(alpha: 0.4)),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(LucideIcons.chartColumn, size: 13, color: colorScheme.primary),
+                                const SizedBox(width: 6),
+                                Text(
+                                  'Score ${_formatScore(names[_selectedIdx!])}: ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 11.5,
+                                    color: colorScheme.onPrimaryContainer,
+                                  ),
+                                ),
+                                Text(
+                                  '${values[_selectedIdx!]} ${widget.unitLabel} (${totalCount > 0 ? (values[_selectedIdx!] / totalCount * 100).toStringAsFixed(1) : 0}%)',
+                                  style: TextStyle(
+                                    fontSize: 11.5,
+                                    fontWeight: FontWeight.w600,
+                                    color: colorScheme.onPrimaryContainer,
+                                  ),
+                                ),
+                                if (widget.barMeanScores != null &&
+                                    _selectedIdx! < widget.barMeanScores!.length &&
+                                    widget.barMeanScores![_selectedIdx!] > 0) ...[
+                                  const SizedBox(width: 8),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                                    decoration: BoxDecoration(
+                                      color: colorScheme.primary.withValues(alpha: 0.15),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Text(
+                                      '★ ${_formatMean(widget.barMeanScores![_selectedIdx!])} Bar Mean',
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w800,
+                                        color: colorScheme.primary,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                          )
+                        : const SizedBox.shrink(),
+                    secondChild: const SizedBox.shrink(),
+                  ),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final useScroll = names.length > 10;
+                      final colWidth = useScroll
+                          ? math.max(34.0, (constraints.maxWidth - 24) / names.length)
+                          : null;
+
+                      Widget content = Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          for (int i = 0; i < names.length; i++) ...[
+                            if (i > 0) SizedBox(width: useScroll ? 6 : 4),
+                            useScroll
+                                ? SizedBox(
+                                    width: colWidth,
+                                    child: _HistogramBar(
+                                      label: _formatScore(names[i]),
+                                      count: values[i],
+                                      maxCount: maxValue,
+                                      isPeak: i == peakIdx,
+                                      isMean: i == closestIdx,
+                                      isSelected: i == _selectedIdx,
+                                      colorScheme: colorScheme,
+                                      onTap: () => setState(() {
+                                        _selectedIdx = _selectedIdx == i ? null : i;
+                                      }),
+                                    ),
+                                  )
+                                : Expanded(
+                                    child: _HistogramBar(
+                                      label: _formatScore(names[i]),
+                                      count: values[i],
+                                      maxCount: maxValue,
+                                      isPeak: i == peakIdx,
+                                      isMean: i == closestIdx,
+                                      isSelected: i == _selectedIdx,
+                                      colorScheme: colorScheme,
+                                      onTap: () => setState(() {
+                                        _selectedIdx = _selectedIdx == i ? null : i;
+                                      }),
+                                    ),
+                                  ),
+                          ],
+                        ],
+                      );
+
+                      return SizedBox(
+                        height: 175,
+                        child: useScroll
+                            ? SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                physics: Theming.bouncyPhysics,
+                                child: content,
+                              )
+                            : content,
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -292,72 +407,137 @@ class _HistogramBar extends StatelessWidget {
     required this.label,
     required this.count,
     required this.maxCount,
+    required this.isPeak,
     required this.isMean,
+    required this.isSelected,
     required this.colorScheme,
+    required this.onTap,
   });
 
   final String label;
   final num count;
   final num maxCount;
+  final bool isPeak;
   final bool isMean;
+  final bool isSelected;
   final ColorScheme colorScheme;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final fillHeight = maxCount > 0 ? (count / maxCount * 70).clamp(4.0, 70.0) : 4.0;
+    final fillHeight = maxCount > 0 ? (count / maxCount * 105).clamp(4.0, 105.0) : 4.0;
+    final ratio = maxCount > 0 ? (count / maxCount).clamp(0.0, 1.0) : 0.0;
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Text(
-          count > 0 ? count.toString() : '',
-          style: TextStyle(
-            fontSize: 9.5,
-            fontWeight: isMean ? FontWeight.w800 : FontWeight.w600,
-            color: isMean ? colorScheme.primary : colorScheme.onSurfaceVariant,
+    final bottomAccent = colorScheme.primary.withValues(alpha: (0.30 + 0.65 * ratio).clamp(0.20, 1.0));
+    final topAccent = isSelected
+        ? colorScheme.primary
+        : isPeak
+            ? colorScheme.primary
+            : colorScheme.primary.withValues(alpha: (0.45 + 0.55 * ratio).clamp(0.35, 1.0));
+
+    final gradientColors = count > 0 ? [bottomAccent, topAccent] : null;
+    final isHighlighted = isSelected || isPeak;
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(6),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(
+            count > 0 ? count.toString() : '',
+            style: TextStyle(
+              fontSize: 9.5,
+              fontWeight: isHighlighted ? FontWeight.w800 : (isMean ? FontWeight.w700 : FontWeight.w600),
+              color: isHighlighted
+                  ? colorScheme.primary
+                  : isMean
+                      ? colorScheme.primary
+                      : colorScheme.onSurfaceVariant,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        const SizedBox(height: 4),
-        AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          height: fillHeight,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
-            gradient: isMean
-                ? LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    colors: [colorScheme.primary, colorScheme.primaryContainer],
-                  )
-                : count > 0
-                    ? LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [
-                          colorScheme.surfaceContainerHighest,
-                          colorScheme.surfaceContainerHigh,
-                        ],
-                      )
-                    : null,
-            color: count == 0 ? colorScheme.surfaceContainerLowest : null,
-            border: isMean
-                ? Border.all(color: colorScheme.primary, width: 1.5)
-                : Border.all(color: colorScheme.outlineVariant.withValues(alpha: 0.5), width: 1),
+          const SizedBox(height: 4),
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 24),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                height: fillHeight,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  gradient: gradientColors != null
+                      ? LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: gradientColors,
+                        )
+                      : null,
+                  color: count == 0 ? colorScheme.surfaceContainerLowest : null,
+                  border: isSelected
+                      ? Border.all(color: colorScheme.primary, width: 2)
+                      : isPeak
+                          ? Border.all(color: colorScheme.primary, width: 1.5)
+                          : isMean
+                              ? Border.all(color: colorScheme.primary.withValues(alpha: 0.65), width: 1.2)
+                              : Border(
+                                  top: BorderSide(
+                                    color: count > 0
+                                        ? colorScheme.primary.withValues(alpha: 0.8)
+                                        : colorScheme.outlineVariant.withValues(alpha: 0.3),
+                                    width: 1.5,
+                                  ),
+                                  left: BorderSide(color: colorScheme.outlineVariant.withValues(alpha: 0.4), width: 0.8),
+                                  right: BorderSide(color: colorScheme.outlineVariant.withValues(alpha: 0.4), width: 0.8),
+                                  bottom: BorderSide(color: colorScheme.outlineVariant.withValues(alpha: 0.4), width: 0.8),
+                                ),
+                  boxShadow: isSelected
+                      ? [
+                          BoxShadow(
+                            color: colorScheme.primary.withValues(alpha: 0.35),
+                            blurRadius: 6,
+                            spreadRadius: 1,
+                          ),
+                        ]
+                      : null,
+                ),
+              ),
+            ),
           ),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: isMean ? FontWeight.w800 : FontWeight.w500,
-            color: isMean ? colorScheme.primary : colorScheme.onSurfaceVariant,
+          const SizedBox(height: 5),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: isHighlighted ? FontWeight.w800 : (isMean ? FontWeight.w700 : FontWeight.w500),
+              color: isHighlighted ? colorScheme.primary : (isMean ? colorScheme.primary : colorScheme.onSurfaceVariant),
+            ),
+            maxLines: 1,
           ),
-          maxLines: 1,
-        ),
-      ],
+          if (isMean)
+            Container(
+              margin: const EdgeInsets.only(top: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0.5),
+              decoration: BoxDecoration(
+                color: colorScheme.primaryContainer.withValues(alpha: 0.85),
+                borderRadius: BorderRadius.circular(3),
+              ),
+              child: Text(
+                'Avg',
+                style: TextStyle(
+                  fontSize: 7.5,
+                  fontWeight: FontWeight.w800,
+                  color: colorScheme.onPrimaryContainer,
+                  letterSpacing: -0.2,
+                ),
+              ),
+            )
+          else
+            const SizedBox(height: 12),
+        ],
+      ),
     );
   }
 }
@@ -397,13 +577,14 @@ class SpieChart extends StatelessWidget {
     final dominantPct = total > 0 ? (dominantMax / total * 100).toStringAsFixed(0) : '0';
     final dominantLabel = names.isNotEmpty ? names[dominantIndex] : '';
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          child: Text(title, style: Theme.of(context).textTheme.titleSmall),
-        ),
+    return RepaintBoundary(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: Text(title, style: Theme.of(context).textTheme.titleSmall),
+          ),
         CardExtension.highContrast(highContrast)(
           child: Padding(
             padding: const EdgeInsets.all(12),
@@ -521,7 +702,7 @@ class SpieChart extends StatelessWidget {
           ),
         ),
       ],
-    );
+    ));
   }
 
   static List<Color> _generatePalette(ColorScheme scheme, int count) {
@@ -676,13 +857,14 @@ class _ScrollableTimelineChartState extends State<ScrollableTimelineChart> {
     const padding = 16.0;
     final totalWidth = padding * 2 + widget.years.length * itemWidth;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          child: Text(widget.title, style: theme.textTheme.titleSmall),
-        ),
+    return RepaintBoundary(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: Text(widget.title, style: theme.textTheme.titleSmall),
+          ),
         if (widget.toolbar != null) ...[
           SizedBox(width: double.infinity, child: widget.toolbar!),
           const SizedBox(height: Theming.offset),
@@ -726,7 +908,7 @@ class _ScrollableTimelineChartState extends State<ScrollableTimelineChart> {
           ),
         ),
       ],
-    );
+    ));
   }
 }
 

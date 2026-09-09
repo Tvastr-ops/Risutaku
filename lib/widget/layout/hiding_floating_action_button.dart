@@ -32,7 +32,9 @@ class _HidingFloatingActionButtonState extends State<HidingFloatingActionButton>
     // spot or is out of bounds, hide/show the actions.
     if (dif > 15 || pos.pixels > pos.maxScrollExtent) {
       _lastOffset = pos.pixels;
-      _animationCtrl.reverse().then((_) => setState(() => _visible = false));
+      _animationCtrl.reverse().then((_) {
+        if (mounted) setState(() => _visible = false);
+      });
     } else if (dif < -15 || pos.pixels < pos.minScrollExtent) {
       _lastOffset = pos.pixels;
       setState(() => _visible = true);

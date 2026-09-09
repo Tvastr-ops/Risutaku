@@ -84,6 +84,7 @@ class __FavoriteButtonState extends State<_FavoriteButton> {
 
         final err = await widget.toggleFavorite();
         if (err == null) return;
+        if (!mounted) return;
 
         setState(() => staff.isFavorite = !staff.isFavorite);
         if (context.mounted) SnackBarExtension.show(context, err.toString());

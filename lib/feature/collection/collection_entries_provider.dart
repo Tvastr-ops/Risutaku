@@ -46,9 +46,13 @@ List<EntryList> _filter(
   var tagIdIn = const <int>[];
   var tagIdNotIn = const <int>[];
   if (tags != null) {
-    final tagFinder = (String name) => tags.ids[tags.indexByName[name] ?? 0];
-    tagIdIn = mediaFilter.tagIn.map(tagFinder).toList();
-    tagIdNotIn = mediaFilter.tagNotIn.map(tagFinder).toList();
+    int? tagFinder(String name) {
+      final idx = tags.indexByName[name];
+      return idx != null ? tags.ids[idx] : null;
+    }
+
+    tagIdIn = mediaFilter.tagIn.map(tagFinder).whereType<int>().toList();
+    tagIdNotIn = mediaFilter.tagNotIn.map(tagFinder).whereType<int>().toList();
   }
 
   for (final l in lists) {

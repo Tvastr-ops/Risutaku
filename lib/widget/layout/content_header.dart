@@ -253,7 +253,7 @@ class _Delegate extends SliverPersistentHeaderDelegate {
       children: [
         if (transition < 1) ...[
           if (bannerUrl != null) ...[
-            Positioned.fill(bottom: bannerBottomPadding, child: CachedImage(bannerUrl!)),
+            Positioned.fill(bottom: bannerBottomPadding, child: CachedImage(bannerUrl!, downscale: false)),
             Positioned.fill(
               bottom: bannerBottomPadding,
               child: GestureDetector(

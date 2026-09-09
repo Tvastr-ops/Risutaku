@@ -106,8 +106,12 @@ class Repository {
       return body['data'];
     } on SocketException {
       throw Exception('Failed to connect to AniList');
+    } on ClientException {
+      throw Exception('Connection error while reaching AniList');
     } on TimeoutException {
       throw Exception('AniList request timed out');
+    } on FormatException {
+      throw Exception('AniList returned an invalid response');
     }
   }
 }

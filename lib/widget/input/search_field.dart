@@ -8,14 +8,14 @@ class SearchField extends StatefulWidget {
     required this.hint,
     required this.onChanged,
     this.focusNode,
-    this.debounce,
+    this.debounce = false,
   });
 
   final String value;
   final String hint;
   final void Function(String) onChanged;
   final FocusNode? focusNode;
-  final Debounce? debounce;
+  final bool debounce;
 
   @override
   State<SearchField> createState() => _SearchFieldState();
@@ -23,6 +23,7 @@ class SearchField extends StatefulWidget {
 
 class _SearchFieldState extends State<SearchField> {
   late final _ctrl = TextEditingController(text: widget.value);
+  late final _debounce = widget.debounce ? Debounce() : null;
 
   @override
   void didUpdateWidget(covariant SearchField oldWidget) {
@@ -33,6 +34,7 @@ class _SearchFieldState extends State<SearchField> {
   @override
   void dispose() {
     _ctrl.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
@@ -46,13 +48,13 @@ class _SearchFieldState extends State<SearchField> {
         style: TextTheme.of(context).bodyMedium,
         onChanged: (val) {
           if (val.isEmpty) {
-            widget.debounce?.cancel();
+            _debounce?.cancel();
             widget.onChanged('');
             return;
           }
 
-          if (widget.debounce != null) {
-            widget.debounce!.run(() => widget.onChanged(val));
+          if (_debounce != null) {
+            _debounce.run(() => widget.onChanged(val));
           } else {
             widget.onChanged(val);
           }
@@ -73,7 +75,7 @@ class _SearchFieldState extends State<SearchField> {
                   padding: const .all(0),
                   onPressed: () {
                     _ctrl.clear();
-                    widget.debounce?.cancel();
+                    _debounce?.cancel();
                     widget.onChanged('');
                   },
                 )

@@ -235,6 +235,7 @@ class _ReplyLikeButtonState extends State<_ReplyLikeButton> {
 
     final err = await widget.toggleLike();
     if (err == null) return;
+    if (!mounted) return;
 
     setState(() {
       reply.isLiked = isLiked;
